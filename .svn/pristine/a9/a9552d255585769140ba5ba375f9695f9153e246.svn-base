@@ -1,0 +1,65 @@
+POTApp.constant('UrlConstants', {
+
+	// MASTER_URL : 'http://192.168.0.18:9080/masters/',
+	//MASTER_URL : 'http://fasdigimdm1.azurewebsites.net/',
+
+    MASTER_URL : 'http://server1:8585/mastersv1/',
+
+	// ///////////////// MASTER SERVER/CLOUD - JSON
+	// //////////////////////////
+	VIEW_ALL_COVERAGE : 'viewAllCoverage.json',
+	GET_ALL_RELATIONSHIP : 'getallrelationship.json',
+	GET_ALL_FINANCIER_NAME : 'getallfinanciername.json',
+	GET_INSURER_DETAILS : 'getInsurerDetails.json',
+	GET_RTOCODE_FOR_ZONALMAPPING : 'getrtocodeforzonalmapping.json',
+	GET_ALL_MAPPED_INSURER : 'getAllMappedInsurer.json?productCode=PCC',
+	GET_RTO_ZONAL_MAPPING : 'getrtozonalmapping.json',
+	GET_MAKE : 'getMake.json',
+	GET_ALL_NCB_TYPE : 'getallncbtype.json',
+	GET_MAKE_MODEL : 'getMakeModel.json',
+	GET_MODEL_SUBMODEL : 'getModelSubModel.json',
+	GET_ALL_TITLE : 'getalltitle.json',
+	GET_ALL_CITY : 'getallcity.json',
+	GET_PINCODE_BY_AREA : 'getPincodeByArea.json?areaCode=',
+	GET_ALL_BANK_MASTER : 'getallbankmaster.json',
+	GET_AREA_BY_CITY : 'getAreaByCity.json?cityCode=',
+
+	LIST_COVERAGE_DETAILS_SUMINSURED : 'getCoverageList.json?productCode=',
+	LIST_COVERAGE_DETAILS : 'viewAllCoverage.json?productCode=',
+	
+	GET_BUSINESS_TYPE : 'getBusinessType.json',
+
+//	MIS_CLOUD : 'http://server1:8585/mis/',
+//	 MIS_CLOUD : 'http://fasmis1.azurewebsites.net/',
+//	 MIS_CLOUD : 'http://localhost:2018/misv2/',
+	 MIS_CLOUD : 'http://server1:8585/mis/',
+	// MIS_CLOUD : 'http://fasmis.azurewebsites.net/',
+
+	// //////////////// MIS SERVER URLS ///////////////
+	UPDATE_ENRICHMENT : 'updateEnrichment.json',
+	GET_POLICY_DETAILS : 'getPolicyDetails.json?quoteNo=',
+	MULTIPLE_INS_PREMIUM_CALC : 'multipleInsurerCalc.json',
+	PERSIST_POLICY : 'persistPolicy.json',
+	SINGLE_INS_PREMIUM_CALC : 'singleInsurerCalc.json?insurerCode=',
+	SINGLE_IDV_EDIT_CALC : 'idvEdit.json?insurerCode=',
+	POLICY_START_DATE:'fetchQuoteByQuoteNo.json?quoteNo=',
+	SEARCH_IN_POLICY:'searchInPolicy.json',
+	
+
+	// DMS_URL : 'http://localhost:9080/dms/',
+	DMS_URL : 'http://server1:8585/dms/',	
+//	 DMS_URL : 'http://fasdmsv1.azurewebsites.net/',
+	// //////////DMS REST Service Name//////////
+	DOCUMENT_LIST : 'documents.json',
+	DOCUMENT_UPLOAD : 'uploadDoc.json',
+	DOCUMENT_DOWNLOAD : 'download.json',
+	DMS_DOCUMENT_DOWNLOAD : 'documentDownload.json?urlParam=',
+	DOCUMENT_PREVIEW : 'documentPreview.json?quoteNo=',
+	// //////////DMS REST Service Name//////////
+
+	// Other Rest URLS
+	LOADING_URL : 'http://localhost:8080/digital/loading.json',
+	REDIRECT_TEST_URL : 'http://localhost:8080/digital/redirectTest.json',
+	LOGIN_URL : 'http://fassecurity.azurewebsites.net/login',
+});
+

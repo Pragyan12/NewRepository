@@ -1,0 +1,32 @@
+POTApp.constant('RatingConstants', {
+    	ADDITIONAL:'ADDITIONAL',
+    	ADDON:'ADDON',
+    	DISCOUNTS:'DISCOUNTS', 
+    	UPA: 'UPA',
+    	VD:'VD',
+    	BFK:'BFK',
+    	BasicOwndamage: 'Basic Own damage:',
+        BasicThirdpartyPropertydamage:'Basic Third party Property damage:',
+        OwndriverCoverCPA:'Own driver Cover (CPA):',
+        TariffDiscounts:'Tariff Discounts',
+        NoClaimBonus:'No Claim Bonus:',
+        OD_COVER:'OD',
+        TPL_COVER:'TPL',
+        CPA_COVER:'CPA',
+        UPA_COVER:'UPA',
+        LLD_COVER:'LLD',
+        LLE_COVER:'LLE',
+       SUM_INSURED:'SUMINSURED',
+       RATE_NA:'-99999',
+       AMSM:'AMSM',
+       NO_POLICY:'NO POLICY',
+       THIRDPARTY:'THIRDPARTY',
+       AT:'AT',
+       RATE:'RATE',
+       FLAT:'FLAT',
+       BOTH:'BOTH',
+       PAD:'PAD'
+    	   
+      
+    		
+}); 

@@ -1,0 +1,24 @@
+POTApp.factory('docPreviewFact',function($http, $q, quotationNoService,UrlConstants){
+	
+	var url=UrlConstants.DMS_URL+UrlConstants.DOCUMENT_DOWNLOAD;
+	
+	var factory={
+		imageUpload : imageUpload
+	}
+	
+	return factory;
+	
+	function imageUpload(quoteNo)
+	{
+		var defered=$q.defer();
+		var data={};
+		 $http.post(url + quoteNo, data, {timeout: 30000}).then(function(response){
+			 defered.resolve(response);
+		 });
+		 
+		 return defered.promise;
+	}
+	
+	 
+	
+});

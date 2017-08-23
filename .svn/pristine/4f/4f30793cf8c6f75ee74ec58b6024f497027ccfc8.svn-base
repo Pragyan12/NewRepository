@@ -1,0 +1,56 @@
+<div class="container data-container">
+<br>
+<br>
+    <h1>Submit Page</h1>
+    <hr/>
+    <div class="col-md-12">
+            <div class="form-group">
+                <div class="col-md-3">
+                    Personal Info
+                </div>
+                <div class="col-md-5">
+					{{personalInfo}}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-3">
+					Vehicle Info
+                </div>
+                <div class="col-md-5">
+                    {{vehicleInfo}}
+                </div>
+            </div>
+             <div class="form-group">
+                <div class="col-md-3">
+					NomineeFinancier Info
+                </div>
+                <div class="col-md-5">
+                    {{nomineeFinancierInfo}}
+                </div>
+            </div>
+             <div class="form-group">
+                <div class="col-md-3">
+					Inspection Info
+                </div>
+                <div class="col-md-5">
+                    {{inspectionInfo}}
+                </div>
+            </div>
+             <div class="form-group">
+                <div class="col-md-3">
+					Qc_pending Info
+                </div>
+                <div class="col-md-5">
+                    {{qcPendingInfo}}
+                </div>
+            </div>
+             <div class="form-group">
+                <div class="col-md-3">
+					Inward_pendingInfo
+                </div>
+                <div class="col-md-5">
+                    {{inwardPendingInfo}}
+                </div>
+            </div>
+    </div>
+</div>

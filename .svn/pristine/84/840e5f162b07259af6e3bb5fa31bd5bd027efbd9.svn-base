@@ -1,0 +1,102 @@
+'use strict';
+ 
+POTApp.factory('PaymentService', ['StorageService','$http', '$q',"UrlConstants",
+	function(StorageService,$http, $q, UrlConstants){
+	var paymentDetailsForAll = {};
+
+	var factory = {
+			fetchAllBankDetails: fetchAllBankDetails,
+			paymentDetails : paymentDetails,
+			callServerforOfflinePayment :callServerforOfflinePayment,
+			fetchPolicyStartDate:fetchPolicyStartDate
+	    };
+	 
+	    return factory;
+	    
+	    function fetchAllBankDetails() {
+	        var deferred = $q.defer();
+	        $http.post(UrlConstants.MASTER_URL+UrlConstants.GET_ALL_BANK_MASTER)
+	            .then(
+	            function (response) {
+	                deferred.resolve(response);
+	            },
+	            function(errResponse){
+	                console.error('Error while fetching Users');
+	                deferred.reject(errResponse);
+	            }
+	        );
+	        return deferred.promise;
+	    }
+	    
+	    
+	    function paymentDetails(data)
+	    {
+	    	alert("inside paymentdetails"+JSON.stringify(data));
+	    	var deferred = $q.defer();
+	        $http.post("http://localhost:8080/digital/loading.json",data) 
+	            .then(
+	            function (response) {
+	                deferred.resolve(response);
+	            },
+	            function(errResponse){
+	                console.error('Error while fetching Users');
+	                deferred.reject(errResponse);
+	            }
+	        );
+	        return deferred.promise;
+	    }
+	    
+	 
+	 // offline payment
+	    function callServerforOfflinePayment(){
+			var details = StorageService.getAll();
+			var insurerName = StorageService.get('insurerName');
+			var paymentDetail = StorageService.get('paymentInfo');
+			var data = {
+    				    "bankCode"        : paymentDetail.bankCode.bankCode,
+	    				"bankName"        : paymentDetail.bankCode.bankName,
+	    				"branch"          : paymentDetail.branchName,
+	    				"instrumentNo"    : paymentDetail.chequeNo,
+	    				"instrumentDate"  : paymentDetail.chequeDate,
+	    				"favourOff"       : paymentDetail.favourOff,
+	    				"adjustedAmount"  : paymentDetail.adjust_to_pay_amount,
+	    				"paymentMode"     : 'CHEQUE',
+	    				"quoteNo"		  : details.premiumInfo.premiumDetails.quoteNo,
+	    				"amount"          : paymentDetail.chequeAmt,
+	    				"userId"		  : 'FAS',
+	    				"insurerCode"	  :  details.premiumInfo.premiumDetails.insurerCode,
+	    				"insurerName"	  :  insurerName
+
+	    		};
+	        var deferred=$q.defer();
+			$http({
+		    	url : UrlConstants.MIS_CLOUD+UrlConstants.PERSIST_POLICY,
+		    	//url : "http://server1:8585/misv2/persistPolicy.json",
+		    	method : "POST",data}).then(function(response){
+		    		paymentDetailsForAll=response.data;
+		    			deferred.resolve(response);
+		    		},function(error){
+		    			deferred.reject(error);
+		    		});
+	    return deferred.promise; 
+	    }
+	    
+	    function fetchPolicyStartDate(quoteNo) {
+	        var deferred = $q.defer();
+//	         http://server1:8585/misv2/fetchQuoteByQuoteNo.json?quoteNo="
+	        $http.post(UrlConstants.MIS_CLOUD+UrlConstants.POLICY_START_DATE+quoteNo)
+	            .then(
+	            function (response) {
+	                deferred.resolve(response);
+	            },
+	            function(errResponse){
+	                console.error('Error while fetching Users');
+	                deferred.reject(errResponse);
+	            }
+	        );
+	        return deferred.promise;
+	    }
+	
+}]);
+
+

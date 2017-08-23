@@ -1,0 +1,269 @@
+<div class="entire customer_details">
+	<div class="wrapper">
+		<div class="totalpage">
+			<div ui-view="customer_header"></div>
+			<div class="container-fluid customer_details_main text-center">
+				<form role="form" class="home_form" id="home_form" name="form"
+					novalidate>
+					<div class="row customer_details_row nomineeFinancier_info">
+						<div
+							class=" col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6 customer_cols nomineeFinancier_info_col">
+							<h4 class="text-left">Nominee & Financier Information</h4>
+							<div class="col-xs-6 col-sm-6 col-md-6">
+								<div class="form-group" data-title="Nominee Name">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-user"></span></span> <input type="text"
+											class="form-control"
+											ng-model="nomineeFinancierInfo.nomineeName" capitalize
+											id="nominee_name" maxlength="100" name="nominee_Name"
+											placeholder="Nominee Name" string-only required>
+									</div>
+								</div>
+								<div ng-show="form.$submitted || form.nominee_Name.$touched"
+									class="form-error val_error">
+									<div ng-show="form.nominee_Name.$error.required">Please
+										Enter Nominee Name</div>
+								</div>
+
+							</div>
+
+							<div class="col-xs-6 col-sm-6 col-md-6">
+								<div class="form-group" data-title="Nominee DOB">
+									<div class="input-group"
+										moment-picker="nomineeFinancierInfo.dob" format="DD/MM/YYYY"
+										start-view="month" autoclose="true" change="dateBirthValue()"
+										max-date="minAgeNomineeDob" >
+										<span class="input-group-addon"> <span
+											class="glyphicon glyphicon-calendar"></span></span> <input
+											name="dob" type="text" class="form-control col-md-2" 
+											ng-model="nomineeFinancierInfo.dob" placeholder="DOB" >
+									</div>
+									
+								</div>
+								<div ng-show="form.$submitted || form.dob.$touched"
+									class="form-error val_error">
+									<div ng-show="form.dob.$error.required">Please Select
+										Nominee DOB</div>
+								</div>
+							</div>
+							<div class="clearfix xs-visible sm-visible md-visible"></div>
+							<div class=" col-xs-6  col-sm-6  col-md-6">
+								<div class="form-group" data-title="Nominee Relationship">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-user"></span></span> <select
+											class="form-control" name="relationName"
+											ng-model="nomineeFinancierInfo.nomineeRelationShip"
+											placeholder="Nominee Relationship"
+											ng-options="obj.relationshipName for obj in relationship track by obj.nomineeCode"
+											required>
+											<option value="">Nominee Relationship</option>
+										</select>
+
+									</div>
+								</div>
+								<div ng-show="form.$submitted || form.relationName.$touched"
+									class="form-error val_error">
+									<div ng-show="form.relationName.$error.required">Please
+										Select Nominee Relationship</div>
+								</div>
+
+							</div>
+						</div>
+						<div
+							class=" col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6 customer_cols nomineeFinancier_info_col">
+
+							<div id="guardian_info" ng-if="age<18">
+								<h4 class="text-left">Guardian Information</h4>
+								<div class="col-xs-6 col-sm-6 col-md-6">
+									<div class="form-group" data-title="Guardian Name">
+										<div class="input-group">
+										<span
+												class="input-group-addon"><span
+												class="glyphicon glyphicon-user"></span></span>
+											<input type="text" class="form-control"
+												ng-model="nomineeFinancierInfo.guardianName" capitalize maxlength="100"
+												id="guardianName" name="guardian_Name"
+												placeholder="Guardian Name" string-only required> 
+										</div>
+									</div>
+									<div ng-show="form.$submitted || form.guardian_Name.$touched"
+										class="form-error val_error">
+										<div ng-show="form.guardian_Name.$error.required">Please
+											Enter  Guardian Name</div>
+									</div>
+								</div>
+
+								<div class=" col-xs-6 col-sm-6 col-md-6">
+									<div class="form-group" data-title="Guardian DOB">
+										<div class="input-group" moment-picker="nomineeFinancierInfo.gdob"
+										format="DD/MM/YYYY" placeholder="Guardian DOB"
+										start-view="month"  autoclose="true"
+											set-on-select="true" max-date="minAgeDob" >
+										<span class="input-group-addon" >
+										<span class="glyphicon glyphicon-calendar"></span> </span>
+										<input name="gdob" type="text" class="form-control col-md-2" ng-model="nomineeFinancierInfo.gdob"
+												required readonly>
+												
+										</div>
+									</div>
+									<div
+										ng-show="form.$submitted || form.gdob.$touched"
+										class="form-error val_error">
+										<div ng-show="form.gdob.$error.required">Please
+											Select Guardian DOB</div>
+									</div>
+								</div>
+								
+								<div class="clearfix xs-visible sm-visible md-visible"></div>
+								<div class=" col-xs-6  col-sm-6  col-md-6">
+									<div class="form-group" data-title="Guardian Relationship">
+										<div class="input-group">
+										 <span class="input-group-addon"><span
+												class="glyphicon glyphicon-user"></span></span>
+											<select class="form-control" name="guardianRelation"
+												ng-model="nomineeFinancierInfo.guardianRelationship" 
+												placeholder="Guardian Relationship"
+												ng-options="obj.relationshipName for obj in guardianRelation track by obj.nomineeCode"
+												required>
+												<option value="">Guardian Relationship</option>
+											</select>
+
+										</div>
+									</div>
+									<div
+										ng-show="form.$submitted || form.guardianRelation.$touched"
+										class="form-error val_error">
+										<div ng-show="form.guardianRelation.$error.required">Please
+											Select Guardian Relation</div>
+									</div>
+								</div>
+							</div>
+							</div>
+<!-- 						</div> -->
+						<div
+							class=" col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6 customer_cols nomineeFinancier_info_col">
+							<h4 class="text-left">Financier information</h4>
+							
+							<!-- <div class="col-xs-6 col-sm-6 col-md-6">
+								<div class="form-group" data-title="Financier Type">
+									<div class="input-group">
+									<span
+											class="input-group-addon"><span
+											class="glyphicon glyphicon-user"></span></span>
+											<select class="form-control" name="financierType"
+												ng-model="nomineeFinancierInfo.financierType" 
+												placeholder="Financier Type"
+												ng-options="obj.name for obj in Financier Type track by obj.code"
+												>
+												<option value="">Financier Type</option>
+											</select>
+											<input type="text" class="form-control"
+											ng-model="nomineeFinancierInfo.financierType" capitalize 
+											maxlength="50" name="financierType"
+											placeholder="Financier Type"  >
+									</div>
+								</div>
+								<div
+										ng-show="form.$submitted || form.financierType.$touched"
+										class="form-error val_error">
+										<div ng-show="form.financierType.$error.required">Please
+											Select Financier Type</div>
+									</div>
+							</div> -->
+							<div class=" col-xs-6  col-sm-6  col-md-6">
+								<div class="form-group" data-title="Financier Type">
+									<div class="input-group">
+									<span class="input-group-addon"><span
+											class="glyphicon glyphicon-thumbs-up"></span></span>
+										<select class="form-control" name="financierType"
+											ng-model="nomineeFinancierInfo.financierType">
+											<option value="">Select</option>
+											<option value="H">HYPOTHECATION</option>
+											<option value="HP">HIRE PURCHASE</option>
+											<option value="L">LEASE</option>
+										</select> 
+
+									</div>
+								</div>
+							</div>
+							<div ng-if="nomineeFinancierInfo.financierType=='H'|| nomineeFinancierInfo.financierType=='HP' || nomineeFinancierInfo.financierType=='L'">
+							<div class="col-xs-6  col-sm-6 col-md-6 ">
+								<div class="form-group" data-title="Specify Your City">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-map-marker"></span></span> <input
+											list="city" class="form-control" placeholder="city"
+											id="city_list" placeholder="City"
+											ng-model="nomineeFinancierInfo.financierCity" name="city"
+											ng-blur="isInValidCity = getcity(nomineeFinancierInfo.financierCity)" required>
+										<datalist id="city">
+											<option
+												ng-repeat="cities in cityMasterdtoList track by cities.cityName"
+												value="{{cities.cityName}}">{{cities.cityName}}</option>
+										</datalist>
+									</div>
+								</div>
+								<div ng-if="isInValidCity==true && nomineeFinancierInfo.financierCity.toString().length >0" class="form-error val_error">Please choose valid city</div>
+								<div ng-show="form.$submitted || form.city.$touched" class="form-error val_error">
+									<div ng-show="form.city.$error.required">Please Enter  city</div>
+								</div>
+							</div>
+							<div class="clearfix xs-visible sm-visible md-visible"></div>
+							<div class="col-xs-6 col-sm-6 col-md-6">
+								<div class="form-group" data-title="Financier Name">
+									<div class="input-group">
+									 <span
+											class="input-group-addon"><span
+											class="glyphicon glyphicon-user"></span></span>
+										<input type="text" class="form-control"
+											ng-model="nomineeFinancierInfo.financierName" capitalize 
+											maxlength="50" name="financierName"
+											placeholder="Financier Name" string-only required>
+									</div>
+								</div>
+								<div ng-show="form.$submitted || form.financierName.$touched"
+									class="form-error val_error">
+									<div ng-show="nomineeFinancierInfo.financierName.$error.required">Please
+										Enter  Financier Name</div>
+									<span ng-show="form.financierName.$error.maxlength">
+										Sorry You are Exceeding the Limit</span> <span
+										ng-show="form.financierName.$error.pattern">Not a Valid
+										Name!</span>
+									<div ng-show="form.financierName.$error.required">Please
+										Enter  Financier Name</div>
+								</div>
+
+							</div>
+							</div>
+							
+						<!-- 	<div class="clearfix xs-visible sm-visible md-visible"></div> -->
+						</div>
+						<div class="clearfix xs-visible sm-visible md-visible"></div>
+						<div class="col-xs-12" id="next_Prev_dummy1"></div>	
+						<div class="row customer_details_row button_row">
+							<div
+								class="col-xs-12 col-sm-offset-2 col-sm-8  col-md-offset-2 col-md-8  button_cols">
+								<div class="col-xs-6 text-left prev_btn_col">
+									<a class="nominee_prev_btn prev_btn"
+										id="nominee_prev_btn"
+										ng-click="goVehicleInfoPage()"
+										><span
+										class="glyphicon glyphicon-menu-left"></span>PREV</a>
+								</div>
+								<div class="col-xs-6 text-right">
+									<a class="nominee_next_btn next_btn" id="nominee_next_btn"
+										ng-click="goInspectionPage($event,form)">NEXT<span
+										class="glyphicon glyphicon-menu-right"></span></a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="next_Prev_dummy"></div>
+

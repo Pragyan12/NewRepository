@@ -1,0 +1,323 @@
+POTApp.controller('InspectionController', function($scope, $state, $filter, InspectionServices, 
+		StorageService,CoverageService,RatingConstants, $q, docPreviewFact, quotationNoService, 
+		fileService, documentPreviewService) {
+
+	//ela
+	$scope.quoteNo = quotationNoService.get("quoteNo");
+//	console.log("hello::" + $scope.quoteNo);
+	$scope.documentPreview;
+	$scope.documentPreviewDisp;
+	
+	//ela
+	
+//	fileService.removeAll();
+	documentPreviewService.removeAll();
+	$scope.fileDownloadPreview = fileService.getAll();
+	fileService.removeAll();
+//	console.log(JSON.stringify($scope.fileDownloadPreview.dmsFileRequestDto));
+	
+	angular.forEach($scope.fileDownloadPreview.dmsFileRequestDto, function(val, key) {
+		$scope.quoteNo = key;
+		
+		angular.forEach(val, function(v, k) {
+			angular.forEach(v, function(fileType, base64) {
+				
+				newfileType = changeDocType(fileType.split(",")[0]);
+				fileURL = newfileType + base64;
+				//k = document Name and fileURL = file url
+				fileService.set(fileURL, fileType.split(",")[0]);
+			});
+//			console.log(val);
+			documentPreviewService.set(k, fileService.getAll());
+			fileService.removeAll();
+		});
+	});
+	
+	$scope.documentPreviewDisp = documentPreviewService.getAll();
+//	console.log(JSON.stringify($scope.documentPreviewDisp));
+	
+	
+	
+	//ela
+//	docPreviewFact.imageUpload($scope.quoteNo).then(function(response){
+//		$scope.documentPreview = response.data.fileURLs;
+//		angular.forEach($scope.documentPreview, function(val, key) {
+//			$scope.quoteNo = key;
+//			
+//			angular.forEach(val, function(v, k) {
+//				angular.forEach(v, function(fileType, base64) {
+//					newfileType = changeDocType(fileType);
+//					fileURL = newfileType + base64;
+//					//k = document Name and fileURL = file url
+//					fileService.set(fileURL, fileType);
+//				});
+//				documentPreviewService.set(k, fileService.getAll());
+//				fileService.removeAll();
+//			});
+//		});
+//		
+////		console.log(JSON.stringify(documentPreviewService.getAll()));
+//		$scope.documentPreviewDisp = documentPreviewService.getAll();
+//	});
+	
+	
+	
+	$scope.currentactiveclass=true;
+	
+	
+	$scope.inspectionInfoActive=true;
+	$scope.inspectionTypeList = InspectionServices.inspectionType();
+	$scope.inspectionTimes = '';
+	$scope.formData = StorageService.getAll();
+
+	$scope.minInspectionDate = moment().subtract('day');
+	$scope.maxAgeInspection = moment().add(5, 'day');
+	var inspectionDetails = StorageService.get('inspectionInfo');
+
+	var vehicleHrefLinkDetails = StorageService.get('vehicleHrefLink');
+	$scope.vehicleHrefLink = false;
+	if (angular.isDefined(vehicleHrefLinkDetails)) {
+		$scope.vehicleHrefLink = true;
+	}
+	
+	
+	//	
+	var inspectionHrefLinkDetails = StorageService.get('inspectionHrefLink');
+	$scope.inspectionHrefLink = false;
+	if (angular.isDefined(inspectionHrefLinkDetails)) {
+		$scope.inspectionHrefLink = true;
+	}
+
+	var nomineeHrefLinkDetails = StorageService.get('nomineeHrefLink');
+	$scope.nomineeHrefLink = false;
+	if (angular.isDefined(nomineeHrefLinkDetails)) {
+		$scope.nomineeHrefLink = true;
+	}
+	var documentHrefLinkLinkDetails = StorageService.get('documentHrefLink');
+	$scope.documentHrefLink = false;
+	if (angular.isDefined(documentHrefLinkLinkDetails)) {
+		$scope.documentHrefLink = true;
+	}
+
+	$scope.getTimelist = function(currentDate) {
+		var inspection_date = $filter('date')(currentDate, "dd/MM/yyyy");
+		var today_date = $filter('date')(new Date(), "dd/MM/yyyy");
+
+		if (inspection_date == today_date) {
+			$scope.inspectionTimes = InspectionServices.getListOfTimes();
+		} else {
+			$scope.inspectionTimes = InspectionServices.defaultTime();
+		}
+	/*alert("getTimelist"+$scope.getTimelist);*/
+	}
+
+	if (angular.isUndefined(inspectionDetails)) {
+		//		alert(JSON.stringify(inspectionDetails));
+		$scope.inspectionInfo = {
+			inspectionRequired : '',
+			inspectBy : '',
+			inspectionType : '',
+			inspecDate : '',
+			inspecTime : '',
+			comments : '',
+			inspectionReason:'',
+		};
+		StorageService.set('inspectionInfo', $scope.inspectionInfo);
+	} else {
+		//		alert(JSON.stringify(inspectionDetails));
+		$scope.inspectionInfo = inspectionDetails;
+	}
+	//TIME
+	//	$scope.inspectionInfo.inspecTime = new Date();
+
+	/*$scope.getTimelist = function(currentDate) {
+		var inspection_date = $filter('date')(currentDate, "dd/MM/yyyy");
+		var today_date = $filter('date')(new Date(), "dd/MM/yyyy");
+		if(inspection_date==today_date) {
+			$scope.inspectionTimes = InspectionServices.fetchTimelist(currentDate);
+			console.log("$scope.inspectionTimes : "+JSON.stringify($scope.inspectionTimes))
+		} else {
+			$scope.inspectionTimes = InspectionServices.defaultTime();
+			console.log("$scope.inspectionTimes : "+JSON.stringify($scope.inspectionTimes))
+		}
+		
+	}*/
+
+	$scope.preview = function(e, form) {
+		e.preventDefault();
+		form.$setSubmitted();
+		$("body").addClass('previewoverflow');
+		if (form.$valid) {
+			StorageService.set('inspectionInfo', $scope.inspectionInfo);
+			$scope.showpreview = true;
+			$scope.formData = StorageService.getAll();
+		}
+
+	};
+	
+	// validate
+	$scope.goDocumentPage = function(e, form) {
+		e.preventDefault();
+		form.$setSubmitted();
+
+		if (form.$valid) {
+			StorageService.set('inspectionInfo',
+					$scope.inspectionInfo);
+			
+			
+			$scope.documentHrefLink=true;
+			StorageService.set("documentHrefLink",$scope.documentHrefLink);
+			
+			$state.go('documentupload');
+			
+			
+
+		}
+	}
+	
+	
+
+	$scope.today = function() {
+		$scope.dt = new Date();
+	};
+	$scope.dateformat = "dd/MM/yyyy";
+
+	$scope.showcalendar = function($event) {
+		$scope.showdp = true;
+	};
+	$scope.showdp = false;
+
+	//validate
+	/*$scope.showPreviewDetails = function(e, form) {
+	e.preventDefault();
+		form.$setSubmitted();			
+		alert($scope.inspectionInfo);
+		if (form.$valid) {
+		StorageService.set('inspectionInfo',$scope.inspectionInfo);
+			alert($scope.inspectionInfo);
+		}
+	}*/
+
+
+	$scope.submit = function() {
+		$scope.formData = StorageService.getAll();
+		
+		var quoteNo=$scope.formData.premiumInfo.premiumDetails.quoteNo;
+
+		InspectionServices.saveEnrichmentDetails().then(function(response) {
+	
+			if(response.data.message=== "SUCCESS"){
+				InspectionServices.getAllEnrichmentDetails(quoteNo).then(function(response){
+					StorageService.set('policyDetails', response.data.responseData[0].PolicyDetails);
+					StorageService.set('CustomerDetails', response.data.responseData[0].CustomerDetails);
+					StorageService.set('VehicleDetails', response.data.responseData[0].VehicleDetails);
+					StorageService.set('PaymentDetails', response.data.responseData[0].PaymentDetails);
+					StorageService.set('PreviousPolicyDetails', response.data.responseData[0].PreviousPolicyDetails);
+					
+					$state.go('premiumSummaryFinal');
+				}, function(errorResponse) {
+					alert("Persistance Failed-->"+JSON.stringify(errorResponse));
+				});
+				
+			}else{
+				alert("Persistance Failed");
+			}
+		}, function(errorResponse) {
+			alert("Persistance Failed----->"+JSON.stringify(errorResponse));
+		});
+	}
+	
+	/*ela */
+	$scope.download = function(base64, filename) {
+		  var element = document.createElement('a');
+		  element.setAttribute('href', base64);
+		  element.setAttribute('download', filename);
+
+		  element.style.display = 'none';
+		  document.body.appendChild(element);
+
+		  element.click();
+		  document.body.removeChild(element);
+	}
+	
+	/*ela */
+	function changeDocType(fileType){
+		
+		switch(fileType) {
+		    case "jpg":
+		    	fileType = "data:image/jpeg;base64,";
+		        break;
+		    case "jpeg":
+		    	fileType = "data:image/jpeg;base64,";
+		        break;
+		    case "png":
+		    	fileType = "data:image/png;base64,";
+		        break;
+		    case "gif":
+		    	fileType = "data:image/gif;base64,";
+		        break;
+		    case "txt":
+		    	fileType = "data:text/plain;base64,";
+		        break;
+		    case "pdf":
+		    	fileType = "data:application/pdf;base64,";
+		        break;
+		    case "ps":
+		    	fileType = "data:application/postscript;base64,";
+		        break;
+		    case "rgb":
+		    	fileType = "data:image/x-rgb;base64,";
+		        break;
+		    case "xpm":
+		    	fileType = "data:image/x-xpixmap;base64,";
+		        break;
+		    case "pic":
+		    	fileType = "data:image/pict;base64,";
+		        break;
+		    case "tiff":
+		    	fileType = "data:image/tiff;base64,";
+		        break;
+		    case "bmp":
+		    	fileType = "data:image/bmp;base64,";
+		        break;
+		    case "doc":
+		    	fileType = "data:application/msword;base64,";
+		        break;
+		        //audio files
+		    case "mp3":
+		    	fileType = "data:audio/mpeg3;base64,";
+		        break;  
+		    case "wav":
+		    	fileType = "data:audio/wav;base64,";
+		        break;
+		    //videos
+		    case "video/mp4;":
+		    	fileType = "mp4";
+		        break;
+		    case "video/avi;":
+		    	fileType = "avi";
+		        break;
+		    case "video/x-flv;":
+		    	fileType = "flv";
+		        break;   
+		    case "video/mpeg;":
+		    	fileType = "mpg";
+		        break;  
+		    case "video/x-ms-wmv;":
+		    	fileType = "wmv";
+		        break;
+		    case "video/quicktime;":
+		    	fileType = "mov";
+		        break;
+		    case "video/3gpp;":
+		    	fileType = "3gp";
+		        break;
+		    default:
+		    	fileType = "file";
+		}
+		
+		return fileType;
+	};
+
+
+});

@@ -1,0 +1,39 @@
+/**
+ * Premium Computation Logic
+ */
+POTApp.factory('PolicyDetailsService', function(CoverageService, StorageService, $http, $q,RatingConstants,UrlConstants) {
+	
+	return {
+		getPolicyDetails : getPolicyDetails
+	}
+
+	function getPolicyDetails(quoteNo) {
+		var deferred = $q.defer();
+		$http({
+			url : UrlConstants.MIS_CLOUD+UrlConstants.GET_POLICY_DETAILS+ quoteNo,
+			method : "POST"
+		}).then(function(response) {
+			if(response.data.message==="SUCCESS"){
+				StorageService.set("quoteNo",response.data.quoteNo);
+				maPersonalDetails(response.data.personalInfo);
+			}
+			deferred.resolve(response);
+		}, function(error) {
+			deferred.reject(error);
+		});
+		return deferred.promise;
+	}
+	
+	function mapDetails(response){
+		var personalInfo = {
+				firstName : response.personalInfo.firstName,
+				lastName : response.personalInfo.lastName,
+				mobileNo : response.personalInfo.mobileNo,
+				email : response.personalInfo.email,
+				aadharNumber : response.personalInfo.aadharNumber,//We Want to split addhar number
+		}
+		
+		
+	}
+
+});

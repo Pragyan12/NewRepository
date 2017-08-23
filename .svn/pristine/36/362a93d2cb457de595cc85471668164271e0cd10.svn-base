@@ -1,0 +1,28 @@
+POTApp.factory('documentDetailsFact', function($http, $q
+		, UrlConstants, cacheFactory) {
+
+	// var url="http://192.168.0.16:8080/dms/download.json?quoteNo=1000000063";
+	// var url="http://server1:8585/dms/download.json?quoteNo=";//1000000102
+	var url = UrlConstants.DMS_URL + UrlConstants.DOCUMENT_PREVIEW;
+	// "http://192.168.0.18:8080/dms/documentPreview.json?quoteNo=";
+	var factory = {
+		imageUpload : imageUpload
+	}
+
+	return factory;
+
+	function imageUpload(quotNo) {
+		var defferred = $q.defer();
+		
+		var method="POST";
+		var data = {};
+		cacheFactory.getJsonWithOutCache(method, url + quotNo, data).then(function (response) {
+			defferred.resolve(response);
+		},function error(response){
+			defferred.reject(response);
+		}); 
+		
+		return defferred.promise;
+	}
+
+});

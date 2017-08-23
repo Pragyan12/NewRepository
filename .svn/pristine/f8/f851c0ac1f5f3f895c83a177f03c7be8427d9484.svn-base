@@ -1,0 +1,238 @@
+<div class="entire customer_details">
+	<form name="form"  role="form" id='myform' novalidate>
+		<div class="entire customer_details">
+			<div class="wrapper">
+				<div class="totalpage">
+					<!--start header-->
+					<div class="container-fluid header">
+						<div class="row bottom_header">
+							<div class="col-xs-12 colbottom_header">
+							</div>
+						</div>
+					</div>
+					<!--End header-->
+					<!--Start home_main-->
+					<div class="container-fluid customer_details_main text-center">
+
+
+						<div class="row customer_details_row search_info">
+							<div
+								class=" col-xs-12 col-sm-12 col-md-offset-1 col-md-10 customer_cols">
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="product Name">
+										<div class="input-group">
+										<span class="input-group-addon"><span
+												class="glyphicon glyphicon-user"></span></span>
+											<select name="productName" 
+												class="form-control" ng-model="searchInfo.productName">
+												<option value="">Select</option>
+													<!-- ng-options="obj.name for obj in productList track by obj.code" -->
+												<option value="COMPREHENSIVE" selected>COMPREHENSIVE</option>
+											</select> 
+										</div>
+									</div>
+								</div>
+								
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Quote No.">
+										<div class="input-group">
+										<span class="input-group-addon"><span
+												class="glyphicon glyphicon-envelope"></span></span>
+											<input type="text" class="form-control"
+												ng-model="searchInfo.quoteNo" id="quote_num"
+												placeholder="Quote No."> 
+										</div>
+									</div>
+								</div>
+								
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Policy No.">
+										<div class="input-group">
+										<span class="input-group-addon"><span
+												class="glyphicon glyphicon-envelope"></span></span>
+											<input type="text" class="form-control"
+												ng-model="searchInfo.policyNo" id="policy_num"
+												placeholder="Policy No."> 
+										</div>
+									</div>
+								</div>
+								<div class="clearfix xs-visible sm-visible md-visible"></div>
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Vechile Reg.No.">
+										<div class="input-group">
+										<span class="input-group-addon"><span
+												class="glyphicon glyphicon-envelope"></span></span>
+											<input type="text" class="form-control"
+												ng-model="searchInfo.vechregNo" id="vechile_reg_no"
+												placeholder="Vechile Reg.No."> 
+										</div>
+									</div>
+								</div>
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Business Type">
+										<div class="input-group">
+										<span class="input-group-addon"><span
+												class="glyphicon glyphicon-envelope"></span></span>
+											<select name="businessType" 
+												class="form-control" ng-model="searchInfo.businessName">
+											<!-- ng-options = "obj.name for obj in businessList "  -->
+												<option value="">Select</option>
+												<option value="ROLLOVER">ROLLOVER</option>
+												<option value="RENEWAL">RENEWAL</option>
+												<option value="RENEWAL TO ROLLOVER">RENEWAL TO ROLLOVER</option>
+											</select> 
+										</div>
+									</div>
+								</div>
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Status">
+										<div class="input-group">
+										<span class="input-group-addon"><span
+												class="glyphicon glyphicon-envelope"></span></span>
+											<select name="paymentType" id="paymentType"
+												class="form-control" ng-model="searchInfo.paymentTypeStatus">
+												<!-- ng-options="obj1.name for obj in paymentList" -->
+												<option value="">Select</option>
+												<option value="Enrich Completed">Enrich Completed</option>
+												<option value="Payment Completed">Payment Completed</option>
+												
+											</select> 
+										</div>
+									</div>
+								</div>
+								
+								<div class="clearfix xs-visible sm-visible md-visible"></div>
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Sub Status">
+										<div class="input-group">
+										<span class="input-group-addon"><span
+												class="glyphicon glyphicon-envelope"></span></span>
+											<select name="subStatus" id="subStatus"
+												class="form-control" ng-model="searchInfo.subStatus">
+												<option value="">Select</option>
+												<option value="QC PENDING">QC PENDING</option>
+												<option value="QC INCOMPLETE">QC INCOMPLETE</option>
+												<option value="INWARD PENDING">INWARD PENDING</option>
+												
+											</select> 
+										</div>
+									</div>
+							    </div>
+								
+									<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Created From Date"
+										data-name="">
+										<div class="input-group" moment-picker="searchInfo.fromDate"
+										 format="DD/MM/YYYY"
+											start-view="month"  autoclose="true"
+											set-on-select="true" >
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-calendar"></span></span> <input
+												name="fromDate" type="text" class="form-control"
+												ng-model="searchInfo.fromDate" ng-click="toEmpty();" readonly>
+										</div>
+									</div>
+									<div ng-show="form.$submitted" class="form-error val_error ">
+												<div ng-show="form.fromDate.$error.required">From should be greater than to date</div>
+									</div>
+								</div>
+								
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Created To Date"
+										data-name="">
+										<div class="input-group" moment-picker="searchInfo.toDate"
+										 format="DD/MM/YYYY"
+											start-view="month" min-date="searchToDate" autoclose="true"
+											set-on-select="true" >
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-calendar"></span></span> <input
+												name="toDate" type="text" class="form-control"
+												ng-model="searchInfo.toDate" ng-click="searchtoDatehide();" readonly ng-disabled="fromDateCheck()" ng-required="checkDateNull();">
+										</div>
+									</div>
+									<div ng-show="form.$submitted" class="form-error val_error">
+												<div ng-show="form.toDate.$error.required">To should be less than from date</div>
+									</div>
+									
+								</div>
+								
+								<div class="clearfix xs-visible sm-visible md-visible"></div>
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Customer Name">
+										<div class="input-group">
+										 <span class="input-group-addon"><span
+												class="glyphicon glyphicon-earphone"></span></span>
+											<input type="text" class="form-control"
+												ng-model="searchInfo.customername" id="customer_name"
+												placeholder="Customer Name">
+										</div>
+									</div>
+								</div>
+								
+								<div class=" col-xs-6  col-sm-4 col-md-4">
+								<div class="form-group" data-title="Mobile Number">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-earphone"></span></span> <input
+											type="text" class="form-control" name="mobileNo"
+											ng-model="searchInfo.mobileNo" id="mobileNo" maxlength="10"
+											placeholder="Mobile Number" numeric-regex >
+									</div>
+								</div>
+								<div ng-show="form.$submitted && form.mobileNo.$touched"
+									class="form-error val_error ">
+									<div
+										ng-show="searchInfo.mobileNo.toString().length<10 && searchInfo.mobileNo.toString().length>0">Please enter Valid 10 digit Mobile Number</div>
+								</div>
+							</div>
+
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+								<div class="form-group" data-title="Email ID" data-name="">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-envelope"></span></span> <input
+											type="email" class="form-control" validate-email
+											ng-model="searchInfo.email" capitalize placeholder="Email"
+											name="email" maxlength="90" ng-pattern="emailregEx">
+									</div>
+								</div>
+								    <span class="form-error val_error" ng-show="form.email.$error.pattern">Please enter Valid EmailId</span>
+							</div>
+								
+							</div>
+						</div>
+						<div
+							class="row search_details_row search_info_button addsearch_button">
+							<div
+								class=" col-xs-12 col-sm-12 col-md-12 search_cols text-center">
+								<div class="col-xs-12 col-sm-12 col-md-12 ">
+									<button class="btn calculate_premium" formtarget="_self" id=""
+										ng-click="search()">
+										<span class="glyphicon glyphicon-search" style="top: 2px;"></span>&nbsp;SEARCH
+									</button>
+								</div>
+
+							</div>
+						</div>
+						
+						<!-- <div class="row viewall_table">
+						<div class="table-responsive" id="dataTables_payment_complete_data">
+						</div>
+					</div> -->
+						<div
+								class=" col-xs-12 col-sm-12 col-md-12">
+								<div id = "searchmyTable">
+						
+									</div>
+						</div> 
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<div id="customer_details_dummy"></div>
+	<div class="footer">
+		<p>@&nbsp;2017 &nbsp;Powered by | FA Software Services Pvt. Ltd.
+			&nbsp;ALL Rights Reserved.</p>
+	</div>
+</div>

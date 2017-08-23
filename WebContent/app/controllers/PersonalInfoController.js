@@ -1,0 +1,236 @@
+POTApp.controller('PersonalInfoController',function($scope, $state, PersonalInfoService, VehicleService,StorageService,$log,$filter) {
+	
+	$scope.personalInfoHrefLink=true;
+	$scope.personalInfoActive=true;
+	
+	$scope.quoteNo ='';
+	$scope.titleList = '';
+	$scope.listOfAreas = '';
+	$scope.pincodeList = '';
+	$scope.pincodeList = '';
+	$scope.citylist = [];
+	$scope.arealist = [];
+	
+	 $scope.minAgeDob = moment().subtract(18,'year').format('DD/MM/YYYY');
+	$('.customer_cols div:nth-child(2n)').addClass('clearfix xs-visible sm-visible md-visible');
+	PersonalInfoService .titleList() .then(
+		function(response) {
+			$scope.titleList = response.data.partyTitleDtoList;
+		});
+	
+	var personalDetails = StorageService.get('personalInfo');
+	var vehicleDetails = StorageService.get('vehicleInfo');
+	var paymentDetails = StorageService.get('paymentInfo');
+	var vehicleHrefLinkDetails = StorageService.get('vehicleHrefLink');
+	$scope.cityMasterdtoList=getlistOfCities();
+//	console.log("Get All => "+JSON.stringify(StorageService.getAll()));
+	$scope.vehicleHrefLink=false;
+	if(angular.isDefined(vehicleHrefLinkDetails)){
+		$scope.vehicleHrefLink=true;
+	}
+	
+	var nomineeHrefLinkDetails = StorageService.get('nomineeHrefLink');
+	$scope.nomineeHrefLink=false;
+	if(angular.isDefined(nomineeHrefLinkDetails)){
+		$scope.nomineeHrefLink=true;
+	}
+	
+	var inspectionHrefLinkDetails = StorageService.get('inspectionHrefLink');
+	$scope.inspectionHrefLink=false;
+	if(angular.isDefined(inspectionHrefLinkDetails)){
+		$scope.inspectionHrefLink=true;
+	}
+	var documentHrefLinkLinkDetails = StorageService.get('documentHrefLink');
+	$scope.documentHrefLink = false;
+	if (angular.isDefined(documentHrefLinkLinkDetails)) {
+		$scope.documentHrefLink = true;
+	}
+	var quoteNo = StorageService.get('quoteNo');
+	if (angular.isDefined(personalDetails) && angular.isDefined(vehicleDetails) &&  angular.isDefined(paymentDetails)) {
+		$scope.personalInfo = {
+				title : angular.isUndefined(personalDetails.title) ? '' : personalDetails.title,
+				firstName : angular.isUndefined(personalDetails.firstName) ? '': personalDetails.firstName,
+				lastName : angular.isUndefined(personalDetails.lastName) ? '': personalDetails.lastName,
+				dob : angular.isUndefined(personalDetails.dob) ? '': personalDetails.dob,
+				address1 : angular.isUndefined(personalDetails.address1) ? '': personalDetails.address1,
+				address2 : angular.isUndefined(personalDetails.address2) ? '': personalDetails.address2,
+				address3 : angular.isUndefined(personalDetails.address3) ? '': personalDetails.address3,
+				isEnableAreaEdit:angular.isUndefined(personalDetails.isEnableAreaEdit) ? '': personalDetails.isEnableAreaEdit,
+				city : angular.isUndefined(personalDetails.city) ? '': personalDetails.city,
+				stateName : angular.isUndefined(personalDetails.stateName) ? '': personalDetails.stateName,
+			    stateCode : angular.isUndefined(personalDetails.stateCode) ? '': personalDetails.stateCode,
+				area : angular.isUndefined(personalDetails.area) ? '': personalDetails.area,
+				pincode : angular.isUndefined(personalDetails.pincode) ? '': personalDetails.pincode,
+				mobileNo : angular.isUndefined(personalDetails.mobileNo) ? '': personalDetails.mobileNo,
+				alterMobileNo : angular.isUndefined(personalDetails.alterMobileNo) ? '': personalDetails.alterMobileNo,
+				panNo : angular.isUndefined(personalDetails.panNo) ? '': personalDetails.panNo,
+				std : angular.isUndefined(personalDetails.std) ? '': personalDetails.std,
+				phonealt : angular.isUndefined(personalDetails.phonealt) ? '': personalDetails.phonealt,
+				email : angular.isUndefined(personalDetails.email) ? '': personalDetails.email,
+				alterEmail:angular.isUndefined(personalDetails.alterEmail) ? '': personalDetails.alterEmail,
+				EIA:angular.isUndefined(personalDetails.EIA) ? '': personalDetails.EIA,
+				GSTIN:angular.isUndefined(personalDetails.GSTIN) ? '': personalDetails.GSTIN		
+		};
+		$scope.vehicleInfo = {
+			vehicleRegisteredTo:angular.isUndefined(vehicleDetails.vehicleRegisteredTo.name) ? '' : vehicleDetails.vehicleRegisteredTo.name
+		};
+		$scope.paymentInfo={
+				chequeAmt:angular.isUndefined(paymentDetails.chequeAmt) ? '' : paymentDetails.chequeAmt
+		}
+	}else if(angular.isDefined(quoteNo)){
+		
+		
+	}else{
+		PersonalInfoService.getPaymentResponseOnQuoteNo().then(function(response) {
+			$scope.quoteNo = response.data.quoteNo;
+		}, function(error) {
+			$log.error('failure loading movie', error);
+		});
+	}
+	
+	
+	
+	$scope.upper = function(panNo) {
+		$scope.personalInfo.panNo = panNo.toUpperCase();
+	}
+	$scope.goVechilePage = function(e, form) {
+		e.preventDefault();
+		form.$setSubmitted();
+		
+		/*var stdNo= (angular.isUndefined($scope.personalInfo.std)?0:$scope.personalInfo.std.toString().length);
+		var phoneAltNoLength= (angular.isUndefined($scope.personalInfo.phonealt)?0:$scope.personalInfo.phonealt.toString().length);*/
+
+		if (form.$valid &&($scope.personalInfo.alterMobileNo.toString().length==10 ||  $scope.personalInfo.alterMobileNo.toString().length==0)&& ($scope.personalInfo.panNo.toString().length==10 ||  $scope.personalInfo.panNo.toString().length==0) && $scope.personalInfo.mobileNo.toString().length==10 
+				&&($scope.personalInfo.address1.toString().length<=50 ||  $scope.personalInfo.address1.toString().length==0)
+				&&( ($scope.personalInfo.phonealt.toString().length>=7 && $scope.personalInfo.std.toString().length>=3) || ($scope.personalInfo.phonealt.toString().length==0 && $scope.personalInfo.std.toString().length==0))
+				&&($scope.personalInfo.pincode.toString().length==6)&& ($scope.personalInfo.pincode!='000000')&& ($scope.personalInfo.std!='00000')&& (!$scope.isInValidCity))
+         {
+			$scope.vehicleHrefLink=true;
+			StorageService.set("personalInfo", $scope.personalInfo);
+			StorageService.set("vehicleHrefLink",$scope.vehicleHrefLink);
+			$state.go('vehicleInfo');
+		}
+	}
+	$scope.getcity=function(city){
+		/*if($scope.personalInfo.area!='' ||$scope.personalInfo.pincode!='' ){
+			$scope.personalInfo.area='';
+			$scope.personalInfo.pincode='';
+		}*/
+		return getApplicableCityList(city);	
+	}
+	$scope.getPincode=function(areaName) {
+		if($scope.personalInfo.pincode!='' ){
+			$scope.personalInfo.pincode='';
+		}
+		return getApplicablePinCodeList(areaName);
+	}
+	function getApplicablePinCodeList(areaName){
+		var newArea= $filter("filter")($scope.arealist, {areaName:areaName});
+		if(newArea.length===0){
+			return true;
+		}else{
+			var result= false;
+			angular.forEach(newArea, function(value, key){
+	            if(value.areaName === areaName){
+	            	result = true;
+	            } 
+			});
+			if(result) {
+				getlistOfPincode(newArea[0].areaName);
+				return false;
+			}else{
+				return true;
+			}
+		}
+	}
+	function getApplicableCityList(city){
+//		alert(city);
+		var newTemp= $filter("filter")($scope.cityMasterdtoList, {cityName:city});
+		if(newTemp.length===0){
+			return true;
+		}else{
+			var result= false;
+			angular.forEach(newTemp, function(value, key){
+	            if(value.cityName === city){
+	            	result = true;
+	            } 
+			});
+			if(result) {
+				//getlistOfAreas(newTemp[0].cityCode);
+				return false;
+			}else{
+				return true;
+			}
+		}
+	}
+	function getlistOfCities(){
+		PersonalInfoService.getlistOfCities().then(function(d) {
+			$scope.cityMasterdtoList = d.data.cityMasterdtoList;
+		/*	if(!$scope.personalInfo.isEnableAreaEdit){
+				var newTemp= $filter("filter")($scope.cityMasterdtoList, {cityName:$scope.personalInfo.city});
+				if(newTemp.length > 0){
+					if(angular.isDefined($scope.personalInfo.city) && $scope.personalInfo.city!=''){
+						//getlistOfAreas(newTemp[0].cityCode);
+						//getApplicablePinCodeList($scope.personalInfo.area);
+					}
+					if($scope.personalInfo.isEnableAreaEdit){
+						//getApplicableCityList($scope.personalInfo.city);
+					}
+				}
+			}*/
+		}, function(error) {
+			$log.error('failure loading movie', error);
+		});
+						
+
+	}
+	function getlistOfAreas(cityCode){
+		PersonalInfoService.getAreaByCity(cityCode)
+		.then(function(d) {
+			$scope.arealist= d.data.areaMasterdtoList;
+		}, function(error) {
+			$log.error('failure loading movie', error);
+		});
+	}
+	function getlistOfPincode(areaCode){
+		PersonalInfoService.getallpincode(areaCode)
+		.then(function(d) {
+			if(''!=areaCode){
+				$scope.personalInfo.pincode=d.data.stringList[0];
+//				alert("::::"+d.data.stringList[0]);
+			}
+		}, function(error) {
+			$log.error('failure loading movie', error);
+		});
+	}
+	$scope.emailregEx = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,5}(?:\.[a-z]{2})?)$/i;
+	
+	$scope.getStateNameByCity = function(){
+		angular.forEach($scope.cityMasterdtoList, function(v, k){
+			if($scope.personalInfo.city == v.cityName){
+				$scope.personalInfo.stateName = $scope.cityMasterdtoList[k].stateName;
+				$scope.personalInfo.stateCode = $scope.cityMasterdtoList[k].stateCode;
+			}
+		});
+	}
+	
+	//please dont delete this code 
+	
+		function getStates()
+		{
+			var city="CHENNAI";
+			PersonalInfoService.getlistOfStates(stateoder).then(function(response)
+					{
+				    alert("from controller"+response);
+					});
+		}
+		
+		/*var quoteNo = $scope.personalInfo.personalDetails.quoteNo;
+		PersonalInfoService.fetchPolicyStartDate(quoteNo).then(function(response){
+			var policyStartDate = response.data.QuotationData.insceptionDate;
+			$scope.minAgeDob = moment(policyStartDate, "DD/MM/YYYY");
+			 $scope.minAgeDob = moment().subtract(18,'year').format('DD/MM/YYYY');
+			
+		});*/
+	
+});

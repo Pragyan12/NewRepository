@@ -1,0 +1,57 @@
+app.factory('potCacheFactory', function ($q, $http, CacheFactory) {
+
+	  CacheFactory('dataCache', {
+	    maxAge: 60 * 60 * 24000, // Items added to this cache expire after 1 minutes
+//	     cacheFlushInterval: 60 * 60 * 24000, // This cache will clear itself every 24 hour
+	    deleteOnExpire: 'aggressive', // Items will be deleted from this cache when they expire
+	    storageMode: 'memory'//'memory', 'localStorage', 'sessionStorage'
+	  });
+	  
+	  function getJsonData(cacheName, method, url, data) {
+	     var deferred = $q.defer();
+	     var start = new Date().getTime();
+	     var dataCache = CacheFactory.get('dataCache');
+
+	     if (dataCache.get(cacheName)) {
+	   		console.log(JSON.stringify(dataCache.get(cacheName)));
+	     	deferred.resolve(dataCache.get(cacheName));
+	     } else {
+		   	  $http({
+		   	        method : method,//"GET","POST"
+		   	        url : url,
+		   	        data : data
+		   	  })
+		   	  .then(function successCallback(response) {
+			   	   console.log('time taken for request: ' + (new Date().getTime() - start) + 'ms');
+			   	   dataCache.put(cacheName, response);
+			   	   deferred.resolve(response);
+		  	   }, function errorCallback(response) {
+		  		   deferred.resolve(response);
+		  	  });
+	     }
+	     return deferred.promise;
+	   }
+	 
+	  return {
+		  getJsonData: getJsonData
+	  };
+	});
+
+// pot implimentation model controller
+//app.controller('myCtrl', function ($http, httpFact) {
+//	//$http configuration
+//	cacheName = "dropDown"//drop down cache name
+//	method = "GET";//"GET" or "POST"
+//	url = "http://192.168.0.22:8080/dms/documents.json"; //url
+//	data = {}; //post data 
+//	
+//	httpFact.getJsonData(cacheName, method, url, data).then(function (response) {
+//		if(response.status == "200"){
+//			//correct
+//			console.log("success");
+//		}else{
+//			//error
+//			console.log("error");
+//		}
+//  	});
+//});

@@ -1,0 +1,113 @@
+<div class="col-xs-3 col-sm-3 col-md-3 premium_addon_cover">
+	<div class="row addon_cover_total_list">
+		<h4 class="text-left">Additional Covers</h4>
+		<div class="addon_list">
+			<div class="checkbox " data-ng-repeat="covers in additional_Covers"
+				data-ng-show="fuelTypeChange(covers.coverCode)">
+				<input type="checkbox" data-title="{{covers.coverName}}"
+					id="{{covers.coverName}}"
+					data-ng-click='suminsured[$index]=addCover(covers.coverCode,covers.coverName,covers.coverType,additional_flag[$index],covers.subInsuredType);'
+					data-ng-checked="isCoverSelected(covers.coverCode)"
+					data-ng-init="additional_flag[$index]=isCoverSelected(covers.coverCode);suminsured[$index]=getCoverSumInsured(covers.coverCode);"
+					data-ng-model='additional_flag[$index]'> 
+					
+				<label for="{{covers.coverName}}">{{covers.coverName}}</label>
+				<span data-ng-switch="covers.subInsuredType" data-ng-show="additional_flag[$index]"> 
+					<span data-ng-switch-when="TEXT">
+						<input type="text"	id="coverage_select{{$index}}"  class="form-control"  
+							data-ng-model="suminsured[$index]" 
+							max="50000"  
+							data-ng-blur="updateCoverSumInsured(covers.coverCode,covers.coverName,covers.coverageType,suminsured[$index],covers.subInsuredType)" 
+							allow-Numbers-Only  prevent-typing-greater />
+					</span> 
+					<span data-ng-switch-when="LIST">
+						<select class="form-control" id="coverage_select{{$index}}" data-ng-model="suminsured[$index]"
+							data-ng-change="updateCoverSumInsured(covers.coverCode,covers.coverName,covers.coverType,suminsured[$index],covers.subInsuredType)"
+							data-ng-options="obj for obj in covers.sumInsuredList track by obj" >
+						</select>
+					</span>
+					<span data-ng-switch-default>
+					</span>
+				</span>
+				
+			</div>
+		</div>
+	</div>
+	<div class="row addon_cover_total_list">
+		<h4 class="text-left">Addon Covers</h4>
+		<div class="addon_list" data-ng-init="viewMoreCover=false;viewLessCover=true;">
+			<div class="checkbox " data-ng-repeat="covers in addon_Covers" data-ng-show="($index<3 || viewMoreCover)?true:false; ">
+				<input type="checkbox" data-title="{{covers.coverName}}"
+					id="{{covers.coverName}}"
+					data-ng-click='suminsured[$index]=addCover(covers.coverCode,covers.coverName,covers.coverType,addon_flag[$index],covers.subInsuredType);'
+					data-ng-checked="isCoverSelected(covers.coverCode)"
+					data-ng-init="addon_flag[$index]=isCoverSelected(covers.coverCode);suminsured[$index]=getCoverSumInsured(covers.coverCode);"
+					data-ng-model='addon_flag[$index]'> 
+				
+				<label for="{{covers.coverName}}">{{covers.coverName}}</label>
+				<span data-ng-switch="covers.subInsuredType" data-ng-show="addon_flag[$index]"> 
+					<span data-ng-switch-when="TEXT">
+						<input type="text"	id="coverage_select{{$index}}"  class="form-control"  data-ng-model="suminsured[$index]" 
+							max="50000" 
+							data-ng-blur="updateCoverSumInsured(covers.coverCode,covers.coverName,covers.coverageType,suminsured[$index],covers.subInsuredType)" 
+							allow-Numbers-Only  prevent-typing-greater /> 
+					</span> 
+					<span data-ng-switch-when="LIST">
+						<select class="form-control" id="coverage_select{{$index}}" data-ng-model="suminsured[$index]"
+							data-ng-change="updateCoverSumInsured(covers.coverCode,covers.coverName,covers.coverType,suminsured[$index],covers.subInsuredType)"
+							data-ng-options="obj for obj in covers.sumInsuredList track by obj" >
+						</select>
+					</span>
+					<span data-ng-switch-default>
+					</span>
+				</span>
+			</div>
+			<div class="addon_list expand_more" data-ng-show="viewLessCover"
+				data-ng-click="viewMoreCover=true;viewLessCover=false;">
+				<div class="toggle_icon">
+					<span class="fa fa-plus-square"></span><span class="more">More</span>
+				</div>
+			</div>
+			<div class="addon_list expand_less" data-ng-show="viewMoreCover"
+				data-ng-click="viewMoreCover=false;viewLessCover=true;">
+				<div class="toggle_icon">
+					<span class="fa fa-minus-square"></span><span class="less">Less</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row addon_cover_total_list">
+		<h4 class="text-left">Discounts</h4>
+		<div class="addon_list">
+			<div class="checkbox " data-ng-repeat="covers in discount_coverage"
+				data-ng-show="fuelTypeChange(covers.coverCode)">
+				<input type="checkbox" data-title="{{covers.coverName}}"
+					id="{{covers.coverName}}"
+					data-ng-click='suminsured[$index]=addCover(covers.coverCode,covers.coverName,covers.coverType,discounts_flag[$index],covers.subInsuredType);'
+					data-ng-checked="isCoverSelected(covers.coverCode)"
+					data-ng-init="discounts_flag[$index]=isCoverSelected(covers.coverCode);suminsured[$index]=getCoverSumInsured(covers.coverCode);"
+					data-ng-model='discounts_flag[$index]'> 
+				
+				<label for="{{covers.coverName}}">{{covers.coverName}}</label>
+				<span data-ng-switch="covers.subInsuredType" data-ng-show="discounts_flag[$index]"> 
+					<span data-ng-switch-when="TEXT">
+						<input type="text"	id="coverage_select{{$index}}"  class="form-control"  data-ng-model="suminsured[$index]" 
+							max="50000" 
+							data-ng-blur="updateCoverSumInsured(covers.coverCode,covers.coverName,covers.coverageType,suminsured[$index],covers.subInsuredType)" 
+							allow-Numbers-Only  prevent-typing-greater /> 
+					</span> 
+					<span data-ng-switch-when="LIST">
+						<select class="form-control" id="coverage_select{{$index}}" data-ng-model="suminsured[$index]"
+							data-ng-change="updateCoverSumInsured(covers.coverCode,covers.coverName,covers.coverType,suminsured[$index],covers.subInsuredType)"
+							data-ng-options="obj for obj in covers.sumInsuredList track by obj" >
+						</select>
+					</span>
+					<span data-ng-switch-default>
+					</span>
+				</span>
+				
+			</div>
+		</div>
+	</div>
+</div>
+

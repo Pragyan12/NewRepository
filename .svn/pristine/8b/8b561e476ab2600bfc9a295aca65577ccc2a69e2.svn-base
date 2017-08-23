@@ -1,0 +1,411 @@
+<div class="entire customer_details">
+	<div class="wrapper">
+		<div class="totalpage">
+			<div ui-view="customer_header"></div>
+			<div class="container-fluid docu_container">
+				<div class="row">
+					<form role="form" class="home_form" id="home_form" name="form"
+						novalidate>
+						<div class="col-xs-12 col-sm-12 col-md-12 docu_container_col12">
+							<!-- 			<p class="docum_header">DOCUMENT MANAGEMENT UPLOAD<p> -->
+							<p class="docum_sub_header">DOCUMENT TYPE
+							<p>
+						</div>
+						<div class="col-xs-12 col-sm-12 col-md-12 docu_container_col12">
+							<p class="optional_header">Optional Document
+							<p>
+						</div>
+						<div
+							class="col-xs-12 col-sm-12 col-md-12 col-lg-12 docu_container_col12">
+							<div class="col-xs-6 col-sm-4 col-md-3 col-lg-3"
+								ng-repeat="x in documentUploads" ng-if="x.mandatory == false">
+								<div class="checkbox checkbox-success">
+									<input id="{{x.documentName}}" ng-model="document[$index]" 
+										ng-click="clkShow([$index], document[$index], x.documentName)"
+										type="checkbox"> <label for="{{x.documentName}}">{{x.documentName}}</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 proof_col">
+							<div class="row proof_row"
+								ng-repeat="x in documentUploadsImg track by $index"
+								ng-if="x.mandatory == true">
+								<div class="col-xs-3 col-sm-3 col-md-2 col-lg-2 proof_text">
+									<p>{{x.documentName}}</p>
+								</div>
+								<div class="col-xs-9 col-sm-9 col-md-10 col-lg-10">
+
+									<span ng-repeat='(col, vals) in documentFiles'
+										ng-if="x.documentName == col">
+										<div class="col-xs-3 col-sm-3 col-md-1 col-lg-1 img_col"
+											ng-repeat='val in vals track by $index'>
+											<div class="img-wrap">
+											
+												<span class="close"
+													ng-click="remove(x.documentName, $index)">&times;</span> <img
+													ng-src="{{val}}" ng-click="showzoomimage(val)"
+													ng-show="val.indexOf('data:application/pdf;') != 0 && val.indexOf('data:video/mp4;') != 0 &&
+							  		val.indexOf('data:video/avi;') != 0 && val.indexOf('video/x-flv;') != 0 && val.indexOf('data:video/mpeg;') != 0 &&
+							  		val.indexOf('data:video/x-ms-wmv;') != 0 && val.indexOf('data:video/quicktime;') != 0"
+													alt="Preview" class="img-responsive">
+												<!-- 							  		<object data="{{val}}" ng-show="val.indexOf('data:application/pdf;') == 0" type="application/pdf" style="width:200%; height:100px" /> -->
+												<!-- 							  		<object data="{{val}}" ng-show="val.indexOf('data:text/plain;') == 0" type="text/plain" style="width:200%; height:100px" /> -->
+												<img ng-src="images/pdflogo.png"
+													ng-show="val.indexOf('data:application/pdf;') == 0;"
+													alt="Preview" class="img-responsive"> <img
+													ng-src="images/videologo.jpg"
+													ng-show="val.indexOf('data:video/mp4;') == 0 ||
+							  		val.indexOf('data:video/avi;') == 0 || val.indexOf('video/x-flv;') == 0 || val.indexOf('data:video/mpeg;') == 0 ||
+							  		val.indexOf('data:video/x-ms-wmv;') == 0 || val.indexOf('data:video/quicktime;') == 0"
+													alt="Preview" class="img-responsive">
+											</div>
+										</div>
+									</span>
+
+									<div class="col-xs-4 col-sm-3 col-md-2 col-lg-2 img_col"
+										ng-show="browseShow == $index" ng-init="browseShow = $index">
+										<div class="img_box">
+											<p class="camera_section">
+												<label for="{{$index}}c"><i class="fa fa-camera"></i>
+												</label>
+											</p>
+											<p class="text_section">Capture Photo / Video here</p>
+											<p class="browse_section">
+												<label for="{{$index}}"><span>Browse</span></label>
+											</p>
+										</div>
+
+										<input type='file' id="{{$index}}c" capture="camera"
+											ng-model-instant show-hide-error
+											onchange="angular.element(this).scope().imageUpload(event);angular.element(this).scope().browseShow = 'y';"
+											ng-click="tmpFiles = x.documentName;" multiple filetype /> <input
+											type='file' id="{{$index}}" ng-model-instant show-hide-error
+											onchange="angular.element(this).scope().imageUpload(event);angular.element(this).scope().browseShow = 'y';"
+											ng-click="add(x.documentName);" multiple filetype /> <input
+											type="hidden" ng-model="tmpFiles" ng-value="x.documentName" />
+										<div class="error" ng-repeat="(errcol, errvals) in errors"
+											ng-if="x.documentName == errcol" style="color: yellow;">
+											<div>{{errvals}}</div>
+										</div>
+									</div>
+
+									<div class="col-xs-4 col-sm-3 col-md-2 col-lg-2 add_update"
+										my-directive id="d{{$index}}" ng-click="browseShow = $index;">
+										<p>
+											<i class="fa fa-plus-circle"></i>&nbsp;Add / Update
+										</p>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+
+
+						<div class="col-xs-12 submit_col text-center">
+							<div class="row submit_row">
+								<div class="col-xs-6 text-left">
+									<a ui-sref="inspectionInfo" class="financier_prev_btn prev_btn" ng-click="previewInspectionInfo()"
+										id="financier_prev_btn"> <span
+										class="glyphicon glyphicon-menu-left"></span>PREV
+									</a>
+								</div>
+								<div class="col-xs-6 text-right">
+									<!-- 				<a class="preview_cus_btn" id="" ng-click="preview($event,form)">Preview& Submit</a>  -->
+									<button class="btn submit_btn" ng-click="preview($event,form)">Preview
+										& Submit</button>
+								</div>
+
+							</div>
+						</div>
+						<div class="col-xs-12">
+							<div class="row">
+								<div class="dummy_height"></div>
+							</div>
+						</div>
+					</form>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+<!-- START ZOOMIN -->
+<div id="zoomsection" ng-show="imgopen" ng-class="closezoomicons">
+
+	<div id="zoomsection_inner">
+		<div id="closezoom">
+			<span class="glyphicon glyphicon-remove-circle" id="closezoomspan"
+				ng-click="closezoomicon()"></span>
+		</div>
+		<img src="">
+	</div>
+</div>
+<!-- END ZOOMIN -->
+<!-- START PREVIEW   -->
+<div class="preview_popup_main_entire" ng-show="showpreview">
+	<div class="container-fluid preview_popup_main">
+		<div class="preview_popup_inner">
+			<div class="preview_popup_header">
+				<h5 class="text-left">QUOTE PREVIEW</h5>
+				<span class="preview_closer close_popup"
+					ng-click="showpreview=false;closepreviewfn()">&#9932;</span>
+			</div>
+			<!-- 						<div class="row preview_row"> -->
+			<div class="col-xs-12 preview_col">
+				<div class="col-xs-6 preview_sub_col preview_customer">
+					<h6>PROPOSER DETAILS</h6>
+					<div>
+						<p>Name</p>
+						<p>
+							<span>:{{formData.personalInfo.title}}</span>{{formData.personalInfo.firstName}}
+							{{formData.personalInfo.lastName}}
+						</p>
+					</div>
+					<div
+						ng-if="formData.personalInfo.dob != null && formData.personalInfo.dob!=''">
+						<p>DOB</p>
+						<p>: {{formData.personalInfo.dob | date:'dd-MM-yyyy'}}</p>
+					</div>
+					<div>
+						<p>Mobile No</p>
+						<p>: {{formData.personalInfo.mobileNo}}</p>
+					</div>
+					<div
+						ng-if="formData.personalInfo.alterMobileNo != null && formData.personalInfo.alterMobileNo!=''">
+						<p>Alternative Mobile No</p>
+						<p>:{{formData.personalInfo.alterMobileNo}}</p>
+					</div>
+					<div>
+						<p>Email</p>
+						<p>:{{formData.personalInfo.email}}</p>
+					</div>
+					<div
+						ng-if="formData.personalInfo.alterEmail != null && formData.personalInfo.alterEmail!=''">
+						<p>Alternative Email</p>
+						<p>:{{formData.personalInfo.alterEmail}}</p>
+					</div>
+					<div>
+						<p>Communication Address</p>
+						<p>
+							<span>:{{formData.personalInfo.address1}}, <span
+								ng-if="formData.personalInfo.address2!=''">
+								{{formData.personalInfo.address2}}, </span> <span
+								ng-if="formData.personalInfo.address3!=''">
+								{{formData.personalInfo.address3}}, </span>
+							{{formData.personalInfo.city}}, {{formData.personalInfo.area}},
+							{{formData.personalInfo.pincode}}
+						</span></p>
+
+					</div>
+					<!-- <div>
+										<p>Pan No:</p>
+										<p>{{formData.personalInfo.panNo}}</p>
+									</div>
+									<div ng-if="formData.personalInfo.phonealt != null && formData.personalInfo.phonealt!=''">
+										<p>Telephone No:</p>
+										<p>{{formData.personalInfo.phonealt}}</p>
+									</div> -->
+
+
+				</div>
+				<div class="col-xs-6 preview_sub_col preview_vechile">
+					<h6>VEHICLE DETAILS</h6>
+					<div>
+						<p>Registration Number</p>
+						<p>:
+							{{formData.vehicleInfo.regNo1}}{{formData.vehicleInfo.regNo2}}{{formData.vehicleInfo.regNo3}}{{formData.vehicleInfo.regNo4}}</p>
+					</div>
+					<div>
+						<p>Engine Number</p>
+						<p><span>:{{formData.additionalVehicleInfo.engineNo}}</span></p>
+					</div>
+					<div>
+						<p>Chassis Number</p>
+						<p><span>:{{formData.additionalVehicleInfo.chassisNo}}</span></p>
+					</div>
+					<div
+						ng-if="formData.vehicleInfo.previousPolicyInsurer != null && formData.vehicleInfo.previousPolicyInsurer!=''">
+						<p>Previous Insurer</p>
+						<p>:
+							{{formData.vehicleInfo.previousPolicyInsurer.insurerName}}</p>
+					</div>
+					<div
+						ng-if="formData.additionalVehicleInfo.prevPolicyNo != null && formData.additionalVehicleInfo.prevPolicyNo!=''">
+						<p>Previous Policy Number</p>
+						<p><span>:{{formData.additionalVehicleInfo.prevPolicyNo}}</span></p>
+					</div>
+					<div>
+						<p>Registration Address</p>
+						<p>
+							<span>:{{formData.additionalVehicleInfo.address1}}, <span
+								ng-if="formData.additionalVehicleInfo.address2!=''">
+								{{formData.additionalVehicleInfo.address2}}, </span> <span
+								ng-if="formData.additionalVehicleInfo.address3!=''">
+								{{formData.additionalVehicleInfo.address3}}, </span>
+							{{formData.additionalVehicleInfo.city}},
+							{{formData.additionalVehicleInfo.area}},
+							{{formData.additionalVehicleInfo.pincode}}
+						</span></p>
+					</div>
+				</div>
+
+				<!-- 						</div> -->
+
+				<!-- 						<div class="row preview_row"> -->
+
+				<div class="col-xs-6 preview_sub_col preview_nominee"
+					ng-if="formData.nomineeFinancierInfo.nomineeName != null && formData.nomineeFinancierInfo.nomineeName!=''">
+					<h6>NOMINEE DETAILS</h6>
+					<div
+						ng-if="formData.nomineeFinancierInfo.nomineeName != null && formData.nomineeFinancierInfo.nomineeName!=''">
+						<p>Nominee Name</p>
+						<p>: {{formData.nomineeFinancierInfo.nomineeName}}</p>
+					</div>
+					<div
+						ng-if="formData.nomineeFinancierInfo.dob != null && formData.nomineeFinancierInfo.dob!=''">
+						<p>Nominee DOB</p>
+						<p>: {{formData.nomineeFinancierInfo.dob | date:'dd-MM-yyyy'}}</p>
+					</div>
+					<div
+						ng-if="formData.nomineeFinancierInfo.nomineeRelationShip != null && formData.nomineeFinancierInfo.nomineeRelationShip!=''">
+						<p>Nominee Relationship</p>
+						<p>:
+							{{formData.nomineeFinancierInfo.nomineeRelationShip.relationshipName}}</p>
+					</div>
+					<div
+						ng-if="formData.nomineeFinancierInfo.guardianName != null && formData.nomineeFinancierInfo.guardianName!=''">
+						<p>Guardian Name</p>
+						<p>: {{formData.nomineeFinancierInfo.guardianName}}</p>
+					</div>
+					<div
+						ng-if="formData.nomineeFinancierInfo.gdob != null && formData.nomineeFinancierInfo.gdob!=''">
+						<p>Guardian DOB</p>
+						<p>: {{formData.nomineeFinancierInfo.gdob |
+							date:'dd-MM-yyyy'}}</p>
+					</div>
+
+					<div
+						ng-if="formData.nomineeFinancierInfo.guardianRelationship != null && formData.nomineeFinancierInfo.guardianRelationship!=''">
+						<p>Guardian Relationship</p>
+						<p>:
+							{{formData.nomineeFinancierInfo.guardianRelationship.relationshipName}}</p>
+					</div>
+
+
+				</div>
+				<div class="col-xs-6 preview_sub_col preview_financier"
+					ng-if="formData.nomineeFinancierInfo.financierType != null && formData.nomineeFinancierInfo.financierType!=''">
+					<h6>FINANCIER DETAILS</h6>
+					<div
+						ng-if="formData.nomineeFinancierInfo.financierType != null && formData.nomineeFinancierInfo.financierType!=''">
+						<p>Financier Type</p>
+						<p>: {{formData.nomineeFinancierInfo.financierType}}</p>
+					</div>
+					<div
+						ng-if="formData.nomineeFinancierInfo.financierName != null && formData.nomineeFinancierInfo.financierName!=''">
+						<p>Financier Name</p>
+						<p><span>:{{formData.nomineeFinancierInfo.financierName}}</span></p>
+					</div>
+					<div
+						ng-if="formData.nomineeFinancierInfo.financierCity != null && formData.nomineeFinancierInfo.financierCity!=''">
+						<p>Financier City</p>
+						<p><span>:{{formData.nomineeFinancierInfo.financierCity}}</span></p>
+					</div>
+
+				</div>
+
+				<!-- 							</div> -->
+
+				<!-- 							<div class="row preview_row"> -->
+				<div class="col-xs-6 preview_sub_col preview_inspection"
+					ng-if="formData.inspectionInfo.inspectionInformation=='Y'">
+					<h6>INSPECTION DETAILS</h6>
+					<div
+						ng-if="formData.inspectionInfo.inspectionBy != null && formData.inspectionInfo.inspectionBy!=''">
+						<p>Inspection By</p>
+						<p>: {{formData.inspectionInfo.inspectionBy}}</p>
+					</div>
+
+					<div
+						ng-if="formData.inspectionInfo.inspectionReason != null && formData.inspectionInfo.inspectionReason!=''">
+						<p>Inspection Reason</p>
+						<p>: {{formData.inspectionInfo.inspectionReason}}</p>
+					</div>
+
+
+					<div
+						ng-if="formData.inspectionInfo.inspecDate != null && formData.inspectionInfo.inspecDate!=''">
+						<p>Inspection Date</p>
+						<p>: {{formData.inspectionInfo.inspecDate |
+							date:'dd-MM-yyyy'}}</p>
+					</div>
+
+					<div
+						ng-if="formData.inspectionInfo.inspecTime != null && formData.inspectionInfo.inspecTime!=''">
+						<p>Inspection Time</p>
+						<p>: {{formData.inspectionInfo.inspecTime}}</p>
+					</div>
+					<div
+						ng-if="formData.inspectionInfo.comments != null && formData.inspectionInfo.comments!=''">
+						<p>Address</p>
+						<p><span>:{{formData.inspectionInfo.comments}}</span></p>
+					</div>
+
+				</div>
+				<div class="col-xs-12 preview_sub_col preview_inspection">
+					<h6>DOCUMENT DETAILS</h6>
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 pre_docupload">
+						<div class="row proof_row"
+							ng-repeat="x in documentUploadsImg track by $index"
+							ng-if="x.mandatory == true">
+							<div
+								class="col-xs-3 col-sm-3 col-md-2 col-lg-2 pre_docupload_text">
+								<p>{{x.documentName}}</p>
+							</div>
+							<div
+								class="col-xs-9 col-sm-9 col-md-10 col-lg-10 pre_docupload_img">
+								<span ng-repeat='(col, vals) in documentFiles'
+									ng-if="x.documentName == col">
+									<div class="col-xs-4 col-sm-4 col-md-2 col-lg-2 img_col"
+										ng-repeat='val in vals track by $index'>
+										<div class="doc_img_preview">
+											<img ng-src="{{val}}" ng-click="showzoomimage(val)"
+												ng-show="val.indexOf('data:application/pdf;') != 0 && val.indexOf('data:video/mp4;') != 0 &&
+					  		val.indexOf('data:video/avi;') != 0 && val.indexOf('video/x-flv;') != 0 && val.indexOf('data:video/mpeg;') != 0 &&
+					  		val.indexOf('data:video/x-ms-wmv;') != 0 && val.indexOf('data:video/quicktime;') != 0"
+												alt="Preview" class="img-responsive">
+											<!-- 							  		<object data="{{val}}" ng-show="val.indexOf('data:application/pdf;') == 0" type="application/pdf" style="width:200%; height:100px" /> -->
+											<!-- 							  		<object data="{{val}}" ng-show="val.indexOf('data:text/plain;') == 0" type="text/plain" style="width:200%; height:100px" /> -->
+											<img ng-src="images/pdflogo.png"
+												ng-show="val.indexOf('data:application/pdf;') == 0;"
+												alt="Preview" class="img-responsive"> <img
+												ng-src="images/videologo.jpg"
+												ng-show="val.indexOf('data:video/mp4;') == 0 ||
+					  		val.indexOf('data:video/avi;') == 0 || val.indexOf('video/x-flv;') == 0 || val.indexOf('data:video/mpeg;') == 0 ||
+					  		val.indexOf('data:video/x-ms-wmv;') == 0 || val.indexOf('data:video/quicktime;') == 0"
+												alt="Preview" class="img-responsive">
+										</div>
+									</div>
+								</span>
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<!-- 			end document preview -->
+
+			</div>
+			<!-- 							</div> -->
+
+			<div class="col-xs-12 preview_popup_footer text-right">
+				<button type="submit" class="preview_submit" ng-click="submit()">
+					Submit</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END PREVIEW -->

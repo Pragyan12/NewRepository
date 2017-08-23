@@ -1,0 +1,147 @@
+POTApp.controller('PaymentController',function($state, $scope, StorageService, PaymentService,$window,CoverageService,RatingConstants,PersonalInfoService) {
+					var self = this;
+					$scope.bankMasterdtoList = [];
+					$scope.disaplePayment = false;
+					fetchAllProduct();
+					var paymentDetail = StorageService.get('paymentInfo');
+					$scope.premiumInfo = StorageService.get('premiumInfo');
+					$scope.personalInfo = StorageService.get("personalInfo");
+					$scope.vehicleInfo = StorageService.get("vehicleInfo");
+					$scope.currentDate = new Date();
+
+					$scope.showAdditionalCover = true;
+					$scope.showAddonCover = true;
+					$scope.showDiscount = true;
+					$scope.chequeAmt = '';
+					 $scope.prop = {header: "Ugly tooltip", body: "some content"};
+					 
+					 $scope.minChequeDate = moment().subtract(60,'days').format('DD/MM/YYYY');
+
+					if (angular.isUndefined(paymentDetail)) {
+
+						$scope.paymentInfo = {
+							bankCode : '',
+							branchName : '',
+							chequeNo : '',
+							chequeDate : '',
+							chequeAmt : $scope.premiumInfo.premiumDetails.grossPremium.toFixed(2),
+							favourOff : '',
+							paymentMode : '',
+							adjust_to_pay_amount : ''
+
+
+						};
+					} else {
+						$scope.paymentInfo = paymentDetail;
+
+					}
+
+					$scope.resetPayment = function() {
+						$scope.paymentInfo.branchName = '';
+						$scope.paymentInfo.chequeNo = '';
+						$scope.paymentInfo.favourOff = '';
+						$scope.paymentInfo.bankCode = '';
+						$scope.paymentInfo.chequeDate = '';
+
+					}
+					$scope.amount = function() {
+                        if (!$scope.adjuseToPayEnabled) {  
+                          $scope.paymentInfo.chequeAmt = angular.copy(totalpremium);
+                        } else {
+                          $scope.paymentInfo.chequeAmt = angular.copy(totalpremium);
+                          $scope.paymentInfo.adjust_to_pay_amount='';
+                        }
+                    };
+					
+					function fetchAllProduct() {
+						PaymentService
+								.fetchAllBankDetails()
+								.then(
+										function(d) {
+											$scope.bankMasterdtoList = d.data.bankMasterdtoList;
+										},
+										function(error) {
+											$log.error('failure loading movie',
+													error);
+										});
+					}
+
+					$scope.resetBankBranch = function() {
+						$scope.paymentInfo.branchName = '';
+
+					};
+
+					$scope.adjuseToPay = function() {
+						return true;
+					}
+					
+					   
+					var totalpremium=$scope.premiumInfo.premiumDetails.grossPremium.toFixed(2);
+					
+					CoverageService.getCoverageList().then(function(d) {
+						$scope.additionalCoverList = CoverageService.getCoverDetails(RatingConstants.ADDITIONAL,$scope.premiumInfo.premiumDetails.coverDetails,d);
+						$scope.addonCoverList = CoverageService.getCoverDetails(RatingConstants.ADDON,$scope.premiumInfo.premiumDetails.coverDetails,d);
+						$scope.discountCoverList = CoverageService.getCoverDetails(RatingConstants.DISCOUNTS,$scope.premiumInfo.premiumDetails.coverDetails,d);
+						StorageService.set('additionalCoverList',$scope.additionalCoverList);
+						StorageService.set('addonCoverList',$scope.addonCoverList);
+					},function(errResponse) {
+						console.error('Error while fetching Users');
+					});
+					
+					var chequeAmount=$scope.paymentInfo.chequeAmt;
+					$scope.paymentInfo.adjust_to_pay_amount;
+					$scope.paymentInfo.chequeAmt;
+					$scope.payNow = function(event, form) {
+						event.preventDefault();
+						form.$setSubmitted();
+						
+					$scope.adj=$scope.paymentInfo.adjust_to_pay_amount;
+                     $scope.cheque=$scope.paymentInfo.chequeAmt;
+                     var addedvalue=parseFloat($scope.adj)+ parseFloat($scope.cheque);
+                     
+						if ($scope.form.$valid
+								&& $scope.paymentInfo.chequeNo.toString().length == 6 ) {
+							StorageService.set('paymentInfo',$scope.paymentInfo);
+							PaymentService.callServerforOfflinePayment().then(function(response) {
+								
+							if($scope.adjuseToPayEnabled && $scope.paymentInfo.adjust_to_pay_amount > 0 && addedvalue ==totalpremium){
+								$state.go('personalInfo');
+								if (this.status === "SUCCESS") {
+									$state.go('personalInfo');
+								}
+							}else if(!$scope.adjuseToPayEnabled){
+								StorageService.set('paymentInfo',$scope.paymentInfo);
+								$state.go('personalInfo');
+								if (this.status === "SUCCESS") {
+									$state.go('personalInfo');
+								}
+							}else{
+								 alert("Adjust to pay out Amount Greater than zero and equal to Total Premium");
+							}
+							});
+							} 
+					};
+				
+					$scope.test = angular.isUndefined(StorageService.get("vehicleInfo").currentNCB) ? false: StorageService.get("vehicleInfo").currentNCB === '' ? false: true;
+					
+					$scope.disaplePayment = false;
+					$scope.termsAndConditionsCheck = function() {
+						$scope.disaplePayment = true;
+
+					}
+					var details = StorageService.getAll();
+
+					$scope.goNextPage = function() {
+						$scope.data={
+								
+								firstName :$scope.personalInfo.firstName,
+								lastName:$scope.personalInfo.lastName,
+								quoteNo: $scope.premiumInfo.premiumDetails.quoteNo,
+								grossPremiumWithAddons :"12333" 
+						}
+						PaymentService.paymentDetails($scope.data).then(function(response){
+			            var requestUrl=response.data.onlinePaymentDto.requestUrl;
+			            $window.location.href = 'http://server1:8585/digital/redirectURL?name='+requestUrl;
+						});
+						}
+				});

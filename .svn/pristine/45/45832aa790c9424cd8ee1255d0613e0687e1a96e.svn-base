@@ -1,0 +1,740 @@
+var POTApp = angular.module('POTApp', [ 'ui.router','ngAnimate', 'ui.bootstrap', 'angular-loading-bar','moment-picker']);
+
+
+POTApp.directive('stringOnly', function() { 
+    return {
+      require: '?ngModel',
+      link: function(scope, element, attrs, ngModelCtrl) {
+        if(!ngModelCtrl) {
+          return; 
+        }
+
+        ngModelCtrl.$parsers.push(function(val) {
+          if (angular.isUndefined(val)) {
+              var val = '';
+          }
+          var clean = val.replace(/[^a-zA-Z ]/g, '');
+          var decimalCheck = clean.split('.');
+
+          if(!angular.isUndefined(decimalCheck[1])) {
+              decimalCheck[1] = decimalCheck[1].slice(0,2);
+              clean =decimalCheck[0] + '.' + decimalCheck[1];
+          }
+
+          if (val !== clean) {
+            ngModelCtrl.$setViewValue(clean);
+            ngModelCtrl.$render();
+          }
+          return clean;
+        });
+
+       /* element.bind('keypress', function(event) {
+          if(event.keyCode === 32) {
+            event.preventDefault();
+          }
+        });*/
+      }
+    };
+  })
+
+//pan
+POTApp.directive('panRegex', function () {
+	var regex,result,special,digit;
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attr, ngModelCtrl) {
+            function fromUser(value) {
+                result="";
+                regexp = /^([a-zA-Z]([a-zA-Z]([a-zA-Z]([a-zA-Z]([a-zA-Z]([0-9]([0-9]([0-9]([0-9]([a-zA-Z])?)?)?)?)?)?)?)?)?)?$/;
+                if (!regexp.test(value)) {
+			                	if(value.length<=5){
+			                		result = value.replace(/[^a-zA-Z]/gi,'');
+			                	}
+			                	 if(value.length>5 && value.length<=10)
+			                    	{
+			                		 	var splitString = value.substr(0,5);
+			                		 	result = splitString; 
+			                    		for(var i=5;i<=value.length-1;i++)
+			                    			{
+			                    					result = value.substr(0,value.length-1);
+			                    					ngModelCtrl.$setViewValue(result);
+			                    					return result;
+			                    				
+			                    			}//for
+				                    	ngModelCtrl.$setViewValue(result);
+				                    	ngModelCtrl.$render();
+			                    	}//end of digit if
+					                    ngModelCtrl.$setViewValue(result);
+					                	ngModelCtrl.$render();
+					                    return result;
+					                }else{
+					                	ngModelCtrl.$setViewValue(value);
+					                	result=value;
+					                }
+                				
+                ngModelCtrl.$render();
+	                return result;
+            }//outer if            
+            ngModelCtrl.$parsers.push(fromUser);
+        }
+    };
+});
+
+
+POTApp.directive(';', function() {
+	  var EMAIL_REGEXP = /^[_a-z0-9]+(\.[_a-z0-9]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+	  return {
+	    link: function(scope, elm) {
+	      elm.on("keyup",function(){
+	            var isMatchRegex = EMAIL_REGEXP.test(elm.val());
+	            if( isMatchRegex&& elm.hasClass('warning') || elm.val() == ''){
+	              alert("error");
+	            }else if(isMatchRegex == false && !elm.hasClass('warning')){
+	            	// alert("error");
+	            }
+	      });
+	    }
+	  }
+	});
+
+// pin code validate
+POTApp.directive('numbersOnly', function () {
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attr, ngModelCtrl) {
+            function fromUser(text) {
+                if (text) {
+                    var transformedInput = text.replace(/[^0-9]/g, '');
+                    if (transformedInput !== text) {
+                        ngModelCtrl.$setViewValue(transformedInput);
+                        ngModelCtrl.$render();
+                    }
+                    return transformedInput;
+                }
+                else{
+                    alert("Please enter only numbers");
+                }
+                return undefined;
+            }            
+            ngModelCtrl.$parsers.push(fromUser);
+        }
+    };
+});
+
+
+POTApp.directive("preventTypingGreater", function() {
+	  return {
+		  require: 'ngModel',
+	    link: function(scope, element, attributes) {
+	      var oldVal = null;
+	      element.on("keydown keyup", function(e) {
+	    if (Number(element.val()) > Number(attributes.max) &&
+	          e.keyCode != 46 // delete
+	          &&
+	          e.keyCode != 8 // backspace
+	        ) {
+	          e.preventDefault();
+	          element.val(oldVal);
+	        } else {
+	          oldVal = Number(element.val());
+	        }
+	      });
+	    }
+	  };
+	});
+
+
+
+POTApp.directive('allowNumbersOnly', function () {
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attr, ngModelCtrl) {
+            function fromUser(text) {
+                if (text) {
+                    var transformedInput = text.replace(/[^0-9]/g, '');
+
+                    if (transformedInput !== text) {
+                        ngModelCtrl.$setViewValue(transformedInput);
+                        ngModelCtrl.$render();
+                    }
+                    return transformedInput;
+                }
+                return undefined;
+            }            
+            ngModelCtrl.$parsers.push(fromUser);
+        }
+    };
+});
+
+
+// forces keystrokes that satisfy the regExp passed
+POTApp.directive("alphaRegex", function() {
+
+    var regexp;
+    return {
+        restrict: "A",
+        link: function(scope, elem, attrs) {
+            regexp = /^[a-z]*$/;
+            var char;
+            elem.bind("keypress", function(event) {
+                char = String.fromCharCode(event.which)
+                if(!regexp.test(elem.val() + char))
+                    event.preventDefault();
+            })
+        }
+    }
+
+});
+
+//Jitu       - 23.6.17         //
+POTApp.directive('onlyString', function () {
+        var regex,result,transformedText;
+        return {
+        require: 'ngModel',
+        link: function (scope, element, attr, ngModelCtrl) {
+            function fromUser(value) {
+                    regexp = /^[A-Za-z]+$/;
+                    
+                if (!regexp.test(value)) {
+                    result = value.replace(/[^a-zA-Z]/g, '');
+                    
+                    ngModelCtrl.$setViewValue(result);
+                        ngModelCtrl.$render();
+                    return result;
+                }else{
+                        if(value.length<=50){
+                                
+                                ngModelCtrl.$setViewValue(value);
+                                result=value;
+                        }else{
+                                result = value.substr(0,50);
+                                ngModelCtrl.$setViewValue(result);
+                        }
+                }
+                ngModelCtrl.$render();
+                return result;
+            }            
+            ngModelCtrl.$parsers.push(fromUser);
+        }
+    };
+        
+    
+});
+POTApp.directive('noSpecialChar', function() {
+	
+    return {
+      require: 'ngModel',
+      restrict: 'A',
+      link: function(scope, element, attrs, modelCtrl) {
+        modelCtrl.$parsers.push(function(inputValue) {
+          if (inputValue == undefined)
+            return ''
+          cleanInputValue = inputValue.replace(/[^a-zA-Z0-9/\&/.]/gi, '');
+          if (cleanInputValue != inputValue) {
+            modelCtrl.$setViewValue(cleanInputValue);
+            modelCtrl.$render();
+          }
+          return cleanInputValue;
+        });
+      }
+    }
+  });
+POTApp.directive('notAllowSpecial', function() {
+    return {
+      require: 'ngModel',
+      restrict: 'A',
+      link: function(scope, element, attrs, modelCtrl) {
+        modelCtrl.$parsers.push(function(inputValue) {
+          if (inputValue == null)
+            return ''
+          cleanInputValue = inputValue.replace(/[^\w\s]/gi, '');
+          if (cleanInputValue != inputValue) {
+            modelCtrl.$setViewValue(cleanInputValue);
+            modelCtrl.$render();
+          }
+          return cleanInputValue;
+        });
+      }
+    }
+  });
+
+
+//
+//mobile num
+POTApp.directive('numericRegex', function () {
+	var regex,result;
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attr, ngModelCtrl) {
+            function fromUser(value) {
+            	regexp = /^([7-9])([0-9]){0,9}$/;
+            	var space = /\s/g;
+                if (!regexp.test(value)) {
+                    result = value.replace(/[^\d]/gi,'');
+                    if(/\d/gi.test(result) && !regexp.test(result))
+                    	{
+	                    	result = value.replace(/[\d\s]/gi,'');
+	                    	ngModelCtrl.$setViewValue(result);
+	                    	ngModelCtrl.$render();
+                    	}
+                    ngModelCtrl.$setViewValue(result);
+                	ngModelCtrl.$render();
+                    return result;
+                }else{
+                	ngModelCtrl.$setViewValue(value);
+                	result=value;
+                }
+                ngModelCtrl.$render();
+                return result;
+            }            
+            ngModelCtrl.$parsers.push(fromUser);
+        }
+    };
+});
+//
+
+//POTApp.directive("numericRegex", function() {
+//
+//    var regexp;
+//    return {
+//        restrict: "A",
+//        link: function(scope, elem, attrs) {
+//            regexp = /^([7-9])([0-9]){0,9}$/;
+//            var char;
+//            elem.bind("keypress", function(event) {
+//                char = String.fromCharCode(event.which)
+//                if(!regexp.test(elem.val() + char))
+//                    event.preventDefault();
+//            })
+//        }
+//    }
+//
+//});
+//STD
+POTApp.directive("stdCode", function() {
+	var regexp;
+	return {
+        require: 'ngModel',
+        restrict: 'A',
+        link: function (scope, element, attr, ngModel) {
+        	ngModel.$parsers.push(function(value){
+        		var inputvalue = value;
+        		regexp = /^([0])([0-9]){0,9}$/;
+        		
+        		if(!regexp.test(inputvalue))
+        			{
+        			ngModel.$setViewValue('');
+            		ngModel.$render();
+        			}
+        		return inputvalue;
+            });
+           }
+      };
+});
+
+// register no:
+POTApp.directive("regNo", function() {
+
+    var regexp;
+    return {
+        restrict: "A",
+        link: function(scope, elem, attrs) {
+            regexp = /^([a-zA-Z]([a-zA-Z]([0-9]([0-9]([a-zA-Z]([a-zA-Z]([0-9]([0-9]([0-9]([0-9])?)?)?)?)?)?)?)?)?)?$/;
+            var char;
+            elem.bind("keypress", function(event) {
+                char = String.fromCharCode(event.which)
+                if(!regexp.test(elem.val().toUpperCase() + char.toUpperCase()))
+                    event.preventDefault();
+            })
+        }
+    }
+
+});
+ // uppercase
+POTApp.directive('capitalize', function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, element, attrs, modelCtrl) {
+      var capitalize = function(inputValue) {
+        if (inputValue == undefined) inputValue = '';
+        var capitalized = inputValue.toUpperCase();
+        if (capitalized !== inputValue) {
+          modelCtrl.$setViewValue(capitalized);
+          modelCtrl.$render();
+        }
+        return capitalized;
+      }
+      modelCtrl.$parsers.push(capitalize);
+      capitalize(scope[attrs.ngModel]); // capitalize initial value
+    }
+  };
+});
+
+
+//payment summery
+POTApp.directive("chequeNo", function() {
+	var regexp;
+	return {
+        require: 'ngModel',
+        restrict: 'A',
+        link: function (scope, element, attr, ngModel) {
+        	ngModel.$parsers.push(function(value){
+        		var inputvalue = value;
+        		regexp = /^([0-9]){0,6}$/;
+        		
+        		if(!regexp.test(inputvalue))
+        			{
+        			ngModel.$setViewValue('');
+            		ngModel.$render();
+        			}
+        		return inputvalue;
+            });
+           }
+      };
+});
+
+POTApp.directive("chequeAmount", function() {
+	var regexp;
+	return {
+        require: 'ngModel',
+        restrict: 'A',
+        link: function (scope, element, attr, ngModel) {
+        	ngModel.$parsers.push(function(value){
+        		var inputvalue = value;
+        		regexp = /^([0-9]){0,9}$/;
+        		
+        		if(!regexp.test(inputvalue))
+        			{
+        			ngModel.$setViewValue('');
+            		ngModel.$render();
+        			}
+        		return inputvalue;
+            });
+           }
+      };
+});
+
+POTApp.directive("moveNextOnMaxlength", function() {
+    return {
+        restrict: "A",
+        link: function($scope, element) {
+            element.on("input", function(e) {
+                if(element.val().length == element.attr("maxlength")) {
+                    var $nextElement = element.next();
+                    if($nextElement.length) {
+                        $nextElement[0].focus();
+                    }
+                }
+            });
+        }
+    }
+});
+
+
+POTApp.directive('areaValidation', function () {
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attr, ngModelCtrl) {
+            function fromUser(text) {
+                if (text) {
+                    var transformedInput = text.replace(/[^a-zA-Z0-9/-]/g, '');
+
+                    if (transformedInput !== text) {
+                        ngModelCtrl.$setViewValue(transformedInput);
+                        ngModelCtrl.$render();
+                    }
+                    return transformedInput;
+                }
+                return undefined;
+            }            
+            ngModelCtrl.$parsers.push(fromUser);
+        }
+    };
+});
+
+
+
+
+POTApp.directive("limitToMax", function() {
+	  return {
+	    link: function(scope, element, attributes) {
+	      element.on("keydown keyup", function(e) {
+	    if (Number(element.val()) > Number(attributes.max) &&
+	          e.keyCode != 46 // delete
+	          &&
+	          e.keyCode != 8 // backspace
+	        ) {
+	          e.preventDefault();
+	          element.val(attributes.max);
+	        }
+	      });
+	    }
+	  };
+	});
+
+POTApp.config(function(cfpLoadingBarProvider,$stateProvider, $locationProvider, $urlRouterProvider,$injector,$httpProvider) {
+	$httpProvider.defaults.cache = true;
+	cfpLoadingBarProvider.includeSpinner=false;
+	$urlRouterProvider.otherwise(function($injector){
+		  $injector.invoke(['$state', function($state) {
+		    $state.go('login');
+		  }]);
+		}); 
+	
+	
+	$locationProvider.html5Mode(false).hashPrefix('');
+	$stateProvider.state('login', {
+		url : "/",
+		views : {
+			"body" : {
+				templateUrl : 'views/login.html',
+				controller : 'LoginController'
+			},
+			"footer" : {
+				templateUrl : 'views/footer.html'
+			}
+		}
+	}).state('product', {
+		url : "/product",
+		views : {
+			"header" : {
+				templateUrl : 'views/header.html',
+				controller : 'HeaderController'
+			},
+			"body" : {
+				templateUrl : 'views/product.html',
+				controller : 'ProductController'
+			},"footer" : {
+				templateUrl : 'views/footer.html',
+			}
+		}
+	}).state('subProduct', {
+		url : "/subProduct",
+		views : {
+			"header" : {
+				templateUrl : 'views/header.html',
+				controller : 'HeaderController'
+			},
+			"body" : {
+				templateUrl : 'views/subProduct.html',
+				controller : 'SubProductController'
+			},"footer" : {
+				templateUrl : 'views/footer.html',
+			}
+		}
+	}).state('basicQuoteInfo', {
+		url : "/basicQuoteInfo",
+		views : {
+			"header" : {
+				templateUrl : 'views/header.html',
+				controller : 'HeaderController'
+			},
+			"body" : {
+				templateUrl : 'views/basicQuoteInfo.html',
+				controller : 'BasicQuoteInfo'
+			},"footer" : {
+				templateUrl : 'views/footer.html',
+			}
+		}
+	}).state('search', {
+		views : {
+			"header" : {
+				templateUrl : 'views/header.html',
+				controller : 'HeaderController'
+			},
+			"body" : {
+				templateUrl : 'views/subProduct.html',
+				controller : 'SubProductController'
+			},"footer" : {
+				templateUrl : 'views/footer.html',
+			}
+		}
+	}).state('premiumComparision', {
+		url : "/premiumComparision",
+		views : {
+			"header" : {
+				templateUrl : 'views/header.html',
+				controller : 'HeaderController'
+			},
+			"body" : {
+				templateUrl : 'views/premiumComparision.html',
+				controller : 'PremiumComparision'
+			},"footer" : {
+				templateUrl : 'views/footer.html',
+			},
+			'coverages@premiumComparision': { 
+				templateUrl : 'views/coverages.html'
+            },
+		}
+	}).state('premiumSummary', {
+		url :"/premiumSummary",
+		views : {
+			"header" : {
+				templateUrl : 'views/header.html',
+				controller : 'HeaderController'
+			},
+			"body" : {
+				templateUrl : 'views/premiumSummary.html',
+				controller : 'PaymentController'
+			},"footer" : {
+				templateUrl : 'views/footer.html',
+			}
+		}
+	}).state('personalInfo', {
+		url :"/personalInfo",
+        views : {
+        	'customer_header@personalInfo':
+        	{ 
+        		templateUrl : 'views/customer_header.html' 
+        },
+        	"header" : {
+                templateUrl : 'views/header.html',
+                controller : 'HeaderController'
+            },
+            "body" : {
+                templateUrl : 'views/personalInfo.html',
+                controller : 'PersonalInfoController'
+            },
+            "footer" : {
+                templateUrl : 'views/footer.html'
+            }
+        }
+    })
+    .state('vehicleInfo', {
+        views : {
+        	'customer_header@vehicleInfo':
+        	{ 
+        		templateUrl : 'views/customer_header.html' 
+        },
+        	"header" : {
+                templateUrl : 'views/header.html',
+                controller : 'HeaderController'
+            },
+            "body" : {
+                templateUrl : 'views/additionalVehicleInfo.html',
+                controller : 'AdditionalVehicleInfo'
+            },
+            "footer" : {
+                templateUrl : 'views/footer.html'
+            }
+        }
+    })
+    .state('nomineeFinancierInfo', {
+        views : {
+        	'customer_header@nomineeFinancierInfo':
+        	{ 
+        		templateUrl : 'views/customer_header.html' 
+        },
+        	"header" : {
+                templateUrl : 'views/header.html',
+                controller : 'HeaderController'
+            },
+            "body" : {
+                templateUrl : 'views/nomineeFinancierInfo.html',
+                controller : 'NomineeFinancierController'
+            },
+            "footer" : {
+                templateUrl : 'views/footer.html'
+            }
+        }
+    })
+    .state('inspectionInfo', {
+        views : {
+        	'customer_header@inspectionInfo':
+        	{ 
+        		templateUrl : 'views/customer_header.html' 
+        },
+        	"header" : {
+                templateUrl : 'views/header.html',
+                controller : 'HeaderController'
+            },
+            "body" : {
+                templateUrl : 'views/InspectionInfo.html',
+                controller : 'InspectionController'
+            },
+            "footer" : {
+                templateUrl : 'views/footer.html'
+            }
+        }
+    }).state('premiumSummaryFinal', {
+        views : {
+        	'customer_header@inspectionInfo':
+        	{ 
+        		templateUrl : 'views/premiumSummaryFinal.html' 
+        },
+        	"header" : {
+                templateUrl : 'views/header.html',
+                controller : 'HeaderController'
+            },
+            "body" : {
+                templateUrl : 'views/premiumSummaryFinal.html',
+                controller : 'InspectionController'
+            },
+            "footer" : {
+                templateUrl : 'views/footer.html'
+            }
+        }
+    }).state('searchpage', {
+		views : {
+			"header" : {
+				templateUrl : 'views/header.html',
+				controller : 'HeaderController'
+			},
+			"body" : {
+				templateUrl : 'views/search.html'
+			},"footer" : {
+				templateUrl : 'views/footer.html',
+			}
+		}
+	});
+});
+
+
+
+
+
+
+
+/*
+ * var StacktraceService = function() {}
+ * 
+ * StacktraceService.prototype.print = function($window, exception) { return
+ * $window.printStackTrace({ e: exception }); };
+ * 
+ * POTApp.service('stacktraceService', StacktraceService);
+ * 
+ * POTApp.config(function($provide) { // $provide provider is used to register
+ * the components in angular internally. // use decorator to customise the
+ * behaviour of a service. $provide.decorator('$exceptionHandler', ['$delegate',
+ * '$window', 'stacktraceService', function($delegate, $window,
+ * stacktraceService) { // exception: exception associated with the error //
+ * cause: optional information about the context in which the error was thrown.
+ * 
+ * return function(exception, cause) { // $delegate: provides the original
+ * service to the method which is used to call the base implementation // of
+ * $exceptionHandler service which internally delegates to $log.error.
+ * $delegate(exception, cause);
+ * 
+ * var stacktrace = stacktraceService.print($window, exception);
+ * 
+ * var clientSideErrorInfo = { cause: cause || '', // the cause of the issue
+ * message: exception.message, // the message in the exception url:
+ * $window.location.href, // the location in the browser's address bar when
+ * error occurred stacktrace: stacktrace.join('\n') // join array items to
+ * populate a string };
+ * 
+ * console.log("client error is :"+clientSideErrorInfo.stacktrace); // the
+ * angular $http service cannot be used in the $log // decorator because it will
+ * cause a circular dependecy. // to overcome this a direct ajax call should be
+ * made. $.ajax({ type: 'POST', url:
+ * 'http://192.168.0.29:7070/digital/getException.json', // this is the server
+ * end-point where you can log this error contentType: 'application/json;
+ * charset=UTF-8', data: JSON.stringify(clientSideErrorInfo) }); };
+ * 
+ * }]);
+ * 
+ * });
+ */
+
+
+

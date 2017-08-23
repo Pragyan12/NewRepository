@@ -1,0 +1,332 @@
+<div class="entire home premium_details">
+	<div class="wrapper">
+		<div class="totalpage" ng-class="breakup_term">
+			<!--Start home_main-->
+			<div class="premium_main">
+				<div class="row premium_main_row">
+					<form role="form" class="premium_form" id="premium_form">
+						<div class="row head_details">
+							<div class="col-xs-12 col-sm-12 col-md-12 premium_main_col">
+								<div class="col-xs-1 col-sm-1 col-md-1 premium_cus_edit">
+									<a ui-sref="basicQuoteInfo">
+										<div class="premium_cus_editer">
+											<h5 class="header_4">Edit</h5>
+											<span class=""><i class="fa fa-pencil-square" aria-hidden="true"></i></span>
+										</div>
+									</a>
+								</div>
+								<div class="col-xs-10 col-sm-10 col-md-10 premium_customer_details text-center">
+									<div class="premium_customer_details_inner">
+									
+										<p id="">Opted Product Name:Private Car</p>
+										<p id="">Model:{{vehicleInfo.model.name}}</p>
+										<p id="">Sub Model: {{vehicleInfo.subModel.subModelName}}</p>
+										<p id="">Engine CC:{{vehicleInfo.engineCC}}</p>
+										<p id="">Fuel Type: {{vehicleInfo.fuelType}}</p>
+										<p id="">Seater: {{vehicleInfo.subModel.seatingCapacity}}</p>
+										<p id="">Manufacturing Year: {{vehicleInfo.yearOfMfg}}</p>
+										<p ng-hide="ncbshow" >NCB: Not Applicable</p>
+										<p ng-show="ncbshow" >NCB: {{vehicleInfo.currentNCB.ncbPercentage}}%</p>
+										<p id="" class="idv_ranges"> 
+											<span>IDV:</span> <span>₹.</span> <input type="text"
+												class="" ng-model="averagesOfIdv" ng-disabled="editIdv"
+												data-ng-blur="checkMulInsIdVChanges(averagesOfIdv)" 
+												allow-Numbers-Only/>
+											<span class="edit_idv" id="edit_idv"
+												ng-init="saveIdv=false;editIdv=true;"> <span
+												class="glyphicon glyphicon-edit edit_idv_icon"
+												id="edit_idv_icon" ng-click="saveIdv=true;editIdv=false"
+												ng-show="editIdv"></span> <span
+												class="glyphicon glyphicon-save save_idv_icon"
+												id="save_idv_icon"
+												ng-click="editIdv=true;saveIdv=false;updatefullIdv(averagesOfIdv)"
+												ng-show="saveIdv"></span>
+											</span></p>
+									</div>
+								</div>
+								<div
+									class="col-xs-1 col-sm-1 col-md-1 text-center premium_compare_1"
+									ng-click="showCompare=true;myStyle=pad_bot_true;" ng-hide="showCompare">
+									<div class="view_text">
+										<h5 class="header_4">Compare</h5>
+										<span class=""><i class="fa fa-binoculars"></i></span>
+									</div>
+								</div>
+								<div
+									class="col-xs-1 col-sm-1 col-md-1 text-center premium_compare_2"
+									ng-click="showCompare=false;showComparePreset=false;emptyCompare();myStyle=pad_bot_false;"
+									ng-show="showCompare">
+									<div class="view_text">
+										<h5 class="header_5">Compare</h5>
+										<span style="font-size: 20px;"> &#9932;</span>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="compare_premium_preset" ng-show="showComparePreset">
+							<div class="row compare_premium_preset_row">
+								<div class="image_compare_div">
+									<div class="chk_img" ng-repeat="s in compareValues">
+										<p>
+											<img ng-src="{{s.imagePath}}" alt="{{s.insurerName}}"
+												class="img-responsive">
+										</p>
+									</div>
+								</div>
+								<div class="compare_btn" ng-show="showCompareButton">
+									<p class="compare_btn_inner" id="" ng-click="compareInsurer();">COMPARE</p>
+								</div>
+							</div>
+						</div>
+						<!--End of compare_premium_preset-->
+						<!--start of compare_premium_main-->
+						<div class="container-fluid compare_premium_main"
+							ng-show="showInsurerComparition">
+							<div class="row compare_premium_main_row"
+								ng-style="breakup_width">
+								<div class="premium_border">
+									<h5 class="compare_header">
+										COMPARISION CHART <span class="main_compare_close"
+											ng-click="showInsurerComparition=false;compareClose()">&#9932;</span>
+									</h5>
+									<div
+										class="compare_premium_main_col compare_col_insurer text-center">
+										<div class="compare_premium_border">
+											<div class="row compare_premium_ind_row">
+												<div class="text-center ind_ins_col"
+													ng-style="{{compare_ind_col1}}">INSURER</div>
+												<div class="text-center ind_ins_col"
+													ng-style="{{compare_ind_col2}}"
+													ng-repeat="x in compareValues">
+													<img ng-src="{{x.imagePath}}" alt="{{x.insurerName}}"
+														id="in_img1" class="img-responsive">
+													<button type="" id="" ng-click="newbuynow(x.insurerCode,true,x.premiumDetails.actualIdv)"
+														class="premium_buynow">BUY NOW</button>
+												</div>
+											</div>
+											<div class="row">
+												<div class="text-center ind_ins_col">IDV</div>
+												<div class="text-center ind_ins_col"
+													ng-repeat="x in compareValues">{{roundOff(x.premiumDetails.actualIdv)}}</div>
+											</div>
+											<div class="row">
+												<div class="text-center ind_ins_col">Premium</div>
+												<div class="text-center ind_ins_col"
+													ng-repeat="x in compareValues">{{x.premiumDetails.grossPremium}}
+												</div>
+											</div>
+
+
+											<div class="row" ng-repeat="x in selectedCovers()">
+												<div class="text-center ind_ins_col">{{x.name}}</div>
+												<div class="text-center ind_ins_col"
+													ng-repeat="d in compareValues">
+													<span
+														ng-repeat="coveragePremium in d.premiumDetails.selectedAddonCover"
+														ng-if="x.code==coveragePremium.coverCode">
+														{{coveragePremium.coverPremium==-99999?'Not Included':'Included'}}
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!--start of compare_premium_main-->
+						
+						<!-- Start of Pop up addon cover checkbox-->
+
+						
+						<div class="preaddoncover" ng-show="showPreviousOptedCovers">
+							<div class="preaddoninner">
+								<div class="preaddoninner_border">
+									<div class="preaddoninner_header">
+										<p>Was add on cover existing in previous year policy?</p>
+										<span class="glyphicon glyphicon-remove-circle" ng-click="closepopupaddon()"></span>
+									</div>
+									<div class="row preaddonrow" ng-repeat="x in OptedCovers.selectedCovers">
+										
+										<div class="text-center ind_ins_col">{{x.name}}</div>
+										<div class="{{x.name}}">
+											<!-- <label><input type="radio" name="{{x.code}}" ng-checked="isPreviouslyOpted(x.code,'Y')">Yes</label>
+											<label><input type="radio" name="{{x.code}}" ng-checked="isPreviouslyOpted(x.code,'N')">No</label> -->
+											<label><input type="radio" name="{{x.code}}" ng-change="isPreviouslyOpted(x.code,'Y')" ng-model="isPrev" value="Y" /> Yes </label>
+											<label><input type="radio" name="{{x.code}}" ng-change="isPreviouslyOpted(x.code,'N')" ng-model="isPrev" value="N" /> No </label>
+										</div>
+									</div>
+									<div class="preaddonbtn row text-right">
+										<P>{{erroraddon}}<P>
+										<button  ng-click="addonbuynow(OptedCovers.insurerCode,true,OptedCovers.actualIdv)"
+												class="premium_buynow_preaddon">BUY NOW</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+						<!-- End of Pop up addon cover checkbox-->
+						
+						<!-- End of Comparision-->
+						<div class="row addon_insurer_row" id="addon_insurer_row">
+							<div ui-view="coverages"></div>
+							<!--List Of Insurer Start-->
+							<div class="col-xs-9 col-sm-9 col-md-9 premium_insurer_details" ng-style="myStyle">
+								<div class="row premium_insurer_row_list"
+									ng-repeat="x in insurerListValues">
+									<div class="row inner_row_premium">
+										
+										<div
+											class="col-xs-3 col-sm-3 col-md-3 premium_col_list insurer_image_col">
+											<div class="insurer_image">
+												<img ng-src="{{x.imagePath}}" alt="{{x.insurerName}}"
+													id="in_img1" class="img-responsive">
+											</div>
+										</div>
+										<div class="col-xs-9 col-sm-9 col-md-9 premium_col_list insurer_calculate_col text-left">
+											<div class="row calculated_values">
+												<div class="calculated_values_inner">
+													<p class="">
+														<label>IDV</label>
+													</p>
+													<p class="" style="position: relative;">
+														<span class="fa fa-inr rupees_symbol"></span> <input
+															type="text" ng-model="idv"
+															ng-init="idv=x.premiumDetails.actualIdv" ng-blur="idv = checkSingleInsIdVChanges(idv,x.premiumDetails.insurerCode)"
+															ng-disabled="editIdv" ng-class="save_click" allow-Numbers-Only >
+														<span class="edit_idv" id="edit_idv"
+															ng-init="saveIdv=false;editIdv=true;"> 
+														<span class="fa fa-pencil edit_idv_icon" id="edit_idv_icon" 
+															ng-click="saveIdv=true;editIdv=false;save_click='input_border'" ng-show="editIdv"></span>
+                                                 		 <span class="fa fa-bullseye save_idv_icon"
+															id="save_idv_icon" 
+														ng-click="validateSingleIdvEdit(idv)?updateIdv(x.premiumDetails.insurerCode,x.premiumDetails.actualIdv,idv):false"
+														ng-show="saveIdv"></span> </span>
+													</p>
+												</div>
+												<!-- <div class="calculated_values_inner" ng-repeat="cover in x.premiumDetails.selectedAddonCover">
+													<p>
+														<label>{{cover.coverName}}</label>
+													</p>
+													<p ng-switch on="cover.coverCode">
+														<span ng-switch-when="RSA">{{cover.coverPremium==-99999?'NA':cover.coverPremium.toFixed(2)}}</span>
+														<span ng-switch-default>{{cover.coverPremium==-99999?'NA':cover.coverPremium.toFixed(2)}}</span>
+													</p>
+												</div> -->
+											</div>
+										</div>
+									</div>
+
+									<div class="row premium_breakup_button"
+										style="padding: 3px 0px;">
+										<div class="col-xs-3 col-sm-3 col-md-3" style="padding: 0px">
+											<div class=" row insurer_premium1 text-center"
+												ng-if="x.premiumDetails.totalAddonCoverPremium> 0">
+												<button class="btn  val_btn"
+													ng-click="buynow(x.premiumDetails.insurerCode,false,x.premiumDetails.actualIdv)">{{x.premiumDetails.grossPremiumWithoutAddon}}</button>
+													<span>(Without Addon)</span>
+											</div>
+										</div>
+										<div
+											class="col-xs-9 col-sm-9 col-md-9 insurer_premium2_maincol">
+											<div class="row insurer_premium2">
+												<div class="col-xs-6 col-sm-6 col-md-6 text-left">
+													<span class="premium_breakup_link"
+														ng-click="showPremiumBreakUp(x.premiumDetails.insurerCode);">Premium
+														breakup</span>
+												</div>
+												<div
+													class="col-xs-6 col-sm-6 col-md-6 text-right hidden_btn_col">
+													
+													<button class="btn hidden_btn"
+														ng-click="newbuynow(x.premiumDetails.insurerCode,true,x.premiumDetails.actualIdv)">{{x.premiumDetails.grossPremium}}</button>
+													<!-- ng-click="goToPayment(true,x.premiumDetails.insurerCode)" -->
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<span class="compre_checkbox_span" ng-show="showCompare">
+										<input type="checkbox" class="compare_chkbox" id="{{x.insurerName}}"
+										ng-model="checkvalue[$index]" ng-checked="compareCheckBox"
+										ng-click="compare_chkbox(x.premiumDetails.insurerCode,checkvalue[$index])?checkvalue[$index]=true:checkvalue[$index]=false" />
+									</span>
+								</div>
+								{{x.premiumDetails.insurerCode}}
+
+
+								<!--  Premium Break Up Start -->
+								<div ng-show="isPremiumBreakup">
+									<div class="premium_breakup">
+										<div class="premium_breakup_inner">
+										<div class="breakup_title">
+											<h5>PREMIUM BREAKUP</h5>
+											<span class="glyphicon glyphicon-remove-sign remove_icon"
+												ng-click="closePremiumBreakup()"><span>
+										</div>
+										<div class="breakup_headings" ng-repeat="v in vehicleList">
+											<div class="breakup_headings_inner">
+												<p>REG NO.{{v.regNo}}</p>
+												<p>MAKE{{v.manufacturer}}</p>
+												<p>MODEL {{v.modelCc}}</p>
+												<p>CC{{v.cc}}</p>
+											</div>
+											<div class="breakup_headings_inner">
+												<p>FUEL {{v.fuelType}}</p>
+												<p>VEC.MODEL{{v.vehicleModel}}</p>
+
+												<p>YEAR OF MAN. {{v.manufactureryear}}</p>
+													
+												<p>IDV</p>
+											</div>
+										</div>
+										<div class="breakup_topsection" >
+											<div><img ng-src="{{premiumbreakup.insurerDetails.imagePath}}" alt="{{premiumbreakup.insurerDetails.insurerName}}" class="img-responsive"></div>
+											<div>
+												<p>IDV:<span class="fa fa-inr space_class">{{roundOff(premiumbreakup.premiumDetails.actualIdv)}}</span><span class="idv_value"></span></p>
+												<p ng-hide="ncbshow" ><span class="ncb_value" >NCB: Not Applicable</span></p>
+										<p ng-show="ncbshow"><span class="ncb_value">NCB: {{vehicleInfo.currentNCB.ncbPercentage}}%</span></p>
+												</div>
+											<div>
+											
+											<p class="breakup_premium_section">PREMIUM</p>
+ 												<span class="fa fa-inr"></span>
+
+												<span class="premium_value">{{premiumbreakup.premiumDetails.grossPremium}}</span>
+											</div>
+										</div>
+										<div class="breakup_body">
+											<div class="breakup_body_inner">
+												<p>BASIC COVER</p>
+												<p>COVER TYPE</p>
+												
+											</div>
+										
+											<div class=""  ng-repeat="ins in premiumbreakup.coverPremium">
+												<div class="breakup_body_inner">
+													<p>{{ins.name | uppercase}}</p>
+													<p>{{ins.premium==-99999?'NA':ins.premium.toFixed(0)}}</p>
+												</div>
+											</div>
+										</div>
+										</div>
+									</div>
+								</div>
+								<!--  Premium Break Up End -->
+							</div>
+							
+							<!-- END INSURER COVERS-->
+						</div>
+						<div id="extra_height"></div>
+					</form>
+				</div>
+			</div>
+		</div>
+		<!--End home_main-->
+	</div>
+</div>
+<div id="premium_dummy"></div>
+
+
+

@@ -1,0 +1,545 @@
+<div class="entire customer_details">
+	<form class="form-horizontal" name="form" role="form" id='myform'
+		novalidate>
+		<div class="wrapper">
+			<div class="totalpage">
+				<!--Start home_main-->
+				<div class="container-fluid customer_details_main text-center">
+					<p class="back_btn">
+						<a ui-sref="subProduct"><span
+							class="glyphicon glyphicon-arrow-left"></span></a>
+					</p>
+					<div class="row customer_details_row personal_info"
+						id="basicquoterow">
+						<div
+							class="col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6 customer_cols personal_info_col">
+							<span class="fields_mandat"><span class="spanred">*</span>&nbsp;(All fields are mandatory)</span>
+							<h4 class="text-left">Proposer Details</h4>
+							<div class="col-xs-6  col-sm-6  col-md-6">
+								<div class="form-group " data-title="Aadhaar Card Number" data-value="**"
+									data-name="Aadhar Card no.">
+									<div class="input-group aadhar_val_input">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-credit-card"></span></span>
+										
+											<input name="aadhaarNo" type="text"
+												ng-model="personalInfo.aadhaarNo1"
+												class="form-control text-center readonly" placeholder="0000"
+												numbers-Only  maxlength="4" move-next-on-maxlength />
+										
+											<input name="aadhaarNo" type="text"
+												ng-model="personalInfo.aadhaarNo2"
+												class="form-control text-center readonly" placeholder="0000"
+												numbers-Only  maxlength="4" move-next-on-maxlength />
+
+											<input name="aadhaarNo" type="text"
+												ng-model="personalInfo.aadhaarNo3"
+												class="form-control text-center readonly" placeholder="0000"
+												numbers-Only  maxlength="4" move-next-on-maxlength />
+										
+									</div>
+								</div>
+								<!-- <div ng-show="form.$submitted || form.aadhaarNo.$touched"
+									class="form-error val_error">
+									<div ng-show="form.aadhaarNo.$error.required">Please
+										enter AadhaarCard number</div>
+								</div> -->
+							</div>
+							
+							<div class="clearfix xs-visible sm-visible md-visible"></div>
+							<div class="col-xs-6  col-sm-6  col-md-6">
+								<div class="form-group" data-title="First Name" 
+									data-name="First Name">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-user"></span></span>
+											 <input type="text"
+											class="form-control" ng-model="personalInfo.firstName"
+											capitalize  name="first_name" maxlength="50"
+											placeholder="First Name"  only-string  required>
+									</div>
+								</div>
+								<div ng-show="form.$submitted || form.first_name.$touched"
+									class="form-error val_error">
+									<div ng-show="form.first_name.$error.maxlength">Sorry You
+										are Exceeding the Limit</div>
+									<div ng-show="form.first_name.$error.required">Please
+										enter First Name</div>
+								</div>
+							</div>
+
+							<div class=" col-xs-6 col-sm-6 col-md-6">
+								<div class="form-group" data-title="Last Name"
+									data-name="Last Name">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-user"></span></span> <input type="text"
+											class="form-control" ng-model="personalInfo.lastName"
+											capitalize maxlength="50" name="last_name"
+											placeholder="Last Name" only-string required>
+									</div>
+								</div>
+								<div ng-show="form.$submitted || form.last_name.$touched"
+									class="form-error val_error">
+
+									<div ng-show="form.last_name.$error.required">Please
+										enter Last Name</div>
+									<!--  <div ng-show="form.last_name.$error.pattern">please enter Alphabet Only</div>  -->
+									<span ng-show="form.last_name.$error.maxlength"> Sorry
+										You are Exceeding the Limit</span>
+								</div>
+							</div>
+
+							<div class="clearfix xs-visible sm-visible md-visible"></div>
+
+							<div class=" col-xs-6  col-sm-6 col-md-6">
+								<div class="form-group" data-title="Mobile Number">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-earphone"></span></span> <input
+											type="text" class="form-control" name="mobileNo"
+											ng-model="personalInfo.mobileNo" id="mobileNo" maxlength="10"
+											placeholder="Mobile Number" numeric-regex  required>
+									</div>
+								</div>
+								<div ng-show="form.$submitted || form.mobileNo.$touched"
+									class="form-error val_error ">
+									<div
+										ng-show="personalInfo.mobileNo.toString().length<10 || form.mobileNo.$error.required ">Please
+										enter Valid 10 digit Mobile Number</div>
+								</div>
+
+							</div>
+
+							<div class=" col-xs-6 col-sm-6 col-md-6">
+								<div class="form-group" data-title="Email ID" data-name="">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-envelope"></span></span> <input
+											type="email" class="form-control" validate-email
+											ng-model="personalInfo.email" capitalize placeholder="Email"
+											name="email" maxlength="90" ng-pattern="emailregEx" required>
+									</div>
+								</div>
+								<span class="form-error val_error" ng-show="form.email.$error.pattern">Not a valid email</span>
+								<div ng-show="form.$submitted || form.email.$touched"
+									class="form-error val_error ">
+									<div ng-show="form.email.$error.required">Please enter Email-Id</div>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="row customer_details_row vechile_info">
+							<div
+								class="col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6 customer_cols vechile_info_col">
+								<h4 class="text-left">Vehicle Details</h4>
+									<div class=" col-xs-6 col-sm-6 col-md-6 form-inline">
+									<div class="form-group" data-title="Registartion Number"
+										data-name="">
+										<div class="input-group date form_date reg_val_input">
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-equalizer"></span></span>
+												<input name="regNo" type="text"
+													ng-model="vehicleInfo.regNo1"
+													class="form-control  readonly" placeholder="AA" capitalize
+													string-Only maxlength="2"  move-next-on-maxlength required />
+											
+												<input name="regNo" type="text"
+													ng-model="vehicleInfo.regNo2" 
+													class="form-control  readonly" placeholder="00"
+													numbers-Only maxlength="2" move-next-on-maxlength required />
+											
+												<input name="regNo" type="text"
+													ng-model="vehicleInfo.regNo3"
+													class="form-control  readonly" placeholder="AB" capitalize
+													string-Only maxlength="2" move-next-on-maxlength required />
+											
+												<input name="regNo" type="text"
+													ng-model="vehicleInfo.regNo4"
+													class="form-control  readonly" placeholder="0000"
+													numbers-Only maxlength="4" required />	
+										</div>
+									</div>
+									<div ng-show="form.$submitted || form.regNo.$touched"
+										class="form-error val_error">
+										<div ng-show="form.regNo.$error.required">Please enter
+											Vehicle Registration Number</div>
+											<div
+											ng-show="vehicleInfo.regNo1.length<2 || vehicleInfo.regNo2.length<2 ||vehicleInfo.regNo3.length<2 ||vehicleInfo.regNo4.length<4">Please
+											enter Valid Registration Number</div>
+									</div>
+								</div>
+
+								<div class=" col-xs-6 col-sm-6  col-md-6">
+									<div class="form-group"
+										data-title="Is Vehicle Registered In The Name Of">
+										<div class="input-group">
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-list-alt"></span></span> <select
+												class="form-control"
+												ng-model="vehicleInfo.vehicleRegisteredTo"
+												ng-init=" vehicleInfo.vehicleRegisteredTo = vechileRegistration[0]"
+												ng-options="obj.name for obj in vechileRegistration track by obj.code"
+												required>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="clearfix xs-visible sm-visible md-visible"></div>
+								<div class=" col-xs-6  col-sm-6  col-md-6">
+									<div class="form-group forms" data-title="Manufacturing Year"
+										data-name="Manufacturer Year">
+										<div class="input-group">
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-calendar"></span></span> <select
+												class="form-control" name="year"
+												ng-model="vehicleInfo.yearOfMfg" ng-change="chooseRegDate()"
+												ng-options="obj for obj in manufacturerYear track by obj"
+												required>
+												<option value="">-- Select Year --</option>
+
+											</select>
+											<!-- <input type="text" name="year" id="year" class="form-control"
+											ng-model="vehicleInfo.year"	ng-readonly="true" required/> -->
+										</div>
+									</div>
+									<div ng-show="form.$submitted || form.year.$touched"
+										class="form-error val_error">
+									<div ng-show="form.year.$error.required">Please enter
+											Manufacturer Year</div>
+									</div>
+								</div>
+								
+								<div class=" col-xs-6 col-sm-6 col-md-6">
+									<div class="form-group" data-title="Registration Date"
+										data-name="">
+										<div class="input-group" moment-picker="vehicleInfo.registrationDate"
+										 format="MM/DD/YYYY"
+											start-view="month"  autoclose="true"
+											set-on-select="true" min-date="minRegisterationDate"
+											max-date="maxRegisterationDate">
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-calendar"></span></span> 
+												<input name="regDate" type="text" class="form-control" ng-model="vehicleInfo.registrationDate" required>
+										</div>
+									</div>
+										<div ng-show="form.$submitted || form.regDate.$touched"
+											class="form-error val_error">
+
+											<div ng-show="form.regDate.$error.required">Please
+												Choose the Registration Date</div>
+										</div>
+									</div>
+
+
+								<div class="clearfix xs-visible sm-visible md-visible"></div>
+								<div class=" col-xs-6 col-sm-6  col-md-6">
+									<div class="form-group manufacturer_form"
+										data-title="Manufacturer Name" data-name="">
+										<div class="input-group">
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-wrench"></span></span> <select
+												class="form-control" ng-model="vehicleInfo.manufacturer"
+												name="make"
+												ng-options="object.name for object in makelist track by object.code"
+												ng-change="showModelList(vehicleInfo.manufacturer)" required>
+												<option value="">--Select --</option>
+											</select>
+										</div>
+									</div>
+									<div ng-show="form.$submitted || form.make.$touched"
+										class="form-error val_error">
+										<div ng-show="form.make.$error.required">Please Select
+											Manufacturer Name</div>
+									</div>
+								</div>
+
+								<div class="col-xs-6 col-sm-6 col-md-6"
+									style="position: relative;">
+									<div class="form-group modelcc_form" data-title="Model/Sub Model and Seating Capacity"
+										data-name="">
+										<div class="input-group">
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-cog"></span></span> <input type="text"
+												name="model" class="form-control" id="modelcc"
+												ng-model="vehicleInfo.modelSubModel"
+												placeholder="Model,Submodel & Seater" ng-click="model=true"
+												ng-readonly="true" required>
+										</div>
+									</div>
+
+									<div class="modal_popup" ng-show="model">
+										<div class="manu_title">
+											{{makename}} <span class="modal_popup_close" 
+												ng-click="model=false;">&#9932;</span>
+										</div>
+										<p class="" ng-repeat="x in modelsList"
+											ng-click="updateModel(x)">{{x.name}}</p>
+									</div>
+
+									<div class="sub_popup" ng-show="subModel" location=no">
+										<div class="manu_title">
+											<span class="glyphicon glyphicon-menu-left sub_popup_back"
+												ng-click="subModel=false;model=true"></span>Sub
+											Model({{modelname}})<span class="sub_popup_close"
+												ng-click="subModel=false;">&#9932;</span>
+										</div>
+										<p class="" ng-repeat="x in submodelsList"
+											ng-click="updateSubModel(x)">
+											Submodel-{{x.subModelName}}<br>Seater-{{x.seatingCapacity}}
+										</p>
+									</div>
+									<div ng-show="form.$submitted || form.model.$touched"
+										class="form-error val_error">
+										<div ng-show="form.model.$error.required">Please Select
+											Model/Sub Model and Seating Capacity Name</div>
+									</div>
+								</div>
+								<div class="clearfix xs-visible sm-visible md-visible"></div>
+								<div class=" col-xs-6  col-sm-6 col-md-6">
+									<div class="form-group" data-title="Engine CC" data-name="">
+										<div class="input-group">
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-stats"></span></span> <input type="text"
+												name="engine" id="engine" class="form-control autu_pop_class auto_forms"
+												ng-model="vehicleInfo.engineCC" ng-readonly="true" required />
+										</div>
+									</div>
+								</div>
+								
+								<div class=" col-xs-6 col-sm-6 col-md-6">
+									<div class="form-group" data-title="Fuel Type" data-name="">
+										<div class="input-group">
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-erase"></span></span> <input type="text"
+												name="fuel" id="fuel" class="form-control autu_pop_class auto_forms"
+												ng-model="vehicleInfo.fuelType" ng-readonly="true" required />
+										</div>
+									</div>
+									
+								</div>
+								<div class="clearfix xs-visible sm-visible md-visible"></div>
+								<!-- <div class=" col-xs-6 col-sm-6  col-md-6">
+									<div class="form-group" data-title="RTO">
+										<div class="input-group">
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-map-marker"></span></span> 
+												<input list="rto_list" class="form-control" placeholder="RTO"
+											 ng-model="vehicleInfo.rtoCode" ng-change="zoneCode(vehicleInfo.rtoCode)"
+											 name="rtoName"
+											 required>
+										<datalist id="rto_list">
+											<option
+												ng-repeat="rtos in rtoList track by rtos.rtoCode"
+												value="{{rtos.rtoLocation}}">{{rtos.rtoCode}}</option>
+											</datalist>
+											<option
+												ng-options="obj.rtoLocation for obj in rtoList track by obj.rtoCode"
+												value="{{rtos.rtoCode}}">{{rtos.rtoLocation}}</option>
+									
+												<p>{{rtoList}}</p>
+												<select
+												class="form-control" ng-model="vehicleInfo.rtoCode"
+												name="rtoName" 
+												ng-options="obj.rtoLocation for obj in rtoList track by obj.rtoCode"
+												required>
+												<option value="">-- Select --</option>
+											</select>
+										</div>
+									</div>
+									<div ng-show="form.$submitted || form.rtoName.$touched"
+										class="form-error val_error">
+
+										<div ng-show="form.rtoName.$error.required">Please Select RTO Name</div>
+									</div>
+								</div> -->
+								
+								<div class=" col-xs-6 col-sm-6  col-md-6">
+									<div class="form-group" data-title="RTO" data-name="">
+										<div class="input-group">
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-map-marker"></span></span> <select
+												class="form-control" ng-model="vehicleInfo.rtoCode"
+												name="rtoName" ng-change="zoneCode(vehicleInfo.rtoCode)"
+												ng-options="obj.rtoLocation for obj in rtoList track by obj.rtoCode"
+												required>
+												<option value="">-- Select --</option>
+											</select>
+										</div>
+									</div>
+									<div ng-show="form.$submitted || form.rtoName.$touched"
+										class="form-error val_error">
+
+										<div ng-show="form.rtoName.$error.required">Please Select RTO Name</div>
+									</div>
+								</div>
+								
+								<div class=" col-xs-6 col-sm-6  col-md-6">
+									<div class="form-group" data-title="Previous Policy Type">
+										<div class="input-group">
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-list-alt"></span></span> <select
+												class="form-control" ng-model="vehicleInfo.policyType"
+												ng-init=" vehicleInfo.policyType = (vehicleInfo.policyType==='')?policyTypeList[2]:vehicleInfo.policyType"
+												ng-options="obj.name for obj in policyTypeList track by obj.code"
+												ng-change="resetValue()" required>
+											</select>
+										</div>
+									</div>
+								</div>
+
+								<div class="clearfix xs-visible sm-visible md-visible"></div>
+								<div class=" col-xs-6 col-sm-6 col-md-6" ng-show="isNoPolicy()">
+									<div class="form-group" data-title="Previous Insurance Company"
+										data-name="Previous Policy Insurer">
+										<div class="input-group">
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-calendar"></span></span> <select
+												name="prevpolicyinsurer" class="form-control"
+												ng-model="vehicleInfo.previousPolicyInsurer"
+												ng-options="obj.insurerName for obj in insurerList track by obj.insurerCode"
+												ng-required="isNoPolicy()">
+												<option value="">-- Select --</option>
+											</select>
+										</div>
+									</div>
+									<div
+										ng-show="form.$submitted || form.prevpolicyinsurer.$touched"
+										class="form-error val_error">
+
+										<div ng-show="form.prevpolicyinsurer.$error.required">Please	
+											Select Previous Policy Insurer</div>
+									</div>
+
+								</div>
+
+
+								<div class=" col-xs-6 col-sm-6 col-md-6" ng-show="isNoPolicy()"
+									ng-required="isNoPolicy()">
+									<div class="form-group"
+										data-title="Previous Policy Expiry Date"
+										data-name="Previous Policy Expiry Date">
+										<div class="input-group"
+											moment-picker="vehicleInfo.prevPolicyExpDate"
+											format="MM/DD/YYYY" autoclose="true" set-on-select="true"
+											start-view="month" min-date="minPreviousPolicyDate"
+											max-date="maxPreviousPolicyDate" change="dateSelect(vehicleInfo.prevPolicyExpDate);">
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-calendar"></span></span> <input
+												type="text" name="prevPolicyExpDate" class="form-control"
+												ng-model="vehicleInfo.prevPolicyExpDate"
+												ng-click="prepolicydatehide();">
+										</div>
+									</div>
+									<div
+										ng-show="form.$submitted || form.prevPolicyExpDate.$touched"
+										class="form-error val_error">
+
+										<div ng-show="form.prevPolicyExpDate	.$error.required">Please
+											Choose the Previous Policy Expiry Date</div>
+									</div>
+								</div>
+								
+
+								<div class="clearfix xs-visible sm-visible md-visible"></div>
+								<div class=" col-xs-6 col-sm-6 col-md-6">
+									<div class="form-group" data-title="Fuel Kit" data-name=""
+										ng-hide="(vehicleInfo.fuelType=='DIESEL' || vehicleInfo.fuelType=='PETROL')?true:false;"
+										ng-style="{display: (vehicleInfo.fuelType=='' ? 'none' : 'block')}">
+										<input ng-disabled="true" type="checkbox" id="fuel_kit"
+											class="fuelkit_check" ng-checked="true"
+											aria-label="Toggle ngShow" ng-model="vehicleInfo.inbuilt"><label for="fuel_kit"
+											id="fuelkit_label" classs="fuelkit_label">Inbuilt</label><br />
+									</div>
+
+								</div>
+
+								<div class=" col-xs-12 col-sm-12 col-md-12" ng-show='showCarOwnerShip()'>
+									<div class="form-group  ownership_form text-center">
+										<div class="input-group">
+											<p>Was the car Ownership changed in the past 12 months?</p>
+											<label class="radio-inline"> <input type="radio"
+												ng-model="vehicleInfo.isCarOwnerChanged" name="isCarOwerChanged" ng-click="resetclaim()" value="Y" ng-required="isNoPolicy()">Yes
+											</label> <label class="radio-inline"> <input type="radio"
+												ng-model="vehicleInfo.isCarOwnerChanged" name="isCarOwerChanged" ng-click="resetclaim()" value="N" ng-required="isNoPolicy()">No
+											</label>
+										</div>
+									</div>
+										<div ng-show="form.$submitted" class="form-error val_error ">
+											<div ng-show="form.isCarOwerChanged.$error.required">Please Choose the Radio Button
+									</div>
+									</div>
+								</div>
+
+								<div ng-switch="vehicleInfo.isCarOwnerChanged" >
+									<div ng-switch-when="N" ng-show='showCarOwnerShip();Comprehensive();Thirdparty();'>
+										<div class=" col-xs-6 col-sm-6 col-md-6" id="claim_radio" ng-required="Comprehensive();Thirdparty();" ng-hide="dayDifference>91">
+											<div class="form-group  ownership_form text-center">
+												<div class="input-group">
+													<p>Do you have any claim for last year</p>
+													<label class="radio-inline"> <input type="radio"
+														ng-model="vehicleInfo.isAnyClaim" name="isAnyClaim"
+														value="Y" ng-required="Comprehensive();Thirdparty();">Yes
+													</label> <label class="radio-inline"> <input type="radio"
+														ng-model="vehicleInfo.isAnyClaim" name="isAnyClaim"
+														value="N">No
+													</label>
+												</div>
+											</div>
+											<div ng-show="form.$submitted" class="form-error val_error ">
+												<div ng-show="form.isAnyClaim.$error.required">Please
+													Choose the Radio Button</div>
+											</div>
+										</div>
+
+
+										<div ng-switch="vehicleInfo.isAnyClaim" ng-show='ncbValue()'>
+											<div ng-switch-when="N">
+												<div class=" col-xs-6 col-sm-6 col-md-6 " id="claim_ncb" ng-required="ncbValue();"  ng-hide="dayDifference>91">
+													<div class="form-group" data-title="NCB"
+														data-name="No Claim Bonus">
+														<div class="input-group">
+															<span class="input-group-addon"><span
+																class="glyphicon glyphicon-calendar"></span></span> <select
+																name="ncb" ng-model="vehicleInfo.ncb" id="ncb"
+																class="form-control" 
+																ng-options="obj.ncbPercentage for obj in ncbList track by obj.ncbPercentage"
+																ng-change="currectNCBCalc(vehicleInfo.ncb.ncbPercentage)">
+																<br />
+																<option value="">-- Select --</option>
+															</select>
+
+														</div>
+													</div>
+													<div ng-show="form.$submitted || form.ncb.$touched"
+														class="form-error val_error">
+
+														<div ng-show="form.ncb.$error.required">Please
+															Choose NCB</div>
+													</div>
+
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+	</form>
+	<div class="row customer_details_row calculate_info">
+		<div
+			class=" col-xs-12 col-sm-12 col-md-12 calculate_info_col text-center"
+			id="next_prev">
+
+			<button class="btn calculate_premium" ng-click="submit($event,form)">Calculate
+				Premium</button>
+		</div>
+
+	</div>
+
+</div>
+<div id="customer_details_dummy"></div>

@@ -1,0 +1,25 @@
+POTApp.factory('documentListFactory',function($http,$q,fileService,UrlConstants)
+		{
+	var url=UrlConstants.DMS_URL+UrlConstants.DOCUMENT_LIST;
+	
+	
+	var factory={
+			getDocumentList : getDocumentList
+	}
+	
+	return factory;
+	function getDocumentList()
+	{
+		var defered=$q.defer();
+		var data=fileService.getAll();
+		 $http.get(url,data).then(function(response)
+				 {
+			 defered.resolve(response);
+				 });
+		 
+		 return defered.promise;
+	}
+	
+	 
+	
+		});

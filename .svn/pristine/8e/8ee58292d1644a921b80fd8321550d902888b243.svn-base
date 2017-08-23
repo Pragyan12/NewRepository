@@ -1,0 +1,219 @@
+POTApp.factory('InspectionServices', function($filter,StorageService,$q,$http) {
+	return {
+		inspectionType : inspectionType,
+		inspectionTime:inspectionTime,
+		fetchTimelist : fetchTimelist,
+		getListOfTimes : getListOfTimes,
+		defaultTime : defaultTime,
+		saveEnrichmentDetails : saveEnrichmentDetails
+	}
+	function inspectionType() {
+		return [
+	        {name: 'BREAK-IN', code: '1'},
+	        {name: 'ADD-ON-COVER', code: '2'},
+	        {name: 'ADD-ON & BREAK-IN', code: '3'}
+	    ];
+	}
+	
+	function inspectionTime() {
+		return [
+			{'time':'07:00'},
+	        {'time':'07:30'},
+	        {'time':'08:00'},
+	        {'time':'08:30'},
+	        {'time':'09:00'},
+	        {'time':'09:30'},
+	        {'time':'10:00'},
+	        {'time':'10:30'},
+	        {'time':'11:00'},
+	        {'time':'11:30'},
+	        {'time':'12:00'},
+	        {'time':'12:30'},
+	        {'time':'13:00'},
+	        {'time':'13:30'},
+	        {'time':'14:00'},
+	        {'time':'14:30'},
+	        {'time':'15:00'},
+	        {'time':'15:30'},
+	        {'time':'16:00'},
+	        {'time':'16:30'},
+	        {'time':'17:00'},
+	        {'time':'17:30'},
+	        {'time':'18:00'},
+	        {'time':'18:30'},
+	        {'time':'19:00'},
+	        {'time':'19:30'},
+	        {'time':'20:00'},
+	        {'time':'20:30'},
+	        {'time':'21:00'}
+	        
+	        
+	    ];
+	}
+	
+	function fetchTimelist(currentDate) {
+		var timeArray = inspectionTime();
+		var inspectionTimeArray = [];
+		var inspectionDate = $filter('date')(currentDate, "dd/MM/yyyy");
+		
+		var currentTime = new Date();
+		angular.forEach(timeArray,function(value,key) {
+		var timeValue =value.time; 
+		var hours = timeValue.split(':')[0];
+		var minutes = timeValue.split(':')[1];
+		
+		var inspectionTime =new Date($filter('date')(new Date(inspectionDate), "dd/MM/yyyy"));
+		inspectionTime.setHours(hours);
+		inspectionTime.setMinutes(minutes);
+			if(currentTime<inspectionTime){
+				inspectionTimeArray.push($filter('date')(new Date(inspectionTime), "hh:mm a"));
+			}
+		});
+		return inspectionTimeArray;
+	}
+	
+	function defaultTime() {
+		return [
+	        '07:00 AM',
+	        '07:30 AM',
+	        '08:00 AM',
+	        '08:30 AM',
+	        '09:00 AM',
+	        '09:30 AM',
+	        '10:00 AM',
+	        '10:30 AM',
+	        '11:00 AM',
+	        '11:30 AM',
+	        '12:00 PM',
+	        '12:30 PM',
+	        '01:00 PM',
+	        '01:30 PM',
+	        '02:00 PM',
+	        '02:30 PM',
+	        '03:00 PM',
+	        '03:30 PM',
+	        '04:00 PM',
+	        '04:30 PM',
+	        '05:00 PM',
+	        '05:30 PM',
+	        '06:00 PM',
+	        '06:30 PM',
+	        '07:00 PM',
+	        '07:30 PM',
+	        '08:00 PM',
+	        '08:30 PM',
+	        '09:00 PM'
+	        
+	    ];
+	}
+	
+	function getListOfTimes(){
+		var timeStops = [];
+		var ROUNDING = 30 * 60 * 1000; /*ms*/
+		var start = moment();
+		start = moment(Math.ceil((+start) / ROUNDING) * ROUNDING);
+		var start_ap = start.format("hh:mm A");
+		var flag = false;
+		
+		var timearray = defaultTime();
+		
+		for(var index = 0;index<timearray.length;index++){
+			if(start_ap==timearray[index]){
+				for(var j=index;j<timearray.length;j++){
+					timeStops.push(timearray[j])
+					flag = true;
+				}
+				if(flag)
+					break;
+			}
+		}
+		return timeStops;
+	}
+	
+	/**
+	 * This method is used to calculate multiple insurer premium calculation
+	 */
+	function saveEnrichmentDetails() {
+		var formData = StorageService.getAll();
+		var data = {
+			"quoteNo" : formData.premiumInfo.premiumDetails.quoteNo,
+			"CustomerDetails" : {
+				"title" : formData.personalInfo.title,
+				"firstName" : formData.personalInfo.firstName,
+				"lastName" : formData.personalInfo.lastName,
+				"address1" : formData.personalInfo.address1,
+				"address2" : formData.personalInfo.address2,
+				"address3" : formData.personalInfo.address3,
+				"areaCode" : formData.personalInfo.area,
+				"areaName" : formData.personalInfo.area,
+				"cityCode" : formData.personalInfo.city,
+				"cityName" : formData.personalInfo.city,
+				"pinCode" : formData.personalInfo.pincode,
+				"stdCode" : formData.personalInfo.std,
+				"telePhone" : formData.personalInfo.phonealt,
+				"mobileNo" : formData.personalInfo.mobileNo,
+				"alternateMobile" : formData.personalInfo.alterMobileNo,
+				"email" : formData.personalInfo.email,
+				"alternateEmail" : formData.personalInfo.alterEmail,
+				"dateOfBirth" : formData.personalInfo.dob,
+				"panNumber" : formData.personalInfo.panNo,
+				"isAreaEdit" : formData.personalInfo.isEnableAreaEdit,
+				"Nominee" : {
+					"nomineeName" : formData.nomineeFinancierInfo.nomineeName,
+					"nomineeDob" : formData.nomineeFinancierInfo.nomineeDOB,
+					"nomineeRelationship" : formData.nomineeFinancierInfo.nomineeRelationShip.relationshipName,
+					"guardianName" : formData.nomineeFinancierInfo.guardianName,
+					"guardianDob" : formData.nomineeFinancierInfo.guardianDOB,
+					"guardianRelationship" : formData.nomineeFinancierInfo.guardianRelationship.relationshipName
+				}
+			},
+			"VehicleDetails" : {
+				"engineNo" : formData.additionalVehicleInfo.engineNo,
+				"chassisNo" : formData.additionalVehicleInfo.chassisNo,
+				"isCustomerAddress" : formData.additionalVehicleInfo.sameAsAboveAddressFlag,
+				"regiAddress1" : formData.additionalVehicleInfo.address1,
+				"regiAddress2" : formData.additionalVehicleInfo.address2,
+				"regiAddress3" : formData.additionalVehicleInfo.address3,
+				"regiCityCode" : formData.additionalVehicleInfo.city,
+				"regiCityName" : formData.additionalVehicleInfo.city,
+				"regiAreaName" : formData.additionalVehicleInfo.area,
+				"regiAreaCode" : formData.additionalVehicleInfo.area,
+				"regiPinCode" : formData.additionalVehicleInfo.pincode,
+				"isRegiAreaEdit" : formData.additionalVehicleInfo.isEnableAreaEdit,
+				"financierType" : formData.nomineeFinancierInfo.financierType,
+				"financierName" : formData.nomineeFinancierInfo.financierName,
+				"financierCity" : formData.nomineeFinancierInfo.financierName,
+				"isInspectionRequired" : formData.inspectionInfo.inspectionRequired,
+				"inspectBy" : formData.inspectionInfo.inspectionBy,
+				"inspectionType" : formData.inspectionInfo.financierName,
+				"inspecDate" : formData.inspectionInfo.inspecDate,
+				"inspecTime" : formData.inspectionInfo.inspecTime,
+				"insPectionComments" : formData.inspectionInfo.comments,
+				"isInspectInfo" : formData.inspectionInfo.inspectionInformation,
+				"inspectReason" : formData.inspectionInfo.inspectionReason.name
+			},
+			"PreviousPolicyDetails":{
+				"prevPolicyNo":formData.additionalVehicleInfo.prevPolicyNo,
+				"prevPolicyExp":formData.vehicleInfo.prevPolicyExpDate,
+				"prevPolicyNcb":formData.vehicleInfo.dob,
+				"prevPolicyInsurerName":formData.vehicleInfo.previousPolicyInsurer.insurerCode,
+				"prevPolicyInsurerCode":formData.vehicleInfo.previousPolicyInsurer.insurerName,
+				"isPrevPolicyClaim":formData.vehicleInfo.ncb.ncbPercentage
+			}
+		}
+		console.log("Values => " + JSON.stringify(data));
+		var deferred = $q.defer();
+		$http({
+			url : "http://192.168.0.34:8080/digital_mis/updateEnrichment.json",
+			method : "POST",
+			data : data
+		}).then(function(response) {
+			console.log("Multiple Insurer Premium Calc Response => "+response.data);
+			deferred.resolve(response);
+		}, function(error) {
+			deferred.reject(error);
+		});
+		return deferred.promise;
+	}
+	
+});

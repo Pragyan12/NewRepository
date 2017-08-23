@@ -1,0 +1,190 @@
+.auto_con{
+	width:100%;
+	height:auto;
+}
+.auto_con .vec_reg_row{
+	background-color:#444;
+	padding-top:20px;
+	padding-bottom:20px;
+}
+.auto_con .vec_reg_row .form-group .input-group-addon{
+	background-color: #0299ff;
+    color: #fff;
+    /* border-right: 2px solid #2e80ab; */
+    border: 1px solid #0299ff;
+    font-weight: 700;
+}
+.auto_con .vec_reg_row .form-group label{
+	color:#ddd;
+}
+.auto_con .vec_reg_row .form-group .form-control{
+	background-color: #fff;
+    border-radius: 0px;
+/*  border-right: 2px solid #0299ff; */
+    border: 1px solid #ddd;
+    color: #000;
+}
+.auto_con .vec_reg_row .form-group .form-control:last-child{
+	border-right: 2px solid #0299ff;
+}
+.auto_con .vec_reg_row .reg_form input{
+	width:25%;
+}
+.auto_con .vec_reg_row .aadhar_form input{
+	width:33%;
+}
+.auto_con .reg_icon{
+	transform: rotate(90deg);
+}
+.auto_con .get_quote_col{
+	padding-top: 20px;
+    padding-bottom: 0px;
+}
+.auto_con .get_quote_col .get_quote_btn{
+	background-color: #ea5555;
+    color: #f3f2f2;
+    border-radius: 2px;
+    box-shadow: 1px 2px 0px 0 rgba(255,255,255,0.4);
+}
+.auto_con .get_quote_col .get_quote_btn:hover{
+	background-color:#f53232;
+    color: #fff;
+}
+.auto_con .get_quote_col .get_quote_btn:focus{
+	outline:none !important;
+}
+.auto_con .auto_pop_row  > div:nth-child(1){
+	padding-left:0px;
+	padding-right:0px;
+}
+.auto_con .auto_pop_row .auto_pop_row_header{
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #b7b7b7;
+    padding-bottom: 5px;
+    padding-top: 5px;
+    color: #fff;
+    font-weight: 700;
+    opacity:0.0;
+/*  background-color: #ddd; */
+    transition: all linear 0.1s;
+}
+.auto_con .auto_pop_row p{
+	word-wrap:break-all;
+}
+.auto_con .auto_pop_row .auto_pop_row_header span{
+	font-size:20px;
+}
+.headerpositionclass{
+	  opacity:1.0 !important;
+}
+.auto_con .auto_pop_row .entire_form{
+/* 	border: 1px solid #fff; */
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.auto_con .auto_pop_row .vechile_info{
+	padding-left:5px;
+}
+.auto_con .auto_pop_row .entire_form .labelvalue{
+    background-color: #ddd;
+    border-right: 5px solid #cccccc;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    top: 30px;
+    font-weight: 700;
+    transition: all cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.3s;
+}
+.auto_con .auto_pop_row .entire_form .labelpositionclass{
+	top: 0px !important;
+}
+.auto_con .auto_pop_row .entire_form .inputsvalue{
+    border-right: 5px solid #9c9a9a;
+    background-color: #ffffff;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-bottom: 5px;
+    color: #000000;
+    position: absolute;
+   	opacity:0;
+    right:0%;
+    width:0%;
+    transition: 0.2s all cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.3s;
+}
+.auto_con .auto_pop_row .entire_form .inputpositionclass{
+	opacity:1.0;
+	position:absolute;
+	right:0%;
+	width:50%;
+}
+.auto_con .bottom_height .bottom_height_col{
+	height:70px;
+	width:100%;
+}
+.address_label{
+	height:90px;
+	
+}
+/*--------------------------------MEDIA QUERIES---------------------------*/
+@media screen and (max-width:992px) and (min-width:767px){
+	.auto_con .auto_pop_row .vechile_info .entire_form{
+		margin-top:0px;
+		margin-bottom:0px;
+	}
+	.auto_con .auto_pop_row .vechile_info .entire_form > div > div{
+		margin-top:5px;
+		margin-bottom:5px;
+	}
+
+	}
+@media screen and (max-width:768px) and (min-width:399px){
+	.auto_con .auto_pop_row .vechile_info .entire_form > div{
+		padding-left:0px;
+		padding-right:0px;
+	}
+	.auto_con .auto_pop_row .vechile_info .entire_form{
+		margin-top:0px;
+		margin-bottom:0px;
+	}
+	.auto_con .auto_pop_row .vechile_info .entire_form > div > div{
+		margin-top:5px;
+		margin-bottom:5px;
+	}
+	.auto_con .auto_pop_row .vechile_info{
+		padding-left:15px;
+	}
+}
+@media screen and (max-width:400px) and (min-width:200px){
+	.auto_con .vec_reg_row .vec_reg_col div{
+		width:100%;
+	}
+	.auto_con .auto_pop_row .entire_form .labelvalue{
+		width:100%;
+		padding-bottom: 35px;
+   		border-right: 5px solid #9c9a9a;
+	}
+	.auto_con .auto_pop_row .entire_form .inputsvalue{
+		width:100%;
+		top: 30px;
+	}
+	.auto_con .auto_pop_row .vechile_info .entire_form{
+		margin-top:0px;
+		margin-bottom:0px;
+	}
+	.auto_con .auto_pop_row .vechile_info .entire_form > div{
+		padding-left:0px;
+		padding-right:0px;
+	}
+	.auto_con .auto_pop_row .vechile_info .entire_form > div > div{
+		margin-top:5px;
+		margin-bottom:5px;
+	}
+	.auto_con .auto_pop_row .vechile_info{
+		padding-left:15px;
+	}
+	.auto_con .auto_pop_row .entire_form .inputsvalue{
+		padding-left:15px;
+	}
+}

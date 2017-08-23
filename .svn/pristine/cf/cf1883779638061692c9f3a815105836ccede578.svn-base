@@ -1,0 +1,167 @@
+<div class="entire customer_details">
+	<div class="wrapper">
+		<div class="totalpage">
+			<div ui-view="customer_header"></div>
+			<div class="container-fluid docu_container">
+				<div class="row">
+					<form role="form" class="home_form" id="home_form" name="form"
+						novalidate>
+						<div class="col-xs-12 col-sm-12 col-md-12 docu_container_col12">
+							<!-- 			<p class="docum_header">DOCUMENT MANAGEMENT UPLOAD<p> -->
+							<p class="docum_sub_header">DOCUMENT TYPE
+							<p>
+						</div>
+						<div class="col-xs-12 col-sm-12 col-md-12 docu_container_col12">
+							<p class="optional_header">Document Preview
+							<p>
+						</div>
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 document_col">
+							<div class="document_content">
+							<div class="row  docment_row"  ng-repeat="(key, value) in documentPreviewDisp track by $index" >
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 img_col" style="text-align:left;padding:10px;">
+									     <div class="col-xs-12 text-left">{{key}}</div>
+										  <span  ng-repeat='(base64, fileType) in value' >
+				<!-- 						   ng-init="{{key-{{$index + 1}}.{{fileType}}" -->
+										  	<div  class="text-left" style="display:inline;">
+										  		<a href="{{downloadURL}}{{base64}}">
+												 <span style="color: black;cursor: pointer;text-decoration: underline;font-size:12px;">
+												 {{key}}-{{$index + 1}}{{$last ? '' : ', '}}</span>
+												 </a>
+											</div>
+										  </span>
+										
+									
+								</div>
+							</div>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-12 col-md-12 docu_container_col12">
+							<p class="optional_header">Optional Document
+							<p>
+						</div>
+						<div
+							class="col-xs-12 col-sm-12 col-md-12 col-lg-12 docu_container_col12">
+							<div class="col-xs-6 col-sm-4 col-md-3 col-lg-3"
+								ng-repeat="x in documentUploads" ng-if="x.mandatory == false">
+								<div class="checkbox checkbox-success">
+									<input id="{{x.documentName}}" ng-model="document[$index]" 
+										ng-click="clkShow([$index], document[$index], x.documentName)"
+										type="checkbox"> <label for="{{x.documentName}}">{{x.documentName}}</label>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 proof_col">
+							<div class="row proof_row"
+								ng-repeat="x in documentUploadsImg track by $index"
+								ng-if="x.mandatory == true">
+								<div class="col-xs-3 col-sm-3 col-md-2 col-lg-2 proof_text">
+									<p>{{x.documentName}}</p>
+								</div>
+								<div class="col-xs-9 col-sm-9 col-md-10 col-lg-10">
+
+									<span ng-repeat='(col, vals) in documentFiles'
+										ng-if="x.documentName == col">
+										<div class="col-xs-3 col-sm-3 col-md-1 col-lg-1 img_col"
+											ng-repeat='val in vals track by $index'>
+											<div class="img-wrap">
+											
+												<span class="close"
+													ng-click="remove(x.documentName, $index)">&times;</span> <img
+													ng-src="{{val}}" ng-click="showzoomimage(val)"
+													ng-show="val.indexOf('data:application/pdf;') != 0 && val.indexOf('data:video/mp4;') != 0 &&
+							  		val.indexOf('data:video/avi;') != 0 && val.indexOf('video/x-flv;') != 0 && val.indexOf('data:video/mpeg;') != 0 &&
+							  		val.indexOf('data:video/x-ms-wmv;') != 0 && val.indexOf('data:video/quicktime;') != 0"
+													alt="Preview" class="img-responsive">
+												<!-- 							  		<object data="{{val}}" ng-show="val.indexOf('data:application/pdf;') == 0" type="application/pdf" style="width:200%; height:100px" /> -->
+												<!-- 							  		<object data="{{val}}" ng-show="val.indexOf('data:text/plain;') == 0" type="text/plain" style="width:200%; height:100px" /> -->
+												<img ng-src="images/pdflogo.png" ng-click="download(val, 'pdf');"
+													ng-show="val.indexOf('data:application/pdf;') == 0;"
+													alt="Preview" class="img-responsive"> <img
+													ng-src="images/videologo.jpg"
+													ng-show="val.indexOf('data:video/mp4;') == 0 ||
+							  		val.indexOf('data:video/avi;') == 0 || val.indexOf('video/x-flv;') == 0 || val.indexOf('data:video/mpeg;') == 0 ||
+							  		val.indexOf('data:video/x-ms-wmv;') == 0 || val.indexOf('data:video/quicktime;') == 0"
+													alt="Preview" class="img-responsive">
+											</div>
+										</div>
+									</span>
+
+									<div class="col-xs-4 col-sm-3 col-md-2 col-lg-2 img_col"
+										ng-show="browseShow == $index" ng-init="browseShow = $index">
+										<div class="img_box">
+											<p class="camera_section">
+												<label for="{{$index}}c"><i class="fa fa-camera"></i>
+												</label>
+											</p>
+											<p class="text_section">Capture Photo / Video here</p>
+											<p class="browse_section">
+												<label for="{{$index}}"><span>Browse</span></label>
+											</p>
+										</div>
+
+										<input type='file' id="{{$index}}c" capture="camera"
+											ng-model-instant show-hide-error
+											onchange="angular.element(this).scope().imageUpload(event);angular.element(this).scope().browseShow = 'y';"
+											ng-click="tmpFiles = x.documentName;" multiple filetype /> <input
+											type='file' id="{{$index}}" ng-model-instant show-hide-error
+											onchange="angular.element(this).scope().imageUpload(event);angular.element(this).scope().browseShow = 'y';"
+											ng-click="add(x.documentName);" multiple filetype /> <input
+											type="hidden" ng-model="tmpFiles" ng-value="x.documentName" />
+										<div class="error" ng-repeat="(errcol, errvals) in errors"
+											ng-if="x.documentName == errcol" style="color: yellow;">
+											<div>{{errvals}}</div>
+										</div>
+									</div>
+
+									<div class="col-xs-4 col-sm-3 col-md-2 col-lg-2 add_update"
+										my-directive id="d{{$index}}" ng-click="browseShow = $index;">
+										<p>
+											<i class="fa fa-plus-circle"></i>&nbsp;Add / Update
+										</p>
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+
+
+						<div class="col-xs-12 submit_col text-center">
+							<div class="row submit_row">
+								<div class="col-xs-6 text-left">
+									<a class="financier_prev_btn prev_btn" ng-click="previewInspectionInfo()"
+										id="financier_prev_btn"> <span
+										class="glyphicon glyphicon-menu-left"></span>BACK TO FINAL
+									</a>
+								</div>
+								<div class="col-xs-6 text-right">
+									<button class="btn submit_btn" ng-click="validationAndSubmit()">Submit</button>
+								</div>
+
+							</div>
+						</div>
+						<div class="col-xs-12">
+							<div class="row">
+								<div class="dummy_height"></div>
+							</div>
+						</div>
+					</form>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+<!-- START ZOOMIN -->
+<div id="zoomsection" ng-show="imgopen" ng-class="closezoomicons">
+
+	<div id="zoomsection_inner">
+		<div id="closezoom">
+			<span class="glyphicon glyphicon-remove-circle" id="closezoomspan"
+				ng-click="closezoomicon()"></span>
+		</div>
+		<img src="">
+	</div>
+</div>
+<!-- END ZOOMIN -->

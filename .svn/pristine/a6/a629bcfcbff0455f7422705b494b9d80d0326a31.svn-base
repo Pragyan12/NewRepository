@@ -1,0 +1,127 @@
+POTApp.controller('InspectionController', function($scope, $state, $filter, InspectionServices, StorageService) {
+
+	$scope.inspectionTypeList = InspectionServices.inspectionType();
+	$scope.inspectionTimes = '';
+	$scope.formData = StorageService.getAll();
+
+	$scope.minInspectionDate = moment().subtract('day');
+	$scope.maxAgeInspection = moment().add(5, 'day');
+	var inspectionDetails = StorageService.get('inspectionInfo');
+
+	var vehicleHrefLinkDetails = StorageService.get('vehicleHrefLink');
+	$scope.vehicleHrefLink = false;
+	if (angular.isDefined(vehicleHrefLinkDetails)) {
+		$scope.vehicleHrefLink = true;
+	}
+	//	
+	var inspectionHrefLinkDetails = StorageService.get('inspectionHrefLink');
+	$scope.inspectionHrefLink = false;
+	if (angular.isDefined(inspectionHrefLinkDetails)) {
+		$scope.inspectionHrefLink = true;
+	}
+
+	var nomineeHrefLinkDetails = StorageService.get('nomineeHrefLink');
+	$scope.nomineeHrefLink = false;
+	if (angular.isDefined(nomineeHrefLinkDetails)) {
+		$scope.nomineeHrefLink = true;
+	}
+
+	$scope.getTimelist = function(currentDate) {
+		var inspection_date = $filter('date')(currentDate, "dd/MM/yyyy");
+		var today_date = $filter('date')(new Date(), "dd/MM/yyyy");
+
+		if (inspection_date == today_date) {
+			$scope.inspectionTimes = InspectionServices.getListOfTimes();
+		} else {
+			$scope.inspectionTimes = InspectionServices.defaultTime();
+		}
+	/*alert("getTimelist"+$scope.getTimelist);*/
+	}
+
+	if (angular.isUndefined(inspectionDetails)) {
+		//		alert(JSON.stringify(inspectionDetails));
+		$scope.inspectionInfo = {
+			inspectionRequired : '',
+			inspectBy : '',
+			inspectionType : '',
+			inspecDate : '',
+			inspecTime : '',
+			comments : ''
+		};
+		StorageService.set('inspectionInfo', $scope.inspectionInfo);
+	} else {
+		//		alert(JSON.stringify(inspectionDetails));
+		$scope.inspectionInfo = inspectionDetails;
+	}
+	//TIME
+	//	$scope.inspectionInfo.inspecTime = new Date();
+
+	/*$scope.getTimelist = function(currentDate) {
+		var inspection_date = $filter('date')(currentDate, "dd/MM/yyyy");
+		var today_date = $filter('date')(new Date(), "dd/MM/yyyy");
+		if(inspection_date==today_date) {
+			$scope.inspectionTimes = InspectionServices.fetchTimelist(currentDate);
+			console.log("$scope.inspectionTimes : "+JSON.stringify($scope.inspectionTimes))
+		} else {
+			$scope.inspectionTimes = InspectionServices.defaultTime();
+			console.log("$scope.inspectionTimes : "+JSON.stringify($scope.inspectionTimes))
+		}
+		
+	}*/
+
+	$scope.preview = function(e, form) {
+		e.preventDefault();
+		form.$setSubmitted();
+		$("body").addClass('previewoverflow');
+		//		alert(form.$valid);
+		if (form.$valid) {
+			StorageService.set('inspectionInfo', $scope.inspectionInfo);
+			$scope.showpreview = true;
+			$scope.formData = StorageService.getAll();
+		}
+
+
+
+	};
+	$scope.closepreviewfn = function() {
+		$("body").removeClass('previewoverflow');
+	};
+
+	$scope.today = function() {
+		$scope.dt = new Date();
+	};
+	$scope.dateformat = "dd/MM/yyyy";
+
+	$scope.showcalendar = function($event) {
+		$scope.showdp = true;
+	};
+	$scope.showdp = false;
+
+	//validate
+	/*$scope.showPreviewDetails = function(e, form) {
+	e.preventDefault();
+		form.$setSubmitted();			
+		alert($scope.inspectionInfo);
+		if (form.$valid) {
+		StorageService.set('inspectionInfo',$scope.inspectionInfo);
+			alert($scope.inspectionInfo);
+		}
+	}*/
+
+
+	$scope.submit = function() {
+		$scope.formData = StorageService.getAll();
+		InspectionServices.saveEnrichmentDetails().then(function(response) {
+			console.log("hjfghdsg  "+JSON.stringify(response));
+			if(response.data.message=== "SUCCESS"){
+				$state.go('premiumSummaryFinal');
+			}else{
+				alert("Persistance Failed");
+			}
+		}, function(errorResponse) {
+			alert("Persistance Failed"+JSON.stringify(errorResponse));
+		});
+	}
+
+
+});

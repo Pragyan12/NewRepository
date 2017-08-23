@@ -1,0 +1,94 @@
+<div class="entire home">
+	<div class="wrapper">
+		<div class="totalpage">
+			<div class="container-fluid home_main text-center">
+				<div class="row home_main_row_product">
+					<p class="back_btn">
+						<a ui-sref="product"><span
+							class="glyphicon glyphicon-arrow-left"></span></a>
+					</p>
+
+					<div class=" col-xs-12 col-sm-12 col-md-12 total_product">
+						<div class="col-xs-6 col-sm-3 product_1 product_img text-center"
+							ng-repeat="subProduct in subProductList | orderBy: 'orderBy'">
+							<div class="marker1">
+								<img ng-src="{{subProduct.imgSrc}}" alt="{{subProduct.name}}"
+									ng-click="viewQuickQuote(subProduct.code,subProduct.name);views=true">
+								<span class="selected glyphicon glyphicon-ok" ng-show="views"></span>
+								<div class="img_circle"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<form role="form" class="home_form" id="home_form" name="form">
+					<div class="row text_box_row" ng-show="false">
+						<span class="down_arrow"></span>
+						<div class="col-xs-12 col-sm-12 col-md-12">
+							<div class="col-xs-12 col-sm-12 col-md-12 text-center">
+								<p class="product_name">{{listproductsName}}</p>
+							</div>
+						</div>
+						<!-- <div class="col-xs-12 col-sm-12 col-md-12 card_input_col">
+							<div class="col-xs-6 col-sm-6 col-md-6 card_input">
+								<div
+									class="col-xs-1  col-sm-offset-3 col-sm-2 text-center hand_symbol">
+									<span class=" glyphicon glyphicon-hand-right"
+										style="font-size: 24px; color: #fff"></span>
+								</div>
+								<div
+									class="col-xs-offset-1 col-xs-10  col-sm-6 col-md-offset-2 col-md-5 text-center vec_num_col">
+									<div class="form-group vec_num">
+										<div class="input-group">
+											<span class="input-group-addon"><img
+												src="images/steer.png"></span> <input type="text"
+												class="form-control vec_num_value" id="vec_num_value"
+												ng-model="productDetails.vehicleNo" name="vehicle_no"
+												placeholder="Enter  Vechile Registration No." required>
+										</div>
+									</div>
+									<div ng-show="form.$submitted || form.vehicle_no.$touched"
+										class="form-error" style="color: pink">
+										<div ng-show="form.vehicle_no.$error.required">Please
+											Enter VehicleNo</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6 col-sm-6 col-md-6 card_input">
+								<div class="col-xs-10 col-sm-6 col-md-5 aadhar_col">
+									<div class="form-group aad_num">
+										<div class="input-group">
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-credit-card"></span></span> <input
+												type="text" class="form-control aad_num_value"
+												ng-model="productDetails.aadharNo" name="aadhar_no"
+												maxlength="14" id="aad_num_value"
+												placeholder="Enter  Aadhar Card No." required>
+										</div>
+									</div>
+									<span id="errmsg"></span>
+									<div ng-show="form.$submitted || form.aadhar_no.$touched"
+										class="form-error" style="color: pink">
+										<div ng-show="form.aadhar_no.$error.required">Please
+											Enter AadharNo</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xs-12 col-sm-12 col-md-12 text-center home_submit">
+							<button class="btn  home_button" id="home_button"
+								ng-click="quickQuote($event,form)">QUICK QUOTE</button>
+						</div>
+ -->
+<!-- 						<div class="col-xs-12 col-sm-12 col-md-12 text-center bottom_link"> -->
+<!-- 						<button class="btn  home_button" id="home_button" -->
+<!-- 								ng-click="proceed()">QUICK QUOTE</button> -->
+<!-- 							<a ng-click="proceed()">Skip & Proceed</a> -->
+<!-- 						</div> -->
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>

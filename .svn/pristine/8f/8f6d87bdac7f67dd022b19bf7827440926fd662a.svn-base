@@ -1,0 +1,105 @@
+POTApp.factory('PersonalInfoService', function($http,$q, UrlConstants) {
+	return {
+		titleList : titleList,
+		getlistOfCities : getlistOfCities,
+		getAreaByCity : getAreaByCity,
+		getallpincode : getallpincode,
+		getPaymentResponseOnQuoteNo:getPaymentResponseOnQuoteNo
+	}
+
+	function titleList() 
+	{
+		var url=UrlConstants.MASTER_URL+UrlConstants.GET_ALL_TITLE;
+		var deffered=$q.defer();
+		
+		$http.post(url).then(function(response)
+				{
+			//alert(":::"+JSON.stringify(response.data));
+			 deffered.resolve(response);
+			
+				},function(errresponse)
+				{
+					deffered.reject(errresponse);
+				});
+		
+		return deffered.promise;
+	}
+	
+	function getlistOfCities()
+	{
+		var url=UrlConstants.MASTER_URL+UrlConstants.GET_ALL_CITY;
+		var deffered=$q.defer();
+		
+		$http.post(url).then(function(response)
+				{
+			
+			 deffered.resolve(response);
+			
+				},function(errresponse)
+				{
+					deffered.reject(errresponse);
+				});
+		
+		return deffered.promise;
+		
+	}
+	function getAreaByCity(cityCode)
+	{
+		var url=UrlConstants.MASTER_URL+UrlConstants.GET_AREA_BY_CITY+cityCode;
+		var deffered=$q.defer();
+		
+		$http.post(url).then(function(response)
+				{
+			
+			 deffered.resolve(response);
+			
+				},function(errresponse)
+				{
+					deffered.reject(errresponse);
+				});
+		
+		return deffered.promise;
+		
+	}
+	function getallpincode(areaCode)
+	{
+		var url=UrlConstants.MASTER_URL+UrlConstants.GET_PINCODE_BY_AREA+areaCode;
+		var deffered=$q.defer();
+		
+		$http.post(url).then(function(response)
+				{
+			
+			 deffered.resolve(response);
+			
+				},function(errresponse)
+				{
+					deffered.reject(errresponse);
+				});
+		
+		return deffered.promise;
+		
+	}
+
+	
+	function getPaymentResponseOnQuoteNo()
+	{
+		var url="http://localhost:8080/digital/redirectTest.json";
+		var deffered=$q.defer();
+		
+		$http.post(url).then(function(response)
+				{
+			alert(JSON.stringify(response));
+			alert(JSON.stringify(response.data.quoteNo));
+			 deffered.resolve(response);
+			
+				},function(errresponse)
+				{
+					deffered.reject(errresponse);
+				});
+		
+		return deffered.promise;
+		
+	}
+	
+	
+});

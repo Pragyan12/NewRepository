@@ -1,0 +1,51 @@
+POTApp.controller('LoginController', function($scope, $rootScope, $state,
+		cacheFactory, UrlConstants) {
+	$scope.errorMessage = '';
+	$scope.login = {
+		'username' : '',
+		'password' : '',
+		'accessType' : 'POT'
+	};
+	$scope.loginSubmit = function(event, form) {
+		if ($scope.form.$valid) {
+			cacheFactory.getJsonWithOutCache("POST", UrlConstants.LOGIN_URL,
+					$scope.login).then(function success(response) {
+				$rootScope.username = response.data.userDetails.Username;
+				$rootScope.token = response.data.token;
+				$state.go('product');
+			}, function error(error) {
+				$scope.login.password = '';
+				$state.go('login');
+				$scope.errorMessage = error.data.message;
+			});
+		}
+		;
+	}
+
+});
+
+POTApp.controller('HeaderController',
+		function($scope, $rootScope, $state) {
+			$scope.quickLink = true;
+			$scope.toggleQuickLink = function() {
+				$scope.quickLink = ($scope.quickLink === false) ? true : false;
+			};
+
+			if ($state.current.name == 'product') {
+				$scope.headertext = true;
+			}
+
+			if ($state.current.name == 'product'
+					|| $state.current.name == 'subProduct') {
+				$scope.navheader = true;
+			}
+
+			$scope.logout = function() {
+				$state.go('login');
+			}
+
+			$scope.home = function() {
+				$state.go('product');
+			}
+
+		});

@@ -1,0 +1,123 @@
+POTApp.factory('DataPersistService', function($q, $http, StorageService, UrlConstants) {
+
+	
+	var url = UrlConstants.MIS_CLOUD+UrlConstants.MULTIPLE_INSURER_CALC;
+	var factory = {
+		persistAllDetails : persistAllDetails,
+		callPersist       : callPersist
+	};
+	return factory;
+
+	function persistAllDetails() {
+		var details = StorageService.getAll();
+
+		console.log(JSON.stringify(details));
+
+		var request = {
+			"CustomerDetails" : {
+				"title"    : details.personalInfo.title,
+				"firstName": details.personalInfo.firstName,
+				"lastName" : details.personalInfo.lastName,
+				"address1" : details.personalInfo.address1,
+				"address2" : details.personalInfo.address2,
+				"address3" : details.personalInfo.address3,
+				"areaCode" : details.personalInfo.areaCode,
+				"areaName" : details.personalInfo.areaName,
+				"cityCode" : details.personalInfo.cityCode,
+				"cityName" : details.personalInfo.cityName,
+				"pinCode"  : details.personalInfo.pinCode,
+				"stdCode"  : details.personalInfo.stdCode,
+				"telePhone": details.personalInfo.telePhone,
+				"mobileNo" : details.personalInfo.mobileNo,
+				"alternateMobile" : details.personalInfo.alternateMobile,
+				"email" 		  : details.personalInfo.email,
+				"alternateEmail"  : details.personalInfo.alternateEmail,
+				"dateOfBirth"     : details.personalInfo.dateOfBirth,
+				"occupation"      : '',
+				"panNumber"       : details.personalInfo.panNumber,
+				"aadharNumber"    : details.personalInfo.aadharNumber,
+				"isAreaEdit"      : details.personalInfo.isAreaEdit
+			},
+			"QuotationData" : {
+				"quoteNo" 		 : "",
+				"lineOfBusiness" : details.productcode,
+				"subLine"        : details.subProductCode,
+				"productCode"    : details.subProductCode,
+				"productName"    : details.productName,
+				"businessType"   : "Rollover",
+				"policyType"     : details.vehicleInfo.policyType.code,
+				"inseptionDate"  : '',
+				"expiryDate"     : details.vehicleInfo.prevPolicyExpDate,
+				"effectiveDate"  : "effectiveDate",
+				"userId"         : "FAS",
+				"branchCode"     : "FAS001",
+				"branchName"     : "CHENNAI",
+				"channelType"    : "POT",
+				"selectedInsurer": ""
+			},
+			"VehicleDetails" : {
+				"registrationNo"   :  details.vehicleInfo.regNo1+""+details.vehicleInfo.regNo2+""+details.vehicleInfo.regNo3+""+details.vehicleInfo.regNo4,
+				"customerType"     :  details.vehicleInfo.customerType,
+				"yearOfMfg"        :  details.vehicleInfo.yearOfMfg,
+				"registrationDate" :  details.vehicleInfo.registrationDate,
+				"makeCode" 		   :  details.vehicleInfo.manufacturer.code,
+				"modelCode"        :  details.vehicleInfo.model.code,
+				"makeName"         :  details.vehicleInfo.manufacturer.name,
+				"modelName"        :  details.vehicleInfo.model.name,
+				"subModelName"     :  details.vehicleInfo.subModel.subModelName,
+				"subModelCode"     :  details.vehicleInfo.subModel.subModelCode,
+				"engineCC"         :  details.vehicleInfo.engineCC,
+				"fuelType"         :  details.vehicleInfo.fuelType,
+				"rtoCode"          :  details.vehicleInfo.rtoCode.rtoCode,
+				"rtoName"          :  details.vehicleInfo.rtoCode.rtoLocation,
+				"policyType"       :  details.vehicleInfo.policyType.code,
+				"prevInsurerCode"  :  details.vehicleInfo.previousPolicyInsurer.insurerCode,
+				"prevInsurerName"  :  details.vehicleInfo.previousPolicyInsurer.insurerName,
+				"prevExpiryDate"   :  details.vehicleInfo.prevPolicyExpDate,
+				"engineNo"         :  details.vehicleInfo.engineNo,
+				"chassisNo"        :  details.vehicleInfo.chassisNo,
+				"prevPolicyNo"     :  details.vehicleInfo.prevPolicyNo,
+				"companyName"      :  details.vehicleInfo.companyName,
+				"isCustomerAddress":  details.vehicleInfo.isCustomerAddress,
+				"regiAddress1"     :  details.vehicleInfo.regiAddress1,
+				"regiAddress2"     :  details.vehicleInfo.regiAddress2,
+				"regiAddress3"     :  details.vehicleInfo.regiAddress3,
+				"regiCityCode"     :  details.vehicleInfo.regiCityCode,
+				"regiCityName"     :  details.vehicleInfo.regiCityName,
+				"regiAreaName"     :  details.vehicleInfo.regiAreaName,
+				"regiAreaCode"     :  details.vehicleInfo.regiAreaCode,
+				"regiPinCode"      :  details.vehicleInfo.regiPinCode,
+				"isRegiAreaEdit"   :  details.vehicleInfo.isRegiAreaEdit,
+				"actualIdv"        :  details.premiumInfo.premiumDetails.actualIdv,
+				"vehicleAge"       :  details.premiumInfo.premiumDetails.vehicleAge,
+				"seatingCapacity"  :  details.vehicleInfo.seatingCapacity
+			},
+			"CoverDetails" : {
+				"coverCode"  : "coverCode",
+				"coverType"  : "coverType",
+				"sumInsured" : "sumInsured"
+			}
+		};
+		
+		alert("custom json"+JSON.stringify(request));
+		console.log("custom json"+JSON.stringify(request));
+		return request;
+	}
+	
+	
+	function callPersist()
+	{
+		var data=persistAllDetails();
+		alert("custom json"+JSON.stringify(data));
+		var deferred=$q.defer();
+		$http({
+	    	url : url,
+	    	method : "POST",data}).then(function(response){
+	    		alert("custom json"+JSON.stringify(response));
+	    		deferred.resolve(response);
+	    		},function(error){
+	    			deferred.reject(error);
+	    		});
+		return deferred.promise; 
+	}
+});

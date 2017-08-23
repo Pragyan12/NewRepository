@@ -1,0 +1,18 @@
+POTApp.controller('DocumentUpload', function($scope) {
+    alert("DocumentUpload");
+    
+    $( window ).on("resize", function() {
+        var h = $('.img_col').css("height");
+        console.log(h);
+        $('.proof_text').css("height",h);
+        $('.add_update').css("height",h);
+     });
+    
+    
+    $(document).ready(function(){
+    	$(".proof_row .img_col:not(:first-child)").addClass("delete_span");
+    	var test = $('.img_col').css("height");
+    	$('.proof_text').css("height",test);
+    	$('.add_update').css("height",test);
+    });
+ });

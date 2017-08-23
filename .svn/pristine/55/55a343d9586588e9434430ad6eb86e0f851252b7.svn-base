@@ -1,0 +1,223 @@
+POTApp.controller('PremiumSummaryFinal', function($scope, InspectionServices,
+
+		StorageService, $q, quotationNoService, fileService,
+
+		documentPreviewService, documentDetailsFact, UrlConstants,CoverageService,RatingConstants,docPreviewFact, 
+		$state) {
+
+	$scope.quoteNo = quotationNoService.get("quoteNo");
+	$('body').removeClass('.bodyscrollhidden');
+
+	$scope.formData;
+   InspectionServices.getAllEnrichmentDetails($scope.quoteNo).then(function(response) {
+	   
+	   $scope.formData = response.data.responseData[0];	  
+	   CoverageService.getCoverageList($scope.productCode).then(function(d) {
+			
+		   
+		   $scope.additionalCoverList = CoverageService.getCoverDetails(RatingConstants.ADDITIONAL,$scope.formData.itemCoverages,d);
+			$scope.addonCoverList = CoverageService.getCoverDetails(RatingConstants.ADDON,$scope.formData.itemCoverages,d);
+			$scope.discountCoverList = CoverageService.getCoverDetails(RatingConstants.DISCOUNTS,$scope.formData.itemCoverages,d);
+			
+		},function(errResponse) {
+			console.error('Error while fetching Users');
+		});
+	});
+   
+	$scope.documentPreviewDisp;
+
+	$scope.documentPreview;
+
+	// fileService.removeAll();
+	documentPreviewService.removeAll();
+	fileService.removeAll();
+
+	// $scope.quoteNo = "1000001005";
+	$scope.downloadURL =UrlConstants.DMS_URL+ UrlConstants.DMS_DOCUMENT_DOWNLOAD;
+	documentDetailsFact.imageUpload($scope.quoteNo).then(function(response) {
+		$scope.documentPreview = response.data.docPreview;
+		angular.forEach($scope.documentPreview, function(val, key) {
+			angular.forEach(val, function(v, k) {
+				angular.forEach(v, function(fileType, fileInfo) {
+
+					fileService.set(fileInfo, fileType);
+				});
+				documentPreviewService.set(k, fileService.getAll());
+				fileService.removeAll();
+			});
+		});
+		$scope.documentPreviewDisp = documentPreviewService.getAll();
+		//console.log(JSON.stringify($scope.documentPreviewDisp));
+	});
+	
+	$scope.goDocumentUploadFinal = function(quoteNo){		
+		quotationNoService.set("quoteNo", quoteNo);
+		$state.go('documentuploadfinal');
+	};
+	
+	
+	$(document).ready(function() {
+		// $('.docment_row').each(function() {
+		// var test = $(this).height();
+		// $(this).find('.document_name_height').height(test);
+		// });
+
+		$('.basicdetails_content').slideDown();
+		$('.insurer_content').slideUp();
+		$('.car_content').slideUp();
+		$('.coverage_content').slideUp();
+		$('.nominee_content').slideUp();
+		$('.payment_content').slideUp();
+		$('.financier_content').slideUp();
+		$('.inspection_content ').slideUp();
+		$('.document_content ').slideUp();
+	});
+
+	// $(window).on("resize", function() {
+	// $('.docment_row').each(function() {
+	// var test = $(this).height();
+	// $(this).find('.document_name_height').height(test);
+	//
+	// });
+	// });
+	// FULL SUMMARY OF CUSTOMER START
+
+	$('.insurer_head').on('click', function() {
+
+		$('.insurer_content').slideToggle();
+		$('.basicdetails_content').slideUp();
+		$('.car_content').slideUp();
+		$('.coverage_content').slideUp();
+		$('.nominee_content').slideUp();
+		$('.payment_content').slideUp();
+		$('.financier_content').slideUp();
+		$('.inspection_content').slideUp();
+		$('.document_content ').slideUp();
+
+	});
+	$('.car_head').on('click', function() {
+		$('.car_content').slideToggle();
+		$('.insurer_content').slideUp();
+		$('.basicdetails_content').slideUp();
+		$('.coverage_content').slideUp();
+		$('.nominee_content').slideUp();
+		$('.payment_content').slideUp();
+		$('.financier_content').slideUp();
+		$('.inspection_content').slideUp();
+		$('.document_content ').slideUp();
+	});
+	$('.coverage_head').on('click', function() {
+		$('.coverage_content').slideToggle();
+		$('.insurer_content').slideUp();
+		$('.car_content').slideUp();
+		$('.nominee_content').slideUp();
+		$('.basicdetails_content').slideUp();
+		$('.payment_content').slideUp();
+		$('.financier_content').slideUp();
+		$('.inspection_content').slideUp();
+		$('.document_content ').slideUp();
+	});
+	$('.nominee_head').on('click', function() {
+
+		$('.nominee_content').slideToggle();
+		$('.insurer_content').slideUp();
+		$('.car_content').slideUp();
+		$('.coverage_content').slideUp();
+		$('.payment_content').slideUp();
+		$('.basicdetails_content').slideUp();
+		$('.financier_content').slideUp();
+		$('.inspection_content').slideUp();
+		$('.document_content ').slideUp();
+	});
+	$('.basicdetails_head').on('click', function() {
+		$('.nominee_content').slideUp();
+		$('.insurer_content').slideUp();
+		$('.car_content').slideUp();
+		$('.coverage_content').slideUp();
+		$('.payment_content').slideUp();
+		$('.basicdetails_content').slideToggle();
+		$('.financier_content').slideUp();
+		$('.inspection_content').slideUp();
+		$('.document_content ').slideUp();
+	});
+	$('.payment_head').on('click', function() {
+		$('.nominee_content').slideUp();
+		$('.insurer_content').slideUp();
+		$('.car_content').slideUp();
+		$('.coverage_content').slideUp();
+		$('.payment_content').slideToggle();
+		$('.basicdetails_content').slideUp();
+		$('.financier_content').slideUp();
+		$('.inspection_content').slideUp();
+		$('.document_content ').slideUp();
+	});
+	$('.financier_head').on('click', function() {
+		$('.insurer_content').slideUp();
+		$('.basicdetails_content').slideUp();
+		$('.car_content').slideUp();
+		$('.coverage_content').slideUp();
+		$('.nominee_content').slideUp();
+		$('.payment_content').slideUp();
+		$('.financier_content').slideToggle();
+		$('.inspection_content').slideUp();
+		$('.document_content ').slideUp();
+		$('.inspection_content').slideUp();
+
+	});
+	$('.inspection_head').on('click', function() {
+		$('.inspection_content').slideToggle();
+		$('.insurer_content').slideUp();
+		$('.basicdetails_content').slideUp();
+		$('.car_content').slideUp();
+		$('.coverage_content').slideUp();
+		$('.nominee_content').slideUp();
+		$('.payment_content').slideUp();
+		$('.financier_content').slideUp();
+		$('.document_content ').slideUp();
+
+
+	});
+	$('.document_head').on('click', function() {
+		$('.document_content ').slideToggle();
+		$('.insurer_content').slideUp();
+		$('.basicdetails_content').slideUp();
+		$('.car_content').slideUp();
+		$('.coverage_content').slideUp();
+		$('.nominee_content').slideUp();
+		$('.payment_content').slideUp();
+		$('.financier_content').slideUp();
+		$('.inspection_content').slideUp();
+
+	});
+	// icon toggle
+	$('.fixed_icon_show').on('click', function() {
+
+		$('.fixed_icon_hide').show("fast");
+		$(this).hide("fast");
+
+		$('.nominee_content').slideDown();
+		$('.financier_content').slideDown();
+		$('.insurer_content').slideDown();
+		$('.car_content').slideDown();
+		$('.coverage_content').slideDown();
+		$('.basicdetails_content').slideDown();
+		$('.payment_content').slideDown();
+		$('.inspection_content ').slideDown();
+		$('.document_content ').slideDown();
+	});
+
+	$('.fixed_icon_hide').on('click', function() {
+		$('.fixed_icon_show').show("fast");
+		$(this).hide("fast");
+		$('.nominee_content').slideUp();
+		$('.financier_content').slideUp();
+		$('.insurer_content').slideUp();
+		$('.car_content').slideUp();
+		$('.coverage_content').slideUp();
+		$('.basicdetails_content').slideUp();
+		$('.payment_content').slideUp();
+		$('.inspection_content ').slideUp();
+		$('.document_content ').slideUp();
+	});
+	// FULL SUMMARY OF CUSTOMER END
+});

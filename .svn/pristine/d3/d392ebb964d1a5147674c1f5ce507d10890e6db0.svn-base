@@ -1,0 +1,306 @@
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<!-- fonts -->
+<link href="../fonts/font-awesome.min.css" rel="stylesheet">
+<!-- Custom Bootstrap -->
+<link href="../css/customer_details.css" rel="stylesheet">
+<link href="../css/head_foot.css" rel="stylesheet">
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+<script src="https://code.angularjs.org/1.4.5/angular-route.js"></script>
+<script src="../app/controllers/CommonSearchController.js"></script>
+<script src="../app/services/ProductService.js"></script>
+<script src="../app/services/BusinessTypeService.js"></script>
+<script src="../app/services/StatusService.js"></script>
+<script src="../app/services/CommonSearchService.js"></script>
+<script src="../app/services/datatable_test.js"></script>
+
+
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css"
+	rel="stylesheet">
+<script
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script
+	src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.7/angular-animate.js"></script>
+<script
+	src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.14.3.js"></script>
+
+
+</head>
+<body ng-app="AngJSApp">
+
+	<form name="myForm"  role="form" id='myform' novalidate>
+
+		<div class="entire customer_details">
+			<div class="wrapper">
+				<div class="totalpage">
+					<!--start header-->
+					<div class="container-fluid header">
+						<div class="row bottom_header">
+							<div class="col-xs-12 colbottom_header">
+								<div class="col-xs-2 text-left">
+									<div class="menuheader">
+										<a href="falist.html"><span
+											class="glyphicon glyphicon-home click_menu">&nbsp;<span
+												class="">HOME</span></span></a>
+									</div>
+								</div>
+								<div class="col-xs-7 text-center">
+									<div class="comlogo">
+										<img src="../images/fa_prem.png" alt="FA SOFTWARE"
+											class="img-responsive">
+									</div>
+								</div>
+								<div class="col-xs-3 text-right">
+									<div class="logout">
+										<a href="login.html"><span class="glyphicon glyphicon-off"></span>&nbsp;<span
+											class="">LogOut</span></a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--End header-->
+					<!--Start home_main-->
+					<div class="container-fluid customer_details_main text-center"
+						ng-controller="CommonSearchController as ctrl">
+
+
+						<div class="row customer_details_row search_info">
+							<div
+								class=" col-xs-12 col-sm-12 col-md-offset-1 col-md-10 customer_cols">
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="product Name">
+										<div class="input-group">
+											<select name="productName" id="productName"
+												class="form-control" ng-model="ctrl.productName"
+												ng-options="obj.name for obj in productList track by obj.code"
+												value="{{obj.name}}" required>
+												<option value="">Product List</option>
+											</select> <span class="input-group-addon"><span
+												class="glyphicon glyphicon-user"></span></span>
+										</div>
+									</div>
+								</div>
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Quote No.">
+										<div class="input-group">
+											<input type="text" class="form-control"
+												ng-model="ctrl.quoteno" id="quote_num"
+												placeholder="Quote No."> <span
+												class="input-group-addon"><span
+												class="glyphicon glyphicon-envelope"></span></span>
+										</div>
+									</div>
+								</div>
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Policy No.">
+										<div class="input-group">
+											<input type="text" class="form-control"
+												ng-model="ctrl.policyno" id="policy_num"
+												placeholder="Policy No."> <span
+												class="input-group-addon"><span
+												class="glyphicon glyphicon-envelope"></span></span>
+										</div>
+									</div>
+								</div>
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Vechile Reg.No.">
+										<div class="input-group">
+											<input type="text" class="form-control"
+												ng-model="ctrl.vechregno" id="vechile_reg_no"
+												placeholder="Vechile Reg.No."> <span
+												class="input-group-addon"><span
+												class="glyphicon glyphicon-envelope"></span></span>
+										</div>
+									</div>
+								</div>
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Business Type">
+										<div class="input-group">
+											<select name="businessType" id="businessType"
+												class="form-control" ng-model="ctrl.businessName"
+												ng-options="obj.name for obj in businessList track by obj.code"
+												required>
+												<option value="">Business List</option>
+											</select> <span class="input-group-addon"><span
+												class="glyphicon glyphicon-envelope"></span></span>
+										</div>
+									</div>
+								</div>
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Status">
+										<div class="input-group">
+											<select name="paymentType" id="paymentType"
+												class="form-control" ng-model="ctrl.paymentType"
+												ng-options="obj.name for obj in paymentList track by obj.code">
+												<option value="">Status</option>
+											</select> <span class="input-group-addon"><span
+												class="glyphicon glyphicon-envelope"></span></span>
+										</div>
+									</div>
+								</div>
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Created From Date"
+										data-name="">
+										<div class="input-group date form_date create_date_calendar">
+
+											<input type="text" class="form-control col-md-2 readonly"
+												uib-datepicker-popup="{{dateformat}}"
+												ng-model="ctrl.createddate" is-open="showdp"> <span
+												class="input-group-addon" ng-click="showcalendar($event)"><span
+												class="glyphicon glyphicon-calendar"></span></span>
+										</div>
+									</div>
+								</div>
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Created To Date"
+										data-name="">
+										<div class="input-group date form_date create_date_calendar">
+											<input type="text" class="form-control col-md-2 readonly"
+												uib-datepicker-popup="{{dateformat}}"
+												ng-model="ctrl.createdtodate" is-open="createtodate">
+											<span class="input-group-addon"
+												ng-click="createToDate($event)"><span
+												class="glyphicon glyphicon-calendar"></span></span>
+
+										</div>
+									</div>
+								</div>
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Customer Name">
+										<div class="input-group">
+											<input type="text" class="form-control"
+												ng-model="ctrl.customername" id="customer_name"
+												placeholder="Customer Name"> <span
+												class="input-group-addon"><span
+												class="glyphicon glyphicon-earphone"></span></span>
+										</div>
+									</div>
+								</div>
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Mobile Number">
+										<div class="input-group">
+											<input type="number" class="form-control"
+												ng-model="ctrl.mobileno" id="search_mobile" name="mobileno"
+												placeholder="Mobile Number" ng-pattern="/^(\d)+$/"
+												ng-change="ctrl.mobileno = numberChanged(ctrl.mobileno);">
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-earphone"></span></span>
+												<div ng-show="form.$submitted || form.mobileno.$touched"
+									class="form-error">
+									<div ng-show="ctrl.mobileno.toString().length<10"></div>
+								</div>
+								<div
+									ng-show="((form.mobileno.$error.minlength || 
+                                                    form.mobileno.$error.maxlength) && 
+                                                    form.mobileno.$dirty) "></div>
+										</div>
+									</div>
+								</div>
+
+								<div class=" col-xs-6 col-sm-4 col-md-4">
+									<div class="form-group" data-title="Email ID">
+										<div class="input-group">
+											<input type="email" class="form-control"
+												ng-model="ctrl.emailid" name="email" id="email" placeholder="Email ID" required>
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-envelope"></span></span>
+												<div ng-show="form.$submitted || form.email.$touched"
+												class="form-error">
+												<div ng-show="form.email.$error.required">Please enter
+													the Email-Id</div>
+												<div ng-show="form.email.$error.email">Not a Valid Email-Id</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								
+								
+								<!--  <input
+												type="email" class="form-control"
+												ng-model="customerInfo.Email" name="email"
+												placeholder="Email" required>
+											<div ng-show="form.$submitted || form.email.$touched"
+												class="form-error">
+												<div ng-show="form.email.$error.required">Please enter
+													the Email-Id</div>
+												<div ng-show="form.email.$error.email">Not a Email-Id</div>
+											</div> -->
+								
+								
+								
+							</div>
+						</div>
+						<div
+							class="row search_details_row search_info_button addsearch_button">
+							<div
+								class=" col-xs-12 col-sm-12 col-md-12 search_cols text-center">
+								<div class="col-xs-12 col-sm-12 col-md-12 ">
+									<button class="btn calculate_premium" formtarget="_self" id=""
+										ng-click="search()">
+										<span class="glyphicon glyphicon-search" style="top: 2px;"></span>&nbsp;SEARCH
+									</button>
+								</div>
+
+							</div>
+						</div>
+						<table class="table  table-hover data-table">
+							<thead>
+								<tr>
+									<th class="Product Name">
+										<div ng-click="sort('searchValues.productName')">
+											Product Name <span class="{{Header[0]}}"></span>
+										</div>
+
+									</th>
+									<th class="Quote Number">
+										<div ng-click="sort('searchValues.productname')">
+											Quote Number <span class="{{Header[1]}}"></span>
+										</div>
+									</th>
+									<th class="Policy Number">
+										<div ng-click="sort('searchValues.policyno')">
+											Policy Number <span class="{{Header[2]}}"></span>
+										</div>
+									</th>
+									<th class="Vechile Reg Number">
+										<div ng-click="sort('searchValues.status')">
+											Status <span class="{{Header[3]}}"></span>
+										</div>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- <tr ng-repeat="searchValues in ItemsByPage[currentPage] | orderBy:columnToOrder:reverse">-->
+								<td>{{searchValues.productname.name}}</td>
+								<td>{{searchValues.quotenumber}}</td>
+								<td>{{searchValues.policyno}}</td>
+								<td>{{searchValues.status.name}}</td>
+								<!-- </tr>-->
+							</tbody>
+						</table>
+						<ul class="pagination pagination-sm">
+							<li ng-class="{active:0}"><a href="#" ng-click="firstPage()">First</a>
+
+							</li>
+							<li ng-repeat="n in range(ItemsByPage.length)"><a href="#"
+								ng-click="setPage()" ng-bind="n+1">1</a></li>
+							<li><a href="#" ng-click="lastPage()">Last</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+	<div class="footer">
+		<p>@&nbsp;2017 &nbsp;Powered by | FA Software Services Pvt. Ltd.
+			&nbsp;ALL Rights Reserved.</p>
+	</div>
+
+
+</body>

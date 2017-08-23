@@ -1,0 +1,86 @@
+'use strict';
+ 
+POTApp.factory('PaymentService', ['StorageService','$http', '$q',
+	function(StorageService,$http, $q){
+	var paymentDetailsForAll = {};
+
+	var factory = {
+			fetchAllBankDetails: fetchAllBankDetails,
+			paymentDetails : paymentDetails,
+			callServerforOfflinePayment :callServerforOfflinePayment,
+	    };
+	 
+	    return factory;
+	    
+	    function fetchAllBankDetails() {
+	        var deferred = $q.defer();
+	        $http.post("http://server1:8585/masters/getallbankmaster.json")
+	            .then(
+	            function (response) {
+	                deferred.resolve(response);
+	            },
+	            function(errResponse){
+	                console.error('Error while fetching Users');
+	                deferred.reject(errResponse);
+	            }
+	        );
+	        return deferred.promise;
+	    }
+	    
+	    
+	    function paymentDetails(data)
+	    {
+	    	alert("inside paymentdetails"+JSON.stringify(data));
+	    	var deferred = $q.defer();
+	        $http.post("http://localhost:8080/digital/loading.json",data) 
+	            .then(
+	            function (response) {
+	                deferred.resolve(response);
+	            },
+	            function(errResponse){
+	                console.error('Error while fetching Users');
+	                deferred.reject(errResponse);
+	            }
+	        );
+	        return deferred.promise;
+	    }
+	    
+	 
+	 // offline payment
+	    function callServerforOfflinePayment(){
+			var details = StorageService.getAll();
+			var paymentDetail = StorageService.get('paymentInfo');
+	        var data = {
+	    			
+	    				"bankName"        : paymentDetail.bankCode.bankCode,
+	    				"branch"          : paymentDetail.branchName,
+	    				"instrumentNo"    : paymentDetail.chequeNo,
+	    				"instrumentDate"  : paymentDetail.chequeDate,
+	    				"favourOff"       : paymentDetail.favourOff,
+	    				"adjustedAmount"  : paymentDetail.adjust_to_pay_amount,
+	    				"paymentMode"     : 'CHEQUE',
+	    				"quoteNo"		  : details.premiumInfo.premiumDetails.quoteNo,
+	    				"amount"          : paymentDetail.chequeAmt,
+	    				"userId"		  : 'FAS',
+	    				"insurerCode"	  :  details.premiumInfo.premiumDetails.insurerCode
+	    		};
+	        var deferred=$q.defer();
+			$http({
+		    	url : "http://server1:8585/mis/persistPolicy.json",
+		    	method : "POST",data}).then(function(response){
+		    		paymentDetailsForAll=response.data;
+		    			deferred.resolve(response);
+		    		},function(error){
+		    			deferred.reject(error);
+		    		});
+	    return deferred.promise; 
+	    }
+	    
+	    function favourOff() {
+			return [
+		        {name: 'FA', code: 'FA CAPITAL'}
+		      ];
+		}
+}]);
+
+

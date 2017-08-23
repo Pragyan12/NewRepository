@@ -1,0 +1,26 @@
+<div class="container-fluid docu_container">
+	<div class="row">
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 proof_col">
+			<div style="text-align: center;" ><h2>{{quoteNo}}</h2></div>	
+		</div>
+		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 proof_col">
+			<div class="row proof_row"  ng-repeat="(key, value) in documentPreview track by $index" >
+				<div class="col-xs-4 col-sm-3 col-md-2 col-lg-2 proof_text">
+					<input type="hidden" ng-model="quoteNo" ng-value="{{key}}">
+				</div>
+				<div class="col-xs-4 col-sm-3 col-md-2 col-lg-2 img_col" >
+					<table>
+					    <tr  ng-repeat='(col, vals) in value'>
+					     <td>{{col}}</td>
+						  <td  ng-repeat='val in vals'>
+						  	<div class="img-wrap">
+						  		<a href="{{val}}" download ><img ng-src="{{val}}" alt="Preview" height="150" width="150"></a>
+							</div>
+						  </td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

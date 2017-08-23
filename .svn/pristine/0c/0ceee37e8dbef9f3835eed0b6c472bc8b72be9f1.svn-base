@@ -1,0 +1,49 @@
+POTApp.controller('LoginController', function($scope, $rootScope, $state,
+		LoginService) {
+
+	$scope.error = '';
+	$scope.username = '';
+	$scope.password = '';
+	$scope.loginSubmit = function(event, form) {
+		if ($scope.form.$valid) {
+			var validate = LoginService.loginValidate($scope.username,
+					$scope.password);
+
+			if (validate) {
+				$state.go('product');
+
+			} else {
+				alert("VALIDATION");
+				$scope.error = "Incorrect username/password !";
+			}
+		}
+		;
+	}
+
+});
+
+POTApp.controller('HeaderController', function($scope, $rootScope, $state) {
+	
+	
+	$scope.quickLink = true;
+	$scope.toggleQuickLink = function() {
+		$scope.quickLink = ($scope.quickLink === false) ? true : false;
+	};
+	
+	if($state.current.name=='product'){
+		$scope.headertext=true;
+	}
+	
+	if($state.current.name=='product' || $state.current.name=='subProduct'){
+		$scope.navheader=true;
+	}
+	
+	$scope.logout = function() {
+		$state.go('login');
+	}
+
+	$scope.home = function() {
+		$state.go('product');
+	}
+
+});

@@ -1,0 +1,186 @@
+POTApp.controller('SearchController',function($state, $scope,VehicleService,SearchService,StorageService,quotationNoService ) {
+	$scope.emailregEx = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,3}(?:\.[a-z]{2})?)$/i;
+	
+	$scope.productList = VehicleService.policyTypeList();
+
+	$scope.searchInfo = {
+			"productName" : '',
+			"quoteNo" : '',
+			"policyNo" : '',
+			"vechregNo" : '',
+			"lineofBusiness" : '',
+			"paymentTypeStatus" : '',
+			"fromDate" : '',
+			"toDate" : '',
+			"customername":'',
+			"mobileNo" :'',
+			"email" :''
+		}
+	
+	/* business type rest url start*/
+	SearchService.getBusinessType().then(function(response) {
+				$scope.businessList = response.data.businessTypeList;
+			});
+	/* business type rest url end*/
+	
+	
+	/* payment status list to get start*/
+		$scope.paymentList =SearchService.getpaymentStatus();
+	/* payment status list to get end*/
+		
+		$scope.empty = function() {
+			$scope.searchInfo = [];
+		}
+		
+		$scope.search = function(event, form) {
+		    var mobileNo=(angular.isUndefined($scope.searchInfo.mobileNo) ? 0 : $scope.searchInfo.mobileNo.toString().length);
+			if($scope.form.$valid && (mobileNo =='0' || mobileNo =='10')){
+				StorageService.set("searchInfo",$scope.searchInfo);
+				var data={
+						
+						productName           : $scope.searchInfo.productName,
+						quoteNo               : $scope.searchInfo.quoteNo,
+						policyNo              : $scope.searchInfo.policyNo,
+						vechicleRegistrationNo: $scope.searchInfo.vechregNo,
+						businessType          : $scope.searchInfo.businessName,
+						status                : $scope.searchInfo.paymentTypeStatus,
+						subStatus             : $scope.searchInfo.subStatus,
+						fromDate              : $scope.searchInfo.fromDate,
+						toDate                : $scope.searchInfo.toDate,
+						customerName          : $scope.searchInfo.customername,
+						mobileNo              : $scope.searchInfo.mobileNo,
+						emailId               : $scope.searchInfo.email
+				}
+				SearchService.fetchAllDetails(data).then(function(searchResponse) {
+					if (searchResponse.data.message === "SUCCESS") {
+						$scope.policylist = searchResponse.data;
+								//	console.log("hdcjc hsddgchsz hs "+JSON.stringify($scope.policylist));
+									var table = "<table class='table-bordered' id='pol_inward_view_table' style='width:100%;'><thead><tr><th>Sub Line</th><th>Product Name</th>" +
+											"<th>Quote No</th><th>Customer Name</th>" +
+									"<th>Policy No</th><th>Premium</th><th>Status</th><th>Actions</th></thead><tbody></tbody></table>";
+				                 $('#searchmyTable').html(table);
+
+									$('#pol_inward_view_table').dataTable({
+									
+									data: $scope.policylist.responseData,
+										
+								      columns: [
+								            { "data": "subLine" },
+								            { "data": "productName" },
+								            { "data": "quoteNo" },
+								            { "data": "customerName" },
+								            { "data": "policyNo"},
+								            { "data": "premium" },
+								            { "data": "status"},
+								            { 
+                                                
+                                                "sortable" : false,
+                                                "targets" : 0, 
+                                                 "data" : null,
+                                                "render" : $scope.view
+								            }
+								        ]
+									});
+								} else {
+									console.error('failure loading movie');
+								}
+
+							},
+							function(error) {
+								console.error(
+										'failure loading movie');
+							});
+			}else{
+			//alert("Fill All Fields");
+			}	
+		}
+		
+		$scope.searchtoDatehide = function() {
+			var fromDate = $scope.searchInfo.fromDate;
+			var b = moment(fromDate, "DD/MM/YYYY");
+			$scope.searchToDate = b.add(0, 'days').format('DD/MM/YYYY');
+		}
+
+		$scope.fromDateCheck = function() {
+			var fromDate = $scope.searchInfo.fromDate;
+			if(fromDate == null || fromDate == ''){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		
+		$scope.toEmpty = function() {
+			$scope.searchInfo.toDate ='';
+		}
+		
+		$scope.checkDateNull = function() {
+			var fromDate = $scope.searchInfo.fromDate;
+			if(fromDate != null && fromDate != ''){
+				return true;
+			}else{
+				return false;
+			}
+		}
+		
+		$scope.view= function getPolicyDataActionButton(data,type,full,meta){
+			var btnhtml = "<td><button type='button' class='search_button view-quote';'name='"+full['quoteNo']+ "' id='"+full['quoteNo']+ "'>VIEW</button></td>";
+			//var temp = $compile(btnhtml)($scope); 
+			return btnhtml;
+       }
+		$(document).on('click', '.view-quote', function(){
+			 var quoteNo= $(this).attr('id');
+			 SearchService.fetchBasicDetailsbyQuoteNo(quoteNo).then(function(basicdetailResponse) {
+				if(basicdetailResponse.data.message ==='SUCCESS'){
+				 var resValue=basicdetailResponse.data.responseData[0];
+				var regNo = resValue.VehicleDetails.registrationNo.split('-');
+			
+				var personalInfo = {
+						firstName  : resValue.CustomerDetails.firstName,
+						lastName   : resValue.CustomerDetails.lastName,
+						mobileNo   : resValue.CustomerDetails.mobileNo,
+						email      : resValue.CustomerDetails.email,
+					}
+				StorageService.set("personalInfo",personalInfo);
+				
+				var vehicleInfo = {
+	    				regNo1              : regNo[0],
+	             		regNo2              : regNo[1],
+	             		regNo3              : regNo[2],
+	             		regNo4              : regNo[3],
+	        			fuelType            : resValue.VehicleDetails.fuelType,
+	        			engineCC            : resValue.VehicleDetails.engineCC,
+	        			vehicleRegisteredTo:{
+	        				"name" : resValue.CustomerDetails.customerType},
+	        			previousPolicyInsurer:{
+	        				"insurerName"     :resValue.PreviousPolicyDetails.prevPolicyInsurerName,
+	        			},
+	        			policyType          :{
+	        				 "code"			: resValue.PreviousPolicyDetails.policyType ,
+	        			},
+	        			currentNCB          : resValue.VehicleDetails.currentNCB,
+	        		    ncb                 : {
+	        		    	"ncbPercentage" :resValue.PreviousPolicyDetails.prevPolicyNcb
+	        		    }
+	        		}
+	            StorageService.set("vehicleInfo",vehicleInfo);
+				StorageService.set('quoteNo',resValue.PolicyDetails.quoteNo);
+				var paymentInfo = {
+
+						chequeAmt : resValue.PaymentDetails[0].amount,
+				}
+				quotationNoService.set('quoteNo',resValue.PolicyDetails.quoteNo);
+				StorageService.set('paymentInfo',paymentInfo);
+
+				if(resValue.PolicyDetails.status ==="Payment Completed"){
+					$state.go('personalInfo');
+				}else {
+					$state.go('premiumSummaryFinal');
+				}
+				}
+				});
+
+			});
+			
+});
+

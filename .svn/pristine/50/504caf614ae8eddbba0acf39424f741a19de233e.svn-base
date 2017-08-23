@@ -1,0 +1,190 @@
+
+.viewpolicy_details{
+	width:100%;
+	height:auto;
+	
+}
+.viewpolicy_details .wrapper{
+	
+	margin:0px auto 20px auto;
+	
+}
+.viewpolicy_details .totalpage{
+	width:100%;
+	min-height:590px;
+	background-color:#2e80ab;
+	/*box-shadow:0 0 20px 0 rgba(0,0,0,0.7);
+	
+	 background-image:url('../images/bg/11_3.jpg'); */
+	
+}
+
+
+/*end of header */
+.fixed_icon_show,.fixed_icon_hide{
+	position:relative;
+	top:0%;
+	left:0%;
+	width:25px;
+	height:25px;
+	padding:4px;
+	color:#fff;
+	background-color:#444;
+	border-top-right-radius:2px;
+	border-bottom-right-radius:2px;
+}
+.fixed_icon_hide{
+	display:none;
+}
+.fixed_icon_show .glyphicon,.fixed_icon_hide .glyphicon{
+	font-size:16px;
+}
+.fixed_icon_show:hover,.fixed_icon_hide:hover{
+	cursor:pointer;
+}
+.fixed_icon_hide .glyphicon{
+	transform:rotate(90deg);
+}
+.viewpolicy_claim_form{
+	position:relative;
+}
+.viewpolicy_claim_form .total_claim{
+	width:100%;
+	margin-top:10px;
+	color:#fff;
+	min-height:440px;
+}
+.col_12_pad{
+	padding:0px;
+}
+.col_div{
+	padding-bottom:10px;
+}
+.heading_row{
+	background-color:#545453;
+	padding-top:5px;
+	padding-bottom:5px;
+	color:#fff;
+	box-shadow:0 3px 3px 0 rgba(0,0,0,0.3);
+	border-right: 6px solid #2b2b2b;
+}
+.heading_row h4{
+	 font-size: 16px;
+    /* font-weight: bold; */
+    color: #e8e8e8;
+    padding-top:3px;
+    padding-bottom:3px;
+}
+.heading_row:hover{
+	cursor:pointer;
+}
+.basicdetails_col,.insurer_col,.car_col,.finan_col,.coverage_col,.payment_col,.nominee_col,.inspection_col{
+	padding-top:10px;
+}
+.document_col{
+  padding-top:10px;
+}
+.document_col .docment_row{
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: #ddd;
+    color: #0662b1;
+    border-radius: 4px;
+    border-bottom: 2px solid #444;
+    box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.5);
+}
+.document_col .docment_row > div{
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 10px;
+}
+.document_col .docment_row > div > div{
+    padding: 0px;
+    font-size: 12px;
+    font-weight: bold;
+}
+.document_col .docment_row > div div{
+    padding: 0px;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+.document_col .docment_row > div div a{
+    font-size: 10px;
+    color: #000 !important;
+    text-decoration: underline
+}
+.content_row{
+	color: #fff;
+	margin-top:2px;
+	padding-left: 10px;
+}
+.content_row div{
+	width:100%;
+	padding-top:8px;
+}
+.content_row div p{
+	width:49%;
+	display:inline-block;
+	vertical-align:top;
+	word-wrap: break-word;
+}
+.viewpolicy_claim_buttons{
+	margin-top:20px;
+	position:relative;
+	padding-right:10px;
+	bottom:0%;
+	padding-bottom:20px;
+	min-height:90px;
+}
+.viewpolicy_claim_buttons a{
+	background-color:#000;
+	border:0px;
+	border-radius:0px;
+	color:#fff;
+	
+}
+.close_link{
+	top:2px;
+}
+.viewpolicy_claim_buttons a:hover{
+	background-color:#000;
+	color:#ff6200;
+}
+.viewpolicy_claim_buttons a:hover span{
+	color:#ff6200;
+}
+.extra_height{
+	height:40px;
+	width:100%;
+}
+@media screen and (max-width:550px) and (min-width:200px){
+	
+	/* .insurer_col,.car_col,.coverage_col,.nominee_col,.finan_col,.inspection_col */
+	.basicdetails_col,.insurer_col,.car_col,.finan_col,.coverage_col,.payment_col,.nominee_col,.inspection_col{
+		width:100%;
+	}
+	.col_div{
+		width:100%;
+	}
+	.viewpolicy_details .wrapper {
+     margin: 0px; 
+}
+.home_icon{
+	    padding-top: 5px;
+		padding-left: 0px;
+}
+
+.viewpolicy_header_col > div{
+	padding:0px;
+}
+.heading_row h4{
+	font-size:14px;
+}
+}
+@media screen and (max-width:768px) and (min-width:550px){
+	.viewpolicy_details .wrapper {
+     margin: 0px; 
+}
+	
+}
+

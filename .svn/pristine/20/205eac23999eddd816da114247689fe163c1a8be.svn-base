@@ -1,0 +1,348 @@
+'use strict';
+POTApp.controller('PremiumComparision',
+	function($q, $scope, RatingConstants, PremiumService,CoverageService, $state, StorageService,PremiumCalculationService, InsurerService) {
+		$scope.vehicleInfo = StorageService.get("vehicleInfo");
+		$scope.productCode = StorageService.get("subProductCode");
+		$scope.compareValues = [];
+		$scope.premiumbreakup = [];
+		$scope.showCompare = false;
+		$scope.showComparePreset = false;
+		$scope.showCompareButton = false;
+		$scope.showCompareInsurerDetails = false;
+		$scope.showInsurerComparition = false;
+		$scope.additional_Covers = [];
+		$scope.addon_Covers = [];
+		$scope.discounts = [];
+		$scope.vehicleModelName = StorageService.get("vehiclemodelName");
+		$scope.vehicleSubModelName = StorageService.get("vehicleSubModelName");
+		$scope.vehicleSeater = StorageService.get("vehicleSeater");
+		$scope.subProductName = StorageService.get("subProductName");
+		$scope.upaSumInsured = CoverageService.getCoverSumInsured('upaSumInsured');
+		$scope.bifuelSumInsured = CoverageService.getCoverSumInsured('bifuelSumInsured');
+		$scope.vdSumInsured = CoverageService.getCoverSumInsured('vdSumInsured');
+		$scope.padSumInsured = CoverageService.getCoverSumInsured('padSumInsured');
+		$scope.insurerListValues = calculatePremium();
+		$scope.averagesOfIdv = 0;
+		// $.scope.resultidvaddition= resultidvaddition();
+		/* * Calculating For Premium */
+		function calculatePremium() {
+			var premiumDetails = {};
+			angular.forEach(InsurerService.getListOfInsurer(),function(insurerValue, insurerKey) {
+				if (PremiumCalculationService.isValidInsurer(insurerValue.insurerCode)) {
+					var premiumInfo = PremiumCalculationService.calculatePremium(insurerValue.insurerCode);
+					insurerValue["premiumDetails"] = premiumInfo;
+					premiumDetails[insurerValue.insurerCode] = insurerValue;
+				}
+			});
+			return premiumDetails;
+		}
+		function getInsurerPremiumDetails(insurerCode) {
+			var premiumDetails = {};
+			angular.forEach(InsurerService.getListOfInsurer(),function(insurerValue, insurerKey) {
+				if (insurerCode === insurerValue.insurerCode) {
+					var premiumInfo = PremiumCalculationService
+							.calculatePremium(insurerValue.insurerCode);
+					insurerValue["premiumDetails"] = premiumInfo;
+					premiumDetails = insurerValue;
+
+				}
+			});
+			return premiumDetails;
+		}
+		$scope.updateCoverSumInsured = function(coverCode,coverName, coverType,sumInsured) {
+			CoverageService.setCoverSumInsured(coverCode,coverName, coverType, sumInsured);
+			$scope.insurerListValues = calculatePremium();
+		}
+		$scope.addCover = function(coverCode, coverName, coverType,flag) {
+			if (flag == true) {
+				var sumInsured =0;
+				if (coverCode === RatingConstants.UPA) {
+					sumInsured= '10000';
+					$scope.upaSumInsured= '10000';
+				} else if (coverCode === RatingConstants.VD) {
+					sumInsured= '2500';
+					$scope.vdSumInsured= '2500';
+				} else if (coverCode === RatingConstants.PAD) {
+					sumInsured= '10000';
+					$scope.padSumInsured= '10000';
+				}else if(coverCode === RatingConstants.BFK) {
+					sumInsured='0';
+					$scope.bifuelSumInsured='0';
+				}
+				CoverageService.set(coverCode, coverName, coverType,sumInsured);
+			} else if (flag == false) {
+				if (coverCode === RatingConstants.UPA) {
+					$scope.upaSumInsured= '10000';
+				} else if (coverCode === RatingConstants.VD) {
+					$scope.vdSumInsured= '2500';
+				} else if (coverCode === RatingConstants.PAD) {
+					$scope.padSumInsured= '10000';
+				}else if(coverCode === RatingConstants.BFK) {
+					$scope.bifuelSumInsured='0';
+				}
+				CoverageService.removeValuesFromJsonArray(coverCode);
+			}
+			$scope.insurerListValues = calculatePremium();
+		}
+		$scope.isCoverSelected = function(coverCode) {
+			return PremiumCalculationService.isCoverSelected(coverCode);
+		}
+		$scope.showPremiumBreakUp = function(insurerCode) {
+			$("body").addClass("premiumoverflow");
+			$scope.isPremiumBreakup = true;
+			var arr = [];
+			var premiumInfo = PremiumCalculationService.calculatePremium(insurerCode);
+			arr = [
+					{
+						'name' : RatingConstants.BasicOwndamage,
+						'premium' : premiumInfo.basicOdPremium,
+						'orderby' : '1'
+					},
+					{
+						'name' : RatingConstants.BasicThirdpartyPropertydamage,
+						'premium' : premiumInfo.basicTpPremium,
+						'orderby' : '2'
+					},
+					{
+						'name' : RatingConstants.OwndriverCoverCPA,
+						'premium' : premiumInfo.cpaPremium,
+						'orderby' : '3'
+					},
+					{
+						'name' : 'Tariff Discounts('
+								+ premiumInfo.tariffDiscount + '):',
+						'premium' : premiumInfo.tariffDiscountAmount,
+						'orderby' : '4'
+					}, {
+						'name' : RatingConstants.NoClaimBonus,
+						'premium' : premiumInfo.ncbDiscountAmount,
+						'orderby' : '5'
+					} ];
+			angular.forEach(premiumInfo.selectedAddonCover,function(value, key) {
+				var coverPremium = {
+					'name' : value.coverName,
+					'premium' : value.coverPremium,
+					'orderby' : 7
+				};
+				arr.push(coverPremium);
+			});
+			var premiumDetails = {};
+			premiumDetails["coverPremium"] = arr;
+			premiumDetails["premiumDetails"] = premiumInfo;
+			angular.forEach(InsurerService.getListOfInsurer(),function(insurerValue, insurerKey) {
+				if (insurerCode === insurerValue.insurerCode) {
+					premiumDetails["insurerDetails"] = insurerValue;
+				}
+			});
+			$scope.premiumbreakup = premiumDetails;
+		}
+		$scope.closePremiumBreakup = function() {
+			$("body").removeClass("premiumoverflow");
+			$scope.isPremiumBreakup = false;
+		}
+		/**
+		 * Insurer Comparision
+		 */
+		$scope.compare_chkbox = function(insurerCode, checkvalue) {
+			var result = false;
+			if (checkvalue == true) {
+				if ($scope.compareValues.length >= 3) {
+					alert("Maximum 3 insurance offers can be compared");
+					result = false;
+				} else {
+					$scope.compareValues
+							.push(getInsurerPremiumDetails(insurerCode));
+					result = true;
+				}
+			} else {
+				angular
+						.forEach(
+								$scope.compareValues,
+								function(value, key) {
+									if (value.premiumDetails.insurerCode === insurerCode) {
+										delete $scope.compareValues.splice(key, 1);
+									}
+								});
+				result = false;
+			}
+			if (Object.keys($scope.compareValues).length >= 2) {
+				$scope.showComparePreset = true;
+				$scope.showCompareButton = true;
+			} else if (Object.keys($scope.compareValues).length >= 1) {
+				$scope.showComparePreset = true;
+				$scope.showCompareButton = false;
+			} else {
+				$scope.showComparePreset = false;
+				$scope.showCompareButton = false;
+			}
+			return result;
+		}
+		$scope.parsevalue = '';
+		$scope.check = '';
+		$scope.compareInsurer = function() {
+			$("body").addClass("premiumoverflow");
+			$scope.showInsurerComparition = true;
+			$scope.check = $('.test1').css('width');
+			var test = [];
+			var i = 0;
+			var data = 0;
+			$(".compare_premium_ind_row div:first-child").each(function() {
+				for (i = 0; i < $scope.compareValues.length + 1; i++) {
+					test[i] = $(this).css('width').substring(0, 3);
+					data = parseInt($(this).css('width').substring(0, 3))+ data;
+				}
+			});
+			$scope.check = data + 60 + 'px';
+			$scope.breakup_width = {
+				"width" : $scope.check
+			}
+			var result = [];
+			angular.forEach($scope.compareValues,function(value, key) {
+				result.push(getInsurerPremiumDetails(value.premiumDetails.insurerCode));
+			});
+			return $scope.compareValues = result;
+		}
+		$scope.emptyCompare = function() {
+			$("body").removeClass("premiumoverflow");
+			$scope.showInsurerComparition = false;
+			$scope.compareCheckBox = false;
+			$scope.compareValues = [];
+			for (var i = 0; i < $scope.insurerListValues.length; i++) {
+				$scope.checkvalue[i] = false;
+		    }
+		}
+		$scope.compareClose = function() {
+			$("body").removeClass("premiumoverflow");
+		}
+		$scope.selectedCovers = function() {
+			return CoverageService.getSelectedCovers();
+		}
+		/* Premium details to next page for payment */
+		$scope.buynow = function(selectedinsurerCode, isAddon,idv) {
+			$("body").removeClass("premiumoverflow");
+			if (!isAddon) {
+				CoverageService.removeAllCovers();
+			}
+			angular.forEach(InsurerService.getListOfInsurer(),function(insurerValue, insurerKey) {
+				if (selectedinsurerCode === insurerValue.insurerCode) {
+					PremiumCalculationService.singleInsurerPremiumCalc(selectedinsurerCode,idv).then(function(response) {
+						if(response.data.message=== "SUCCESS" && angular.isDefined(response.data.premium[selectedinsurerCode]) ){
+							insurerValue["premiumDetails"] = response.data.premium[selectedinsurerCode];
+							StorageService.set('premiumInfo',insurerValue);
+							console.log(JSON.stringify(StorageService.get('premiumInfo')));
+							$state.go('premiumSummary');
+						}else{
+							alert("Premium Calculation Failed");
+						}
+					}, function(errorResponse) {
+						alert("Premium Calculation Failed"+JSON.stringify(errorResponse));
+					});
+				}
+			});
+		}
+		$scope.validateSingleIdvEdit = function(idv) {
+			if (angular.isDefined(idv) || angular.isNumber(idv)) {
+				$scope.editIdv = true;
+				$scope.saveIdv = false;
+				$scope.save_click = 'input_border_hide'
+				return true;
+			} else {
+				$scope.editIdv = false;
+				$scope.saveIdv = true;
+				$scope.save_click = 'input_border'
+			}
+			return false;
+		}
+		
+		/* update the particular insurer method */
+		$scope.updateIdv = function(insurerCode, actualIdv, idv) {
+			$scope.insurerListValues = '';
+			PremiumCalculationService.singleIdvCalc(insurerCode,idv).then(function(response) {
+				if(response.data.message=== "SUCCESS"){
+					PremiumCalculationService.getUpdateIdv(insurerCode,response.data);
+					$scope.insurerListValues = calculatePremium();
+					$scope.averagesOfIdv = PremiumCalculationService.idvalledit();
+				}else{
+					alert("Premium Calculation Failed");
+				}
+			}, function(errorResponse) {
+				alert("Premium Calculation Failed"+JSON.stringify(errorResponse));
+			});
+		}
+
+		/* update the whole insurer for idvrange */
+		$scope.updatefullIdv = function(idv) {
+			if (idv != null) {
+				$scope.insurerListValues = '';
+				PremiumCalculationService.multipleInsurerPremiumCalc(idv).then(function(response) {
+					console.log("hjfghdsg  "+JSON.stringify(response));
+					if(response.data.message=== "SUCCESS"){
+						$scope.insurerListValues = calculatePremium();
+					}else{
+						alert("Premium Calculation Failed");
+					}
+				}, function(errorResponse) {
+					alert("Premium Calculation Failed"+JSON.stringify(errorResponse));
+				});
+			} else {
+				$scope.averagesOfIdv = 0;
+			}
+		}
+		$scope.averagesOfIdv = PremiumCalculationService.idvalledit();
+		getAddonCoverList();
+		function getAddonCoverList() {
+			var addonCover = [];
+			CoverageService.getCoverageList().then(function(d) {
+				$scope.addonCover = d;
+				angular.forEach($scope.addonCover,function(value,index) {
+					if (value.coverageType === RatingConstants.ADDITIONAL) {
+						$scope.additional_Covers
+								.push(value);
+					} else if (value.coverageType === RatingConstants.ADDON) {
+						$scope.addon_Covers
+								.push(value);
+					} else if (value.coverageType === RatingConstants.DISCOUNTS) {
+						$scope.discounts
+								.push(value);
+					}
+				});
+			},function(errResponse) {
+				console.error('Error while fetching Users');
+			});
+			return addonCover;
+		}
+
+		$scope.mark = "";
+		/*
+		 * $scope.mark=StorageService.get("vehicleInfo").currentNCB.ncbPercentage;
+		 * alert("mark induja"+JSON.stringify($scope.mark));
+		 * console.log("mark indhjua"+JSON.stringify($scope.mark));
+		 */
+
+		$scope.test = angular.isUndefined(StorageService.get("vehicleInfo").currentNCB) ? false: StorageService.get("vehicleInfo").currentNCB === '' ? false: true;
+		
+		$scope.fuelTypeChange = function(coverCode) {
+			var result=false;
+			if(coverCode===RatingConstants.BFK){
+				var fuelType = $scope.vehicleInfo.fuelType;
+				if(fuelType ==='PETROL' ||fuelType ==='DIESEL'){
+					result=true;
+				}
+			}else if(coverCode===RatingConstants.UPA){
+				var vehicleRegisteredTo =$scope.vehicleInfo.vehicleRegisteredTo.name;
+				if(vehicleRegisteredTo ==='INDIVIDUAL'){
+					result =true;
+				}
+			}else if(coverCode===RatingConstants.PAD || coverCode===RatingConstants.LLD_COVER || coverCode===RatingConstants.LLE_COVER){
+				var vehicleRegisteredTo =$scope.vehicleInfo.vehicleRegisteredTo.name;
+				if(vehicleRegisteredTo ==='COMPANY'){
+					result =true;
+				}
+			}
+			
+		else{
+				result=true;
+			}
+			return result; 
+		}
+});

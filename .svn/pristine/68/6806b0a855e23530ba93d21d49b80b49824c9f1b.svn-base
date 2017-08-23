@@ -1,0 +1,60 @@
+POTApp.factory('NomineeFinancierServices', function($http,$q, UrlConstants) {
+	return {
+		getFinancierList : getFinancierList,
+		getNomineeRelationship : getNomineeRelationship,
+		getGuardianRelationship : getGuardianRelationship
+		
+	}
+	
+	function getNomineeRelationship() 
+	{
+		var url=UrlConstants.MASTER_URL+UrlConstants.GET_ALL_RELATIONSHIP;
+		var deffered=$q.defer();
+		
+		$http.post(url).then(function(response)
+				{
+			 deffered.resolve(response);
+			
+				},function(errresponse)
+				{
+					deffered.reject(errresponse);
+				});
+		
+		return deffered.promise;
+	}
+	function getGuardianRelationship() {
+		var url=UrlConstants.MASTER_URL+UrlConstants.GET_ALL_RELATIONSHIP;
+		var deffered=$q.defer();
+		
+		$http.post(url).then(function(response)
+				{
+			 deffered.resolve(response);
+			
+				},function(errresponse)
+				{
+					deffered.reject(errresponse);
+				});
+		
+		return deffered.promise;
+	}
+	
+	function getFinancierList()
+	{
+		var url=UrlConstants.MASTER_URL+UrlConstants.GET_ALL_FINANCIER_NAME;
+		var deffered=$q.defer();
+		
+		$http.post(url).then(function(response)
+				{
+			
+			 deffered.resolve(response);
+			
+				},function(errresponse)
+				{
+					deffered.reject(errresponse);
+				});
+		
+		return deffered.promise;
+		
+	}
+	
+});

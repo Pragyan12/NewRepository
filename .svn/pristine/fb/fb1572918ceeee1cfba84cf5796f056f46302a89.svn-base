@@ -1,0 +1,469 @@
+<div class="entire customer_details">
+	<div class="wrapper">
+		<div class="totalpage">
+			<div ui-view="customer_header"></div>
+			<div class="container-fluid customer_details_main text-center">
+				<form role="form" class="home_form" id="home_form" name="form"
+					novalidate>
+					<div class="row customer_details_row personal_info">
+						<div class=" col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6 customer_cols personal_info_col"">
+							<!-- vehicleHrefLink::{{vehicleHrefLink}} -->
+							<h4 class="text-left">Proposer  Information</h4>
+							<div class="col-xs-6  col-sm-6  col-md-6">
+								<div class="form-group" data-title="First Name">
+				
+									<div class="input-group">
+										<span class="input-group-addon"> <span
+											class="glyphicon glyphicon-user"></span></span>
+										<div class="col-xs-3  col-sm-3 col-md-3"
+											style="padding-left: 0px; padding-right: 0px">
+											<select name="title" id="title" class="form-control"
+												ng-model="personalInfo.title" required>
+												<option value="">Title</option>
+												<option ng-repeat="obj in titleList" value="{{obj.title}}">{{obj.title}}</option>
+											</select>
+										</div>
+										<div class="col-xs-9 col-sm-9 col-md-9"
+											style="padding-left: 0px; padding-right: 0px">
+											<input type="text" class="form-control" id="first_name"
+												name="firstName" ng-model="personalInfo.firstName"
+												capitalize maxlength="50" placeholder="First Name" 
+												only-string required>
+										</div>
+									</div>
+								</div>
+								
+								<div ng-show="form.$submitted || form.title.$touched"
+									class="form-error">
+									<div ng-show="form.title.$error.required" class="val_error">Choose
+										Title</div>
+								</div>
+								<div ng-show="form.$submitted || form.firstName.$touched"
+									class="form-error val_error">
+									<div ng-show="form.firstName.$error.required" class="val_error">Please
+										Enter First Name</div>
+									<div ng-show="form.firstName.$error.pattern">Please Enter
+										Only Alphabets</div>
+								</div>
+							</div>
+
+
+							<div class="col-xs-6 col-sm-6 col-md-6">
+								<div class="form-group" data-title="Last Name">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-user"></span></span> <input type="text"
+											class="form-control" name="lastName"
+											ng-model="personalInfo.lastName" capitalize maxlength="50" 
+											id="lastName" placeholder="Last Name" only-string required>
+									</div>
+								</div>
+								<div ng-show="form.$submitted || form.lastName.$touched"
+									class="form-error val_error">
+									<div ng-show="form.lastName.$error.required" class="val_error">Please
+										Enter Last Name</div>
+									<div ng-show="form.lastName.$error.pattern">Please Enter
+										Only Alphabets</div>
+								</div>
+							</div>
+                           <div class="clearfix xs-visible sm-visible md-visible"></div>
+							 
+							<div class=" col-xs-6 col-sm-6 col-md-6">
+								<div class="form-group" data-title="DOB">
+									<div ng-if="vehicleInfo.vehicleRegisteredTo=='CUSTOMER_INDIVIDUAL' || vehicleInfo.vehicleRegisteredTo=='INDIVIDUAL'" class="input-group" moment-picker="personalInfo.dob"
+										 format="DD/MM/YYYY"
+											start-view="month"  autoclose="true"
+											set-on-select="true" max-date="minAgeDob" >
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-calendar"></span></span> 
+												<input name="dob" type="text" class="form-control" placeholder="DD/MM/YYYY" ng-model="personalInfo.dob"
+												readonly ng-required="vehicleInfo.vehicleRegisteredTo=='CUSTOMER_INDIVIDUAL' || vehicleInfo.vehicleRegisteredTo=='INDIVIDUAL'">
+										</div>
+										<div ng-if="vehicleInfo.vehicleRegisteredTo!='CUSTOMER_INDIVIDUAL' && vehicleInfo.vehicleRegisteredTo!='INDIVIDUAL'" class="input-group" 
+										 format="DD/MM/YYYY"
+											start-view="month"  autoclose="true"
+											set-on-select="true" max-date="minAgeDob" >
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-calendar"></span></span> 
+												<input name="dob" type="text" class="form-control" placeholder="DD/MM/YYYY" ng-model="personalInfo.dob"
+												readonly>
+										</div>	
+								</div>
+								<div ng-show="form.$submitted || form.dob.$touched"
+										class="form-error val_error">
+										<div ng-show="form.dob.$error.required">Please
+											Select Date Of Birth</div>
+									</div>
+							</div>
+
+							<div class=" col-xs-6  col-sm-6  col-md-6">
+								<div class="form-group" data-title="Address#1">
+									<div class="input-group" >
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-home"></span></span> <input type="text"
+											class="form-control" name="address1" maxlength="50" only-str-no
+											ng-model="personalInfo.address1" capitalize id="address1"
+											 placeholder="Address#1"  required>
+									</div>
+								</div>
+								<div ng-show="form.$submitted || form.address1.$touched"
+									class="form-error val_error">
+									<div ng-show="form.address1.$error.required">Please Enter
+										Address Field</div>
+										<span ng-show="form.address1.$error.maxlength">
+										Sorry You are Exceeding the Limit</span>
+								</div>
+							</div>
+                         <div class="clearfix xs-visible sm-visible md-visible"></div>
+							
+							<div class=" col-xs-6 col-sm-6 col-md-6">
+								<div class="form-group" data-title="Address #2">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-home"></span></span> <input type="text"
+											class="form-control" name="address2" only-str-no
+											ng-model="personalInfo.address2" capitalize id="address2"
+											maxlength="50" placeholder="Address#2" >
+									</div>
+								</div>
+							</div>
+
+							<div class=" col-xs-6  col-sm-6  col-md-6">
+								<div class="form-group" data-title="Address #3">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-home"></span></span> <input type="text"
+											class="form-control" name="address3" only-str-no
+											ng-model="personalInfo.address3" capitalize id="address3"
+											maxlength="50" placeholder="Address#3" >
+									</div>
+								</div>
+							</div>
+                           <div class="clearfix xs-visible sm-visible md-visible"></div>
+							
+							<div class="col-xs-6  col-sm-6 col-md-6 ">
+								<div class="form-group" data-title="City Name">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-map-marker"></span></span> <input
+											list="city" class="form-control" placeholder="City"
+											id="city_list" placeholder="City"
+											ng-model="personalInfo.city" name="city"
+											ng-change="isInValidCity = getcity(personalInfo.city)" required>
+										<datalist id="city">
+											<option
+												ng-repeat="cities in cityMasterdtoList track by cities.cityName"
+												value="{{cities.cityName}}">{{cities.cityName}}</option>
+										</datalist>
+									</div>
+								</div>
+								<div
+									ng-if="isInValidCity==true && personalInfo.city.toString().length >0"
+									class="form-error val_error">Please Choose Valid City</div>
+								<div ng-show="form.$submitted || form.city.$touched"
+									class="form-error val_error">
+									<div ng-show="form.city.$error.required">Please Enter 
+										City</div>
+								</div>
+							</div>
+							<div class="col-xs-6  col-sm-6 col-md-6" data-ng-switch
+								on="personalInfo.isEnableAreaEdit">
+
+								<div class="form-group" data-title="Area Name"
+									data-ng-switch-when="true">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-map-marker"></span></span> <input
+											type="text" type="text" class="form-control" id="area_list"
+											placeholder="Area" capitalize 
+											data-ng-model="personalInfo.area" name="area" only-String required>
+									</div>
+									<div data-ng-show="form.$submitted || form.area.$touched"
+										class="form-error val_error">
+										<div data-ng-show="form.area.$error.required">Please
+											Enter  Area</div>
+									</div>
+								</div>
+								<div class="form-group" data-title="Area Name"
+									data-ng-switch-default>
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-map-marker"></span></span> 
+											<input
+											capitalize list="area" type="text"
+											data-ng-readonly="isInValidCity" class="form-control"
+											id="area_list" placeholder="Area"
+											data-ng-model="personalInfo.area" name="area" 
+											ng-change="isInValidArea = getPincode(personalInfo.area)"
+											required>
+										<datalist id="area">
+											<option data-ng-repeat="area in arealist  track by area.areaName"
+												value="{{area.areaName}}">{{area.areaName}}</option>
+										</datalist>
+										
+									</div>
+									<!-- <p>{{isInValidArea}}</p> -->
+									<div
+										ng-if="isInValidArea && personalInfo.area.toString().length >0"
+										class="form-error val_error">Please Choose Valid Area</div>
+									<div data-ng-show="form.$submitted || form.area.$touched"
+										class="form-error val_error">
+										<div data-ng-show="form.area.$error.required">Please
+											Enter  Area</div>
+									</div>
+								</div>
+							</div>
+               <div class="clearfix xs-visible sm-visible md-visible"></div>
+							
+							<div class="col-xs-6  col-sm-6 col-md-6 specify_check">
+								<label><input type="checkbox" id="" class=""
+									ng-model="personalInfo.isEnableAreaEdit" ng-change="personalInfo.isEnableAreaEdit==false?getcity(personalInfo.city):false">Checkbox To
+									Specify Your Area</label>
+							</div>
+							<div class="col-xs-6  col-sm-6 col-md-6">
+								<div class="form-group" data-title="Pincode">
+									<div class="input-group" data-ng-switch
+										on="personalInfo.isEnableAreaEdit">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-list-alt"></span></span> 
+										<span data-ng-switch-when="true">
+											<input type="text" class="form-control"
+												placeholder="Pincode" maxlength="6" name="pincode"
+												ng-model="personalInfo.pincode" numbers-Only required>
+										</span>
+										<span data-ng-switch-default>
+<!-- 											 <select   -->
+<!-- 												class="form-control" -->
+<!-- 												ng-model="personalInfo.pincode" -->
+<!-- 												required> -->
+<!-- 												<option ng-repeat="obj for obj in pincodeList track by obj">{{obj}}</option> -->
+<!-- 												 <option value="">Pincode</option> -->
+<!-- 											</select> -->
+											
+											<input type="text" class="form-control"
+												placeholder="Pincode" maxlength="6" name="pincode"
+												ng-model="personalInfo.pincode" numbers-Only  required>
+										</span>
+									</div>
+								</div>
+								
+								<div ng-show="form.$submitted || form.pincode.$touched"
+									class="form-error val_error">
+                                    <div
+										ng-show="personalInfo.pincode.toString().length<6 && personalInfo.pincode.length>=1">
+										Invalid pincode</div>
+									<div ng-show="form.pincode.$error.required">Please Enter
+										Pincode</div>
+									
+								</div>
+								
+							</div>
+							<div class="clearfix xs-visible sm-visible md-visible"></div>
+
+							<div class=" col-xs-6  col-sm-6 col-md-6">
+								<div class="form-group" data-title="Mobile No.">
+								<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-earphone"></span></span> 	
+											<div class="col-xs-3  col-sm-3 col-md-3 sub_forms"
+											style="padding-right: 0px; padding-left: 0px">
+											<input type="text" class="form-control" readonly
+												value="+91">
+										</div>
+										<div class="col-xs-9 col-sm-9 col-md-9 sub_forms"
+											style="padding-left: 0px; padding-right: 0px">
+											<input
+											type="text" class="form-control" name="mobileNo"
+											ng-model="personalInfo.mobileNo" id="mobileNo" maxlength="10"
+											placeholder="Mobile Number" numeric-regex required>
+										</div>
+									</div>
+									 <!-- <div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-earphone"></span></span> <input
+											type="text" class="form-control" name="mobileNo"
+											ng-model="personalInfo.mobileNo" id="mobileNo"
+											maxlength="10" 
+											placeholder="Mobile No." numeric-regex >
+									</div> --> 
+								</div>
+
+								<div ng-show="form.$submitted || form.mobileNo.$touched"
+									class="form-error val_error">
+									<div
+										ng-show="personalInfo.mobileNo.toString().length<10 && personalInfo.mobileNo.length>=1">Please
+										Enter  Valid Number</div>
+									<div ng-show="form.mobileNo.$error.required">Please Enter
+										Mobile Number</div>
+								</div>
+							</div>
+
+							<div class=" col-xs-6  col-sm-6 col-md-6">
+								<div class="form-group" data-title="Alternative Mobile No.">
+								<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-earphone"></span></span> 	
+											<div class="col-xs-3  col-sm-3 col-md-3 sub_forms"
+											style="padding-right: 0px; padding-left: 0px">
+											<input type="text" class="form-control" readonly
+												value="+91">
+										</div>
+										<div class="col-xs-9 col-sm-9 col-md-9 sub_forms"
+											style="padding-left: 0px; padding-right: 0px">
+											<input
+											type="text" class="form-control" name="altMobile"
+											ng-model="personalInfo.alterMobileNo" id="mobileNo" maxlength="10"
+											placeholder="Alternative Mobile Number" numeric-regex ng-required="personalInfo.alterMobileNo">
+										</div>
+									</div>
+									<!-- <div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-earphone"></span></span> <input
+											type="text" class="form-control" name="altMobile"
+											ng-model="personalInfo.alterMobileNo" id="alt_mobile_id" maxlength="10"
+											placeholder="Alternative Mobile No." numeric-regex ng-required="personalInfo.alterMobileNo">
+									</div> -->
+								</div>
+								<div ng-show="form.$submitted || form.altMobile.$touched"
+									class="form-error val_error">
+									<div
+										ng-show="personalInfo.alterMobileNo.toString().length>0 && personalInfo.alterMobileNo.toString().length<10">Please
+										Enter Valid Alternative Mobile No</div>
+
+								</div>
+
+							</div>
+							<div class="clearfix xs-visible sm-visible md-visible"></div>
+							
+							<div class=" col-xs-6  col-sm-6 col-md-6">
+								<div class="form-group" data-title="PAN No">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-pencil"></span></span> <input type="text"
+											class="form-control" name="panNo" maxlength="10"
+											ng-model="personalInfo.panNo" id="panNo" pan-regex capitalize
+											placeholder="PAN No" ng-required="paymentInfo.chequeAmt>50000">
+									</div>
+								</div>
+
+								<div ng-show="form.$submitted || form.panNo.$touched"
+									class="form-error val_error">
+									<div
+										ng-show="personalInfo.panNo.length<10 && personalInfo.panNo.length>=1">Please
+										Enter Valid PAN Number</div>
+									<div ng-show="form.panNo.$error.required">Please Enter
+										Pan Number</div>
+								</div>
+							</div>
+
+							<div class="col-xs-6  col-sm-6  col-md-6">
+								<div class="form-group">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-phone-alt"></span></span>
+										<div class="col-xs-4  col-sm-4 col-md-4 sub_forms"
+											
+											style="padding-right: 0px; padding-left: 0px">
+											<input type="text" class="form-control" name="stdNo"
+												ng-model="personalInfo.std" maxlength="5" id="std"
+												placeholder="STD Code" std-code >
+										</div>
+										<div class="col-xs-8 col-sm-8 col-md-8 sub_forms"
+											data-title="Telephone No"
+											style="padding-left: 0px; padding-right: 0px">
+											<input type="text" class="form-control" name="stdNo"
+												ng-model="personalInfo.phonealt" maxlength="10"
+												id="telePhoneNo" placeholder="Telephone No." numbers-Only
+												>
+										</div>
+									</div>
+								</div>
+								<!-- <div ng-show="form.$submitted "
+									class="form-error val_error">
+									<div
+										ng-show="((personalInfo.phonealt.toString().length>0 && personalInfo.phonealt.toString().length<7)
+										|| (personalInfo.std.toString().length>0  &&  personalInfo.std.toString().length<=2))">Please
+										Enter Valid Number</div>
+								</div> -->
+								<div ng-show="
+									(form.$submitted || form.stdNo.$touched) 
+									&& 
+									((personalInfo.std.toString().length+personalInfo.phonealt.toString().length>0) &&(personalInfo.std.toString().length+personalInfo.phonealt.toString().length<10))"
+								class="form-error val_error">
+								<div ng-show="personalInfo.std!=3||personalInfo.phonealt!=7">
+									Please Enter Valid Number</div>
+								</div>
+							</div>
+                               <div class="clearfix xs-visible sm-visible md-visible"></div>							
+							<div class=" col-xs-6 col-sm-6 col-md-6">
+								<div class="form-group" data-title="Email ID" data-name="">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-envelope"></span></span> <input
+											type="email" class="form-control" 
+											ng-model="personalInfo.email" capitalize placeholder="Email"
+											name="email" ng-maxlength="90" ng-pattern="emailregEx" 
+											required>
+									</div>
+								</div>
+								<div class="form-error val_error "
+									ng-show="form.email.$error.pattern">Enter Valid Email ID</div>
+								<div class="form-error val_error "
+									ng-show="form.email.$error.maxlength">Sorry You Are
+									Exceeding  Limit</div>
+								<div ng-show="form.$submitted || form.email.$touched"
+									class="form-error val_error ">
+									<div ng-show="form.email.$error.required">Please Enter
+										 Email ID</div>
+								</div>
+							</div>
+
+
+							<div class=" col-xs-6 col-sm-6 col-md-6">
+								<div class="form-group" data-title="Alternative Email ID">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-envelope"></span></span> <input
+											type="email" class="form-control" validate-email
+											ng-model="personalInfo.alterEmail"
+											placeholder="Alternative Email" capitalize name="alterEmail"
+											ng-maxlength="90" ng-pattern="emailregEx">
+
+									</div>
+								</div>
+								<div class="form-error val_error "
+									ng-show="form.alterEmail.$error.pattern">Enter Valid
+									Email ID</div>
+								<div class="form-error val_error "
+									ng-show="form.alterEmail.$error.maxlength">Sorry You Are
+									Exceeding Limit</div>
+								<div ng-show="form.$submitted || form.alterEmail.$touched"
+									class="form-error val_error ">
+									<div ng-show="form.alterEmail.$error.required">Please
+										Enter Email ID</div>
+								</div>
+
+
+							</div>
+							   <div class="clearfix xs-visible sm-visible md-visible"></div>
+							
+						</div>
+						<br />
+						<div class="col-xs-12" id="next_Prev_dummy1"></div>
+						<div class="row customer_details_row button_row">
+							<div class="col-xs-12 col-sm-offset-2 col-sm-8  col-md-offset-2 col-md-8 button_cols" id="next_prev">
+								<div class="col-xs-6 text-right"></div>
+								<div class="col-xs-6 text-right">
+									<a class="personal_next_btn next_btn"
+										ng-click="goVechilePage($event,form)">NEXT<span
+										class="glyphicon glyphicon-menu-right"></span></a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="next_Prev_dummy"></div>

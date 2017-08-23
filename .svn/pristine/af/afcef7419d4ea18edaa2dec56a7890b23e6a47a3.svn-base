@@ -1,0 +1,26 @@
+POTApp.factory('StorageService', function() {
+	var formData =  {"productName":"Motor Insurance","productcode":"Motor","subProductCode":"PCC","subProductName":"PRIVATE CAR","personalInfo":{"firstName":"ASDFASDF","lastName":"ASDFASDFSADF","mobileNo":"9842498424","email":"ASDFASDF@ASDF.COM","aadhaarNo1":"1231","aadhaarNo2":"2312","aadhaarNo3":"3123"},"vehicleInfo":{"vehicleRegisteredTo":{"name":"INDIVIDUAL","code":"CUSTOMER_INDIVIDUAL"},"policyType":{"name":"COMPREHENSIVE","code":"COMPREHENSIVE"},"manufacturer":{"name":"ASHOK LEYLAND","code":"AKL"},"modelSubModel":"STILE,LX Captain Alloy,7","registrationDate":"11/02/2017","rtoCode":{"rtoLocation":"CHENNAI","rtoCode":"CHE","effectiveStartDate":"01-01-2017","effectiveEndDate":"01-01-2020","status":"ACTIVE","createdBy":null,"createdDate":null,"lastModifiedDate":null,"lastModifiedBy":null,"message":null},"fuelType":"DIESEL","ZoneArea":"ZONE A","engineCC":"1461","yearOfMfg":2016,"previousPolicyInsurer":{"insurerCode":"117","imagePath":"images/new/117.png","insurerName":"LIBERTY VIDEOCON GENERAL INSURANCE COMPANY LIMITED"},"prevPolicyExpDate":"06/07/2017","ncb":{"id":null,"ncbPercentage":"20.0","status":"ACTIVE","createdBy":"0","creationDate":null,"lastModifiedDate":null,"lastModifiedBy":null,"exceptionStatus":null},"currentNCB":{"id":null,"ncbPercentage":"25.0","status":"ACTIVE","createdBy":"0","creationDate":null,"lastModifiedDate":null,"lastModifiedBy":null,"exceptionStatus":null},"isInBuilt":false,"isCarOwnerChanged":"N","isAnyClaim":"N","regNo1":"AS","regNo2":"12","regNo3":"AS","regNo4":"1231","year":"1900","seatingCapacity":"7","model":{"name":"STILE","code":"MD000001","$$hashKey":"object:610"},"subModel":{"subModelCode":"SM00000001","subModelName":"LX Captain Alloy","fuelType":"DIESEL","engineCC":"1461","seatingCapacity":"7","year":"1900","$$hashKey":"object:612"}},"quoteNo":"1000000138","premiumInfo":{"insurerCode":"104","imagePath":"images/new/104.png","insurerName":"BAJAJ ALLIANZ GENERAL INSURANCE CO. LTD.","premiumDetails":{"quoteNo":"1000000138","insurerCode":"104","actualIdv":475000,"vehicleAge":0.42,"tariffDiscountRate":0,"tariffDiscountAmt":0,"totalOdPremium":11695.6875,"totalTPPremium":2963,"ncb":"25.0","addonCoverPremium":0,"premiumWithoutAddon":14658.6875,"commissionPremium":null,"netPremium":14658.6875,"taxAmount":null,"grossPremium":17297.2475,"status":"SUCCESS","errorDescriptions":null,"coverDetails":{"TPL":{"code":"TPL","rate":-99999,"flat":2863,"rateType":"FLAT","premium":2863,"type":null,"deductibleAmt":null,"sumInsuredAmt":null,"coverElements":[],"coverVariables":null,"coverClauses":null},"AT":{"code":"AT","rate":25,"flat":null,"rateType":"RATE","premium":3898.5625,"type":null,"deductibleAmt":null,"sumInsuredAmt":null,"coverElements":[],"coverVariables":null,"coverClauses":null},"OD":{"code":"OD","rate":3.283,"flat":-99999,"rateType":"RATE","premium":15594.25,"type":"OD","deductibleAmt":null,"sumInsuredAmt":null,"coverElements":[],"coverVariables":null,"coverClauses":null},"CPA":{"code":"CPA","rate":-99999,"flat":100,"rateType":"FLAT","premium":100,"type":"ADDITIONAL","deductibleAmt":null,"sumInsuredAmt":null,"coverElements":[],"coverVariables":null,"coverClauses":null,"name":"Compulsory Personal Accident","$$hashKey":"object:914"}},"insurerElements":[{"code":"TARIFF_DISCOUNT_RATE","value":0},{"code":"TARIFF_DISCOUNT_AMT","value":0},{"code":"TOTAL_OD_PREMIUM","value":11695.6875},{"code":"TOTAL_LIABILITY_PREMIUM","value":2963}],"insurerVariables":null,"insurerClauses":null,"listOfTax":[{"nameOfTax":"servicetax","rate":17,"amount":2491.98},{"nameOfTax":"krish kalayan","rate":0.5,"amount":73.29},{"nameOfTax":"swach bharath","rate":0.5,"amount":73.29}]}},"paymentInfo":{"bankCode":{"bankName":"ABIRAMAM CO-OP URBAN BANK","bankCode":"B0013","effectiveStartDate":"01-01-2017","effectiveEndDate":"01-01-2020","status":"ACTIVE","createdBy":null,"createdDate":null,"lastModifiedDate":null,"lastModifiedBy":null,"message":null},"branchName":"DFSFDSDFSDF","chequeNo":"645644","chequeDate":"19/07/2017","chequeAmt":17297.2475,"favourOff":"FASDFSD","paymentMode":"Offline Payment","adjust_to_pay_amount":""}}
+	return {
+		set: set,
+		get: get,
+		remove : remove,
+		removeAll:removeAll,
+		getAll:getAll
+	}
+	function get(key){     
+	    return formData[key];
+	}
+	function getAll(){     
+	    return formData;
+	}
+	function set(key, value){
+		formData[key] = value;
+	}
+	
+	function remove(key){
+		
+	}
+	function removeAll(){
+		formData = {};
+	}
+});

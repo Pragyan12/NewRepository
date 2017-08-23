@@ -1,0 +1,73 @@
+POTApp.factory('CoverageService', function($q, $http,Constants) {
+	var selectedCovers = {};
+	var coverSumInsured={'upaSumInsured':'10000','vdSumInsured':'2500','bifuelSumInsured':0,'padSumInsured':'10000'};
+	var url = "http://server1:8585/masters/viewAllCoverage.json";
+	return {
+		set : set,
+		getSelectedCovers : getSelectedCovers,
+		getCoverageList : getCoverageList,
+		removeAllCovers : removeAllCovers,
+		removeValuesFromJsonArray : removeValuesFromJsonArray,
+		setCoverSumInsured:setCoverSumInsured,
+		getCoverSumInsured : getCoverSumInsured,
+		removeCoverSumInsured:removeCoverSumInsured,
+		removeAll : removeAll
+	}
+
+	function set(code,name,type,sumInsured) {
+		var arr = {};
+		arr = 
+		{
+			'name' : name,
+			'code' : code,
+			'coverType' : type,
+			'sumInsured' : sumInsured 
+		};
+		selectedCovers[code] = arr;
+	}
+	function setCoverSumInsured(code,name,type,sumInsured){
+		delete selectedCovers[code];
+		set(code,name,type,sumInsured);
+	}
+	function getCoverSumInsured(key){
+		return coverSumInsured[key];
+	}
+	function removeCoverSumInsured(key){
+		delete coverSumInsured[key];
+	}
+	function removeAll() {
+		selectedCovers={};
+	}
+	function removeAllCovers() {
+		angular.forEach(selectedCovers, function(value, key) {
+			if (value.coverType === Constants.ADDON) {
+				delete selectedCovers[key];
+			}
+		});	
+	}
+	function getSelectedCovers() {
+		return selectedCovers;
+	}
+	function removeValuesFromJsonArray(code) {
+		angular.forEach(selectedCovers, function(value, key) {
+			if (code == value.code) {
+				delete selectedCovers[key];
+			}
+		});
+		return selectedCovers;
+	}
+
+	function getCoverageList() 	{
+		var deferred = $q.defer();
+		$http.post(url).then(function(response) 
+		{
+			deferred.resolve(response.data.coverageMasterDtoList);
+		}, function(errresponse) 
+		{
+			deferred.reject(errresponse);
+			console.log("error fetching result in getcoveragelist function");
+		});
+		return deferred.promise;
+	}
+
+});

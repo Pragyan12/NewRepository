@@ -1,0 +1,63 @@
+POTApp.factory("InsurerService", [ "$q", "$http","UrlConstants", function($q, $http, UrlConstants) {
+	var listOfInsurer = []; 
+	return {
+		getInsurerList : getInsurerList,
+		getRtoListFromRestUrl : getRtoListFromRestUrl,
+		getInsuredFromProduct : getInsuredFromProduct,
+		getListOfInsurer:getListOfInsurer
+	}
+	
+	function getListOfInsurer(){
+		return listOfInsurer;
+	}
+	function getRtoListFromRestUrl() {
+		var deferred = $q.defer();
+		$http({
+			url : UrlConstants.MASTER_URL+UrlConstants.GET_RTOCODE_FOR_ZONALMAPPING,
+			method : "POST",
+			config :{
+			    cache: true
+			}
+		}).then(function(response) {
+			deferred.resolve(response);
+		}, function(response) { // optional
+			deferred.reject(response);
+			console.log("error in getting response");
+		});
+		return deferred.promise;
+	}
+	function getInsurerList() {
+		var deferred = $q.defer();
+		$http({
+			url : UrlConstants.MASTER_URL+UrlConstants.GET_INSURER_DETAILS,
+			method : "POST",
+			config :{
+			    cache: true
+			}
+		}).then(function(response) {
+			deferred.resolve(response);
+		}, function(response) { // optional
+			deferred.reject(response);
+			console.log("error in getting response");
+		});
+		return deferred.promise;
+	}
+	
+	function getInsuredFromProduct(productCode) {
+		var deferred = $q.defer();
+		$http({
+			url : UrlConstants.MASTER_URL+UrlConstants.GET_ALL_MAPPED_INSURER,
+			method : "POST",
+			config :{
+			    cache: true
+			}
+		}).then(function(response) {
+			listOfInsurer = response.data.insurerMappedList;
+			deferred.resolve(response);
+		}, function(response) { // optional
+			deferred.reject(response);
+			console.log("error in getting response");
+		});
+		return deferred.promise;
+	}
+} ]);

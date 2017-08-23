@@ -1,0 +1,84 @@
+POTApp.factory('PersonalInfoService', function($http,$q) {
+	return {
+		titleList : titleList,
+		getlistOfCities : getlistOfCities,
+		getAreaByCity : getAreaByCity,
+		getallpincode : getallpincode
+	}
+
+	function titleList() 
+	{
+		var url="http://server1:8585/masters/getalltitle.json";
+		var deffered=$q.defer();
+		
+		$http.post(url).then(function(response)
+				{
+			//alert(":::"+JSON.stringify(response.data));
+			 deffered.resolve(response);
+			
+				},function(errresponse)
+				{
+					deffered.reject(errresponse);
+				});
+		
+		return deffered.promise;
+	}
+	
+	function getlistOfCities()
+	{
+		var url="http://server1:8585/masters/getallcity.json";
+		var deffered=$q.defer();
+		
+		$http.post(url).then(function(response)
+				{
+			
+			 deffered.resolve(response);
+			
+				},function(errresponse)
+				{
+					deffered.reject(errresponse);
+				});
+		
+		return deffered.promise;
+		
+	}
+	function getAreaByCity(cityCode)
+	{
+		var url="http://server1:8585/masters/getAreaByCity.json?cityCode="+cityCode;
+		var deffered=$q.defer();
+		
+		$http.post(url).then(function(response)
+				{
+			
+			 deffered.resolve(response);
+			
+				},function(errresponse)
+				{
+					deffered.reject(errresponse);
+				});
+		
+		return deffered.promise;
+		
+	}
+	function getallpincode(areaCode)
+	{
+		var url="http://server1:8585/masters/getPincodeByArea.json?areaCode="+areaCode;
+		var deffered=$q.defer();
+		
+		$http.post(url).then(function(response)
+				{
+			
+			 deffered.resolve(response);
+			
+				},function(errresponse)
+				{
+					deffered.reject(errresponse);
+				});
+		
+		return deffered.promise;
+		
+	}
+
+	
+	
+});

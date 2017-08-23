@@ -1,0 +1,90 @@
+'use strict';
+ 
+POTApp.factory('PaymentService', ['StorageService','$http', '$q','$window', function(StorageService,$http, $q,$window){
+	var paymentDetailsForAll = {};
+
+	var factory = {
+			fetchAllBankDetails: fetchAllBankDetails,
+			paymentDetails : paymentDetails,
+			callServerforOfflinePayment :callServerforOfflinePayment
+	    };
+	 
+	    return factory;
+	    
+	    function fetchAllBankDetails() {
+	        var deferred = $q.defer();
+	        $http.post("http://server1:8585/masters/getallbankmaster.json")
+	            .then(
+	            function (response) {
+	                deferred.resolve(response);
+	            },
+	            function(errResponse){
+	                console.error('Error while fetching Users');
+	                deferred.reject(errResponse);
+	            }
+	        );
+	        return deferred.promise;
+	    }
+	    
+	    
+	    function paymentDetails(data)
+	    {
+	    	alert("inside paymentdetails"+JSON.stringify(data));
+	    	var deferred = $q.defer();
+	        $http.post("http://localhost:8080/digital/loading.json",data) 
+	            .then(
+	            function (response) {
+	                deferred.resolve(response);
+//	                alert(response.data.onlinePaymentDto.requestUrl);
+//	                var requestUrl=response.data.onlinePaymentDto.requestUrl;
+//	                console.error(response);
+//	                $window.location.href = 'http://localhost:9090/digital/redirectURL?name='+requestUrl;
+	            },
+	            function(errResponse){
+	                console.error('Error while fetching Users');
+	                deferred.reject(errResponse);
+	            }
+	        );
+	        return deferred.promise;
+	    }
+	    
+	    function callServerforOfflinePayment(){
+			var details = StorageService.getAll();
+			var paymentDetail = StorageService.get('paymentInfo');
+			alert('inside payment service');
+			alert('inside payment service 1 1'+JSON.stringify(details));
+
+			console.log(JSON.stringify(details));
+
+	        var data = {
+	    			
+	    				"bankName"        : paymentDetail.bankCode.bankCode,
+	    				"branch"          : paymentDetail.branchName,
+	    				"instrumentNo"    : paymentDetail.chequeNo,
+	    				"instrumentDate"  : paymentDetail.chequeDate,
+	    				"favourOff"       : paymentDetail.favourOff,
+	    				"adjustedAmount"  : paymentDetail.adjust_to_pay_amount,
+	    				"paymentMode"     : '',
+	    				"paidDate"        : '',
+	    				"quoteNo"		  : details.premiumInfo.quoteNo,
+	    				"amount"          : paymentDetail.chequeAmt
+	    				
+	    			
+	    		};
+	        
+	        var deferred=$q.defer();
+			$http({
+		    	url : "http://Server1:8585/mis/persistPolicy.json",
+		    	method : "POST",data}).then(function(response){
+		    		paymentDetailsForAll=response.data;
+		    			deferred.resolve(response);
+		    		},function(error){
+		    			deferred.reject(error);
+		    		});
+	    return deferred.promise; 
+	    }
+	   
+	
+}]);
+
+

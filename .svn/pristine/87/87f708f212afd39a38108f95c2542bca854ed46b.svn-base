@@ -1,0 +1,106 @@
+<div class="col-xs-3 col-sm-3 col-md-3 premium_addon_cover">
+	<div class="row addon_cover_total_list">
+		<h4 class="text-left">Additional Covers</h4>
+		<div class="addon_list" >
+			{{additional_Covers}}
+			<div class="checkbox " data-title="Unnamed PA" ng-repeat="addoncvrs in additional_Covers" ng-show="fuelTypeChange(addoncvrs.coverCode)">
+				
+				<input type="checkbox"   data-title="{{addoncvrs.coverName}}"  id="{{addoncvrs.coverName}}" 
+					ng-click='addCover(addoncvrs.coverCode,addoncvrs.coverName,addoncvrs.coverageType,additional_flag[$index]);'
+					ng-checked="isCoverSelected(addoncvrs.coverCode)"
+					ng-init="additional_flag[$index]=isCoverSelected(addoncvrs.coverCode)" 
+					ng-model='additional_flag[$index]'>
+					
+<!-- 					{{vehicleInfo.vehicleRegisteredTo.name}} -->
+				<label for="{{addoncvrs.coverName}}">{{addoncvrs.coverName}}</label>
+				<select class="form-control"  id="coverage_select1"  ng-if="addoncvrs.coverCode=='UPA' && (additional_flag[$index] || isCoverSelected(addoncvrs.coverCode)) "  ng-model="upaSumInsured" ng-change="updateCoverSumInsured(addoncvrs.coverCode,addoncvrs.coverName,addoncvrs.coverageType,upaSumInsured)">
+					<option  value="10000">10000</option>
+					<option  value="20000">20000</option>
+					<option  value="50000">50000</option>
+					<option  value="100000">100000</option>
+					<option  value="150000">150000</option>
+					<option  value="200000">200000</option>
+				</select>
+				
+				<select class="form-control" id="coverage_select2" ng-if="addoncvrs.coverCode=='PAD' && (additional_flag[$index] || isCoverSelected(addoncvrs.coverCode))"  ng-model="padSumInsured" ng-change="updateCoverSumInsured(addoncvrs.coverCode,addoncvrs.coverName,addoncvrs.coverageType,padSumInsured)">
+					<option  value="10000">10000</option>
+					<option  value="20000">20000</option>
+					<option  value="50000">50000</option>
+					<option  value="100000">100000</option>
+					<option  value="150000">150000</option>
+					<option  value="200000">200000</option>
+				</select>
+
+				<div class="addon_list"  >
+					<div ng-if="addoncvrs.coverCode=='BFK'" ng-show="additional_flag[$index] || isCoverSelected(addoncvrs.coverCode)" >
+						<input type="text"	id="coverage_select3"  class="form-control"  ng-model="bifuelSumInsured" max="50000" ng-blur="updateCoverSumInsured(addoncvrs.coverCode,addoncvrs.coverName,addoncvrs.coverageType,bifuelSumInsured)" ng-init="bifuelSumInsured='0'" allow-Numbers-Only  prevent-typing-greater /> 
+<!-- 					<span ng-show="form.last_name.$error.allow-Numbers-Only"> Sorry -->
+<!-- 										Limit is 50000 only</span> -->
+					</div>
+					
+					<!-- <label class="radio-inline" ng-if="addoncvrs.coverCode=='BFK'" ng-show="additional_flag"> 
+						<input type="radio"	name="fuelradio" class="addonradio" ng-model="addon" value="Addon" >Addon
+						<input type="number"	 class="form-control"  ng-model="bifuelSumInsured" ng-blur="updateCoverSumInsured(addoncvrs.coverCode,bifuelSumInsured)"/>
+					</label>  -->
+				</div>
+			</div>
+           </div>
+	</div>
+	<div class="row addon_cover_total_list">
+		<h4 class="text-left">Addon Covers</h4>
+		<div class="addon_list" ng-init="viewMoreCover=false;viewLessCover=true;">
+			<div class="checkbox" data-title="{{addon.coverName}}" ng-repeat="addon in addon_Covers" ng-show="($index<3 || viewMoreCover)?true:false; ">
+					<input type="checkbox" data-title="{{addon.coverName}}"
+						ng-click="addCover(addon.coverCode,addon.coverName,addon.coverageType,addon_flag[$index])"
+						ng-model='addon_flag[$index]' id="{{addon.coverName}}"
+						ng-checked="isCoverSelected(addon.coverCode)" 
+						ng-init="addon_flag[$index]=isCoverSelected(addoncvrs.coverCode)" 
+						><label
+						for="{{addon.coverName}}">{{addon.coverName}}&nbsp;&nbsp;&nbsp;&nbsp;</label>
+			</div>
+			<div class="addon_list expand_more" ng-show="viewLessCover"
+				ng-click="viewMoreCover=true;viewLessCover=false;">
+				<div class="toggle_icon">
+					<span class="fa fa-plus-square"></span><span class="more">More</span>
+				</div>
+			</div>
+			<div class="addon_list expand_less" ng-show="viewMoreCover"
+				ng-click="viewMoreCover=false;viewLessCover=true;">
+				<div class="toggle_icon">
+					<span class="fa fa-minus-square"></span><span class="less">Less</span>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
+
+	<div class="row addon_cover_total_list">
+		<h4 class="text-left">Discounts</h4>
+		{{discount_coverage}}
+		<div class="addon_list">
+			<div class="checkbox " data-title="Voluntary deductible"
+				ng-repeat="discount_coverage in discounts">
+				<input type="checkbox" 
+					data-title="{{discount_coverage.coverName}}" class="voluntary_deductible"
+					id="{{discount_coverage.coverName}}"
+					ng-click='addCover(discount_coverage.coverCode,discount_coverage.coverName,discount_coverage.coverageType,discounts_flag[$index])'
+					ng-model='discounts_flag[$index]'
+					ng-init="discounts_flag[$index]=isCoverSelected(addoncvrs.coverCode)" 
+					ng-checked="isCoverSelected(discount_coverage.coverCode)" 
+					><label
+					for="{{discount_coverage.coverName}}">{{discount_coverage.coverName}}</label> 
+					
+					<select class="form-control"   id="coverage_select2"
+					ng-if="discount_coverage.coverCode=='VD' && (discounts_flag[$index] || isCoverSelected(discount_coverage.coverCode))" ng-model="vdSumInsured" ng-change="updateCoverSumInsured(discount_coverage.coverCode,discount_coverage.coverName,discount_coverage.coverageType,vdSumInsured)">
+					<option  value="2500">2500</option>
+					<option  value="5000">5000</option>
+					<option  value="7500">7500</option>
+					<option  value="15000">15000</option>
+				</select>
+			</div>
+</div>
+</div>
+</div>
+

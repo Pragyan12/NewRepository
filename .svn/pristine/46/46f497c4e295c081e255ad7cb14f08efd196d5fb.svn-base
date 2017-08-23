@@ -1,0 +1,447 @@
+POTApp
+		.controller(
+				'BasicQuoteInfo',
+				function($scope, $rootScope, $state, $log, RTO_SERVICE,
+						StorageService, VehicleService, InsurerService,
+						PremiumService, CoverageService,
+						PremiumCalculationService) {
+
+					$scope.manufacturerYear = VehicleService.yearOfMfgList();
+					$scope.vechileRegistration = VehicleService
+							.vehicleRegisteredTo();
+					$scope.policyTypeList = VehicleService.policyTypeList();
+					/*alert(":::" + JSON.stringify($scope.policyTypeList));*/
+					$scope.productCode = StorageService.get("subProductCode");
+					$scope.modelList = '';
+					$scope.subModelList = '';
+					$scope.prevPolicyExpDate = '';
+					$scope.zoneCode = '';
+					$scope.adhaarNo1 = {
+						'isValid' : true
+					};
+					$scope.adhaarNo2 = {
+						'isValid' : true
+					};
+					$scope.adhaarNo3 = {
+						'isValid' : true
+					};
+
+					$scope.emailregEx = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,3}(?:\.[a-z]{2})?)$/i;
+
+					$scope.minRegisterationDate = moment().subtract(5, 'year')
+							.format('DD/MM/YYYY');
+					$scope.maxRegisterationDate = moment().subtract(1, 'day')
+							.format('DD/MM/YYYY');
+					$scope.minPreviousPolicyDate = moment().subtract(1, 'year')
+							.format('DD/MM/YYYY');
+					$scope.maxPreviousPolicyDate = moment().add(60, 'days')
+							.format('DD/MM/YYYY');
+
+					$scope.chooseRegDate = function() {
+						chooseRegDate();
+					}
+
+					function chooseRegDate() {
+						var manufacturerYear = $scope.vehicleInfo.yearOfMfg;
+						var minRegiDate = new Date();
+						minRegiDate.setDate(01);
+						minRegiDate.setMonth(0);
+						minRegiDate.setFullYear(manufacturerYear);
+						$scope.minRegisterationDate = moment(
+								new Date(minRegiDate)).format('DD/MM/YYYY');
+					}
+
+					$scope.prepolicydatehide = function() {
+						var predate = $scope.vehicleInfo.registrationDate;
+						var b = moment(predate, "DD/MM/YYYY");
+						$scope.minPreviousPolicyDate = b.add(1, 'days').format(
+								'DD/MM/YYYY');
+						$scope.vehicleInfo.isCarOwnerChanged = '';
+					}
+
+					var customerDetails = StorageService.get("personalInfo");
+					var vehicleDetails = StorageService.get("vehicleInfo");
+
+					// //////////////////// Jitu //////////////////////
+					$scope.submodelsList = [];
+					$scope.modelname = '';
+
+					VehicleService.getNCBListFromRestUrl().then(
+							function(response) {
+								$scope.ncbList = response.data.ncbDtoList;
+							}, function(error) {
+								console.log("error")
+							});
+
+					$scope.currectNCBCalc = function(prevncb) {
+						$scope.vehicleInfo.currentNCB = {};
+						angular
+								.forEach(
+										$scope.ncbList,
+										function(value, index) {
+											if (prevncb === value.ncbPercentage) {
+												if ((index + 1) === $scope.ncbList.length) {
+													$scope.vehicleInfo.currentNCB = $scope.ncbList[index];
+												} else {
+													$scope.vehicleInfo.currentNCB = $scope.ncbList[index + 1];
+												}
+											}
+										});
+
+					}
+
+					VehicleService.getMakeListFromRestUrl().then(
+							function(response) {
+								// console.log("data :
+								// "+JSON.stringify(response.data));
+								$scope.makelist = response.data.makeList;
+							}, function(error) {
+								console.log("error")
+							});
+					InsurerService.getInsurerList().then(function(response) {
+						$scope.insurerList = response.data.insurerList;
+					});
+
+					InsurerService
+							.getRtoListFromRestUrl()
+							.then(
+									function(response) {
+										$scope.rtoList = response.data.rtoMasterdtoList;
+									});
+
+					// //////////////////// Jitu //////////////////////
+					if (angular.isUndefined(customerDetails)) {
+						$scope.personalInfo = {
+							firstName : '',
+							lastName : '',
+							mobileNo : '',
+							email : ''
+						}
+					} else {
+						/*alert("::" + JSON.stringify(customerDetails));*/
+						$scope.personalInfo = customerDetails;
+					}
+					if (angular.isUndefined(vehicleDetails)) {
+						$scope.vehicleInfo = {
+							vehicleRegisteredTo : '',
+							policyType : '',
+							manufacturer : '',
+							modelSubModel : '',
+							registrationDate : '',
+							rtoCode : '',
+							fuelType : '',
+							ZoneArea : '',
+							engineCC : '',
+							yearOfMfg : '',
+							previousPolicyInsurer : '',
+							prevPolicyExpDate : '',
+							ncb : '',
+							currentNCB : ncbPercentage = 0,
+							isInBuilt : false
+						}
+					} else {
+						$scope.vehicleInfo = vehicleDetails;
+						chooseRegDate();
+					}
+
+					$scope.showModelList = function(makeobj) {
+						$scope.vehicleInfo.modelSubModel = '';
+						$scope.vehicleInfo.fuelType = '';
+						$scope.vehicleInfo.engineCC = '';
+						$scope.vehicleInfo.year = '';
+						$scope.vehicleInfo.seatingCapacity = '';
+						getModelList(makeobj.code);
+						$scope.makename = makeobj.name;
+					}
+					function getModelList(makeCode) {
+						VehicleService.getModelsFromRestUrl().then(function(response) {
+							if (angular.isDefined(response.data.makeModelMap[makeCode])) {
+								$scope.modelsList = response.data.makeModelMap[makeCode];
+							}
+						});
+					}
+
+					$scope.zoneCode = function(rtoCode) {
+						VehicleService.zoneValue().then(function(response) {
+							$scope.vehicleInfo.ZoneArea = response.data[rtoCode.rtoCode];
+						});
+					}
+					$scope.updateModel = function(model) {
+						$scope.model = false;
+						$scope.subModel = true;
+						$scope.modelname = model.name;
+						$scope.modelCode = model.code;
+						$scope.vehicleInfo.model = model;
+						getSubModelList(model.code);
+					}
+					function getSubModelList(modelCode) {
+						VehicleService
+								.getMakeSubmodelFromRestUrl()
+								.then(
+										function(response) {
+											if (!angular
+													.isUndefined(response.data.modelSubModelMap[modelCode])) {
+												$scope.submodelsList = response.data.modelSubModelMap[modelCode];
+											}
+										});
+					}
+					$scope.updateSubModel = function(subModel) {
+
+						$scope.vehicleInfo.fuelType = subModel.fuelType;
+						$scope.vehicleInfo.engineCC = subModel.engineCC;
+						$scope.vehicleInfo.year = subModel.year;
+						$scope.vehicleInfo.seatingCapacity = subModel.seatingCapacity;
+
+						$scope.model = false;
+						$scope.subModel = false;
+						$scope.vehicleInfo.subModel = subModel;
+						$scope.vehicleInfo.modelSubModel = $scope.modelname
+								+ "," + subModel.subModelName + ","
+								+ subModel.seatingCapacity;
+					}
+					$scope.showCarOwnerShip = function() {
+						if (angular
+								.isUndefined($scope.vehicleInfo.prevPolicyExpDate)
+								|| angular.equals('',
+										$scope.vehicleInfo.prevPolicyExpDate)
+								|| !$scope.isNoPolicy) {
+							$scope.vehicleInfo.isCarOwnerChanged = '';
+							$scope.vehicleInfo.isAnyClaim = '';
+							return false;
+						} else {
+							return true;
+						}
+					}
+					$scope.isNoPolicy = function() {
+						if (angular.equals('NO POLICY',
+								$scope.vehicleInfo.policyType.code)) {
+							return false;
+						} else {
+							return true;
+						}
+					}
+
+					$scope.ncbValue = function() {
+						if (angular.equals('THIRDPARTY',
+								$scope.vehicleInfo.policyType.code)) {
+							return false;
+						} else {
+							return true;
+						}
+					}
+
+					$scope.resetValue = function() {
+						$scope.vehicleInfo.previousPolicyInsurer = '';
+						$scope.vehicleInfo.prevPolicyExpDate = '';
+						$scope.vehicleInfo.currentNCB = '';
+						$scope.isCarOwnerChanged = '';
+						$scope.isAnyClaim = '';
+
+					};
+
+					$scope.resetclaim = function() {
+						$scope.vehicleInfo.isAnyClaim = '';
+						$scope.vehicleInfo.ncb = '';
+						$scope.vehicleInfo.currentNCB = '';
+					}
+
+					$scope.submit = function(event, form) {
+
+						var aadharNoLength = (angular
+								.isUndefined($scope.personalInfo.aadhaarNo1) ? 0
+								: $scope.personalInfo.aadhaarNo1.toString().length)
+								+ (angular
+										.isUndefined($scope.personalInfo.aadhaarNo2) ? 0
+										: $scope.personalInfo.aadhaarNo2
+												.toString().length)
+								+ (angular
+										.isUndefined($scope.personalInfo.aadhaarNo3) ? 0
+										: $scope.personalInfo.aadhaarNo3
+												.toString().length);
+//
+//						alert("$scope.form.$valid::::" + $scope.form.$valid
+//								+ ":aadharNoLength:" + aadharNoLength);
+						var vehRegNo = $scope.vehicleInfo.regNo1.toString().length
+								+ $scope.vehicleInfo.regNo2.toString().length
+								+ $scope.vehicleInfo.regNo4.toString().length;
+						
+						
+						if (($scope.form.$valid) && (aadharNoLength==0 || aadharNoLength==12)
+								&& (vehRegNo == 8)) {
+							StorageService.set("personalInfo",$scope.personalInfo);
+							StorageService.set("vehicleInfo",$scope.vehicleInfo);
+							CoverageService.removeAll();
+							PremiumCalculationService.multipleInsurerPremiumCalc('0').then(
+											function(response) {
+												/*console
+														.log("hjfghdsg  "
+																+ JSON
+																		.stringify(response));*/
+												if (response.data.message === "SUCCESS") {
+													InsurerService
+															.getInsuredFromProduct(
+																	$scope.productCode)
+															.then(
+																	function(
+																			response) {
+																		$state
+																				.go('premiumComparision');
+																	});
+
+												} else {
+													alert("Premium Calculation Failed");
+												}
+											},
+											function(errorResponse) {
+												alert("Premium Calculation Failed"
+														+ JSON
+																.stringify(errorResponse));
+											});
+						}
+					};
+
+					$scope.Thirdparty = function() {
+						if (angular.equals('THIRDPARTY',
+								$scope.vehicleInfo.policyType.code)) {
+							return false;
+						} else {
+							return true;
+						}
+					}
+					$scope.isCarOwnerChangedFun = function() {
+						if (angular.equals('THIRDPARTY',
+								$scope.vehicleInfo.policyType.code)) {
+							return false;
+						} else if (angular.equals('COMPREHENSIVE',
+								$scope.vehicleInfo.policyType.code)
+								&& $scope.dayDifference < 91) {
+							return true;
+						}
+					}
+
+					$scope.Comprehensive = function() {
+						if (angular.equals('COMPREHENSIVE',
+								$scope.vehicleInfo.policyType.code)) {
+							return false;
+						} else {
+							return true;
+						}
+					}
+
+					$scope.dateSelect = function(user) {
+						var currentDate = moment(new Date());
+						var prevPolicyExpDate = moment(user, "DD/MM/YYYY");
+						$scope.dayDifference = currentDate.diff(
+								prevPolicyExpDate, 'days', true);
+					}
+
+					$scope.patternAadharNumber = (function() {
+
+						return {
+							test : function(value) {
+								if ($scope.requirePhoneNumber === false) {
+									return true;
+								}
+								alert(regexp.test(value));
+								return regexp.test(value);
+							}
+						};
+					});
+					function validateRegex(value){
+						var regexp = /^[0-9]*$/;
+						if(regexp.test(value) && value.length === 4){
+							return true;
+						}else{
+							return false;
+						}
+					}
+					
+					$scope.resetdate = function() {
+						
+						var selectedDate = $scope.vehicleInfo.registrationDate;	
+						if(null!=selectedDate && ''!=selectedDate){
+							var selectedYear = $scope.vehicleInfo.yearOfMfg;	
+							
+							var b = moment(selectedDate, "DD/MM/YYYY").year();
+							if(b<selectedYear){
+								$scope.vehicleInfo.registrationDate='';
+							}
+						}
+					} 
+					
+					/*$scope.$watch('personalInfo.aadhaarNo1', function(value) {
+						if(angular.isDefined(value) && value.length>0){
+							if(validateRegex(value)){
+								if((angular.isDefined($scope.personalInfo.aadhaarNo2) && validateRegex($scope.personalInfo.aadhaarNo2))
+								&& (angular.isDefined($scope.personalInfo.aadhaarNo3) && validateRegex($scope.personalInfo.aadhaarNo3))		
+								){
+									$scope.adhaarNo1.isValid = true;
+									$scope.adhaarNo2.isValid = true;
+									$scope.adhaarNo3.isValid = true;
+								}else{
+									$scope.adhaarNo1.isValid = false;
+								}
+							}else {
+								$scope.adhaarNo1.isValid = false;
+							}
+						}else{
+							if((angular.isDefined($scope.personalInfo.aadhaarNo2) && validateRegex($scope.personalInfo.aadhaarNo2))
+									&& (angular.isDefined($scope.personalInfo.aadhaarNo3) && validateRegex($scope.personalInfo.aadhaarNo3))		
+									){
+								$scope.adhaarNo1.isValid = false;
+							}else{
+								$scope.adhaarNo1.isValid = true;
+							}
+						}
+					});
+					$scope.$watch('personalInfo.aadhaarNo2', function(value) {
+						if(angular.isDefined(value) && value.length>0){
+							if(validateRegex(value)){
+								if((angular.isDefined($scope.personalInfo.aadhaarNo1) && validateRegex($scope.personalInfo.aadhaarNo1))
+								&& (angular.isDefined($scope.personalInfo.aadhaarNo3) && validateRegex($scope.personalInfo.aadhaarNo3))		
+								){
+									$scope.adhaarNo1.isValid = true;
+									$scope.adhaarNo2.isValid = true;
+									$scope.adhaarNo3.isValid = true;
+								}else{
+									$scope.adhaarNo2.isValid = false;
+								}
+							}else {
+								$scope.adhaarNo2.isValid = false;
+							}
+						}else{
+							if((angular.isDefined($scope.personalInfo.aadhaarNo1) && validateRegex($scope.personalInfo.aadhaarNo1))
+									&& (angular.isDefined($scope.personalInfo.aadhaarNo3) && validateRegex($scope.personalInfo.aadhaarNo3))		
+									){
+								$scope.adhaarNo2.isValid = false;
+							}else{
+								$scope.adhaarNo2.isValid = true;
+							}
+						}
+					});
+					$scope.$watch('personalInfo.aadhaarNo3', function(value) {
+						if(angular.isDefined(value) && value.length>0){
+							if(validateRegex(value)){
+								if((angular.isDefined($scope.personalInfo.aadhaarNo2) && validateRegex($scope.personalInfo.aadhaarNo2))
+								&& (angular.isDefined($scope.personalInfo.aadhaarNo1) && validateRegex($scope.personalInfo.aadhaarNo1))		
+								){
+									$scope.adhaarNo1.isValid = true;
+									$scope.adhaarNo2.isValid = true;
+									$scope.adhaarNo3.isValid = true;
+								}else{
+									$scope.aadhaarNo3.isValid = false;
+								}
+							}else {
+								$scope.aadhaarNo3.isValid = false;
+							}
+						}else{
+							if((angular.isDefined($scope.personalInfo.aadhaarNo2) && validateRegex($scope.personalInfo.aadhaarNo2))
+									&& (angular.isDefined($scope.personalInfo.aadhaarNo1) && validateRegex($scope.personalInfo.aadhaarNo1))		
+									){
+								$scope.aadhaarNo3.isValid = false;
+							}else{
+								$scope.aadhaarNo3.isValid = true;
+							}
+						}
+					});*/
+				});

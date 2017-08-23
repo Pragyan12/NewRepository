@@ -1,0 +1,74 @@
+<div class="container-fluid header" ng-controller="HeaderController">
+	<div class="row bottom_header">
+		<div class="col-xs-12 col-sm-12 colbottom_header">
+			<div class="col-xs-3 col-sm-4 text-left agent_header">
+				<div class="agentname" ng-show="">
+					<p class="agentname_text">Welcome</p>
+					<p class="agentname_value">{{UserName}}</p>
+				</div>
+				<div class="homeicon_div">
+					<span id="home_icon"  ng-click="home()" class="btn btn-dark btn-lg toggle"><i class="fa fa-home"></i></span>
+				</div>
+			</div>
+			<div class="col-xs-6  col-sm-4  text-center logo_header">
+				<div class="comlogo">
+					<img src="images/fa_prem.png" alt="FA SOFTWARE"
+						" class="img-responsive">
+				</div>
+			</div>
+			<!--  
+			<div class="col-xs-3  col-sm-4  text-right logout_header">
+				<div class="logout">
+					<a href="login.html"><span class="glyphicon glyphicon-off"></span>&nbsp;<span
+						class="">LogOut</span></a>
+				</div>
+				<div class="menuheader" ng-click="toggleQuickLink()">
+					Quick links&nbsp;<span class="glyphicon glyphicon-th click_menu"></span>
+					<ul class="menulist" ng-hide="quickLink">
+						<li><a href="#search">Search</a></li>
+						<li><a href="">Service Request Tracker</a></li>
+						<li><a href="#referfriend">Refer a Friend</a></li>
+						<li><a href="">My Incentives</a></li>
+						<li><a href="">My Transaction</a></li>
+						<li><a href="">Change Password</a></li>
+					</ul>
+				</div>
+			</div>
+			-->
+			
+			<!--  START navigation menu -->
+	<div class="col-xs-3  col-sm-4 text-right main_menus">	
+	<div id="sidenav">
+	<span id="logout_icon"  ng-click="logout()" class="btn btn-dark btn-lg toggle"><i class="fa fa-power-off"></i></span>
+   <span id="menu-toggle" ng-show="true" ng-click="sidemenu='menuopen'" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></span>
+    <nav  class="sidebar-wrapper text-left" ng-class="sidemenu">
+        <ul class="sidebar-nav">
+            <span id="menu-close" ng-click="sidemenu='menuclose'" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></span>
+            <li class="sidebar-brand"><span>QUICK LINKS</span></li>
+            
+<!--             <li><a href="" ng-click="sublistfunc()">HOME</a> -->
+<!--             	<ul class="sub_ullist" ng-show="sublist_ul"> -->
+<!--             		<li><a href="">Organization master</a></li> -->
+<!--             		<li><a href="">City-State master</a></li> -->
+<!--             		<li><a href="">branch master</a></li> -->
+<!--             		<li><a href="">Organization-Branching mapping</a></li> -->
+<!--             	</ul> -->
+<!--             </li> -->
+            
+            <li> <a ui-sref="searchpage" ui-sref-active="searchpage_activetab" >Search</a></li>
+            <li><a href="" >Service Request Tracker</a></li>
+            <li><a href="" >Refer a Friend</a></li>
+            <li><a href="" >My Incentives</a></li>
+            <li><a href="" >My Transaction</a></li>
+            <li><a href="">Change Password</a></li>
+            <li><a ui-sref="documentupload1" ui-sref-active="searchpage_activetab">Document Upload1</a></li>
+            <li><a ui-sref="documentupload" ui-sref-active="searchpage_activetab">Document Upload</a></li>
+			 <li><a ui-sref="autopopulate" ui-sref-active="searchpage_activetab">Auto Populate</a></li>
+          </ul> 
+    </nav>
+</div>
+</div>
+			<!--  End navigation menu -->
+		</div>
+	</div>
+</div>

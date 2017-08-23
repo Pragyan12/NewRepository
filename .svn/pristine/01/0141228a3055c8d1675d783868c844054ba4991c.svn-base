@@ -1,0 +1,242 @@
+.docu_container{
+	width:100%;
+	height:auto;
+	color:#fff; 
+}
+.docu_container .docu_container_col12{
+	padding-left:0px;
+	padding-right:0px;
+}
+.docu_container .docum_header{
+	background-color: black;
+    font-size: 16px;
+    color: #fff;
+    text-align: center;
+    font-weight: 700;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.docu_container .docum_sub_header{
+	font-size: 16px;
+    color: #fff;
+    padding-top: 10px;
+    padding-bottom: 5px;
+    margin-left: 15px;
+    padding-left: 10px;
+    margin-right: 15px;
+    border-bottom: 2px solid #a5a5a5;
+}
+.docu_container .optional_header{
+	margin-left: 20px;
+    padding-top: 25px;
+    font-weight: 700;
+    font-size: 14px;
+    padding-bottom: 10px;
+}
+.docu_container .docu_container_form{
+	padding-top:15px;
+}
+.docu_container .docu_container_form .row{
+	margin-bottom:10px;
+	border-bottom:2px solid #ddd;
+}
+.docu_container .docu_container_form .row .form-group .form-control {
+    border-radius: 0px;
+    background-color: rgba(255,255,255,1.0);
+}
+.docu_container .docu_container_form .row .form-group label{
+	padding-left:10px;
+}
+.docu_container .docu_container_form .row .form-group .input-group-addon {
+    background-color: #2b1a3e;
+    color: #bfbfbf;
+    border: 0px;
+}
+.docu_container .docu_container_form .row .form-group:hover .input-group-addon {
+    color: #fff;   
+}
+/*-----------------------------STRAT OF CHECKBOX-------------------------------*/
+.docu_container .checkbox {
+    padding-left: 20px; 
+	}
+.docu_container .checkbox label {
+    display: inline-block;
+    position: relative;
+    padding-left: 5px;
+   
+	}
+.docu_container .checkbox label::before {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    width: 17px;
+    height: 17px;
+    left: 0;
+    margin-left: -20px;
+    border: 1px solid #cccccc;
+    border-radius: 2px;
+    background-color: #fff;
+    -webkit-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+    -o-transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+    transition: border 0.15s ease-in-out, color 0.15s ease-in-out;
+	}
+.docu_container .checkbox label::after {
+    display: inline-block;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    left: 0;
+    top: -2px;
+    margin-left: -20px;
+    padding-left: 3px;
+    padding-top: 1px;
+    font-size: 11px;
+    color: #555555;
+	}
+.docu_container .checkbox input[type="checkbox"] {
+    opacity: 0; 
+	}
+.docu_container .checkbox input[type="checkbox"]:focus + label::before {
+     outline: thin dotted;
+     outline: 5px auto -webkit-focus-ring-color;
+     outline-offset: -2px; 
+     }
+     .checkbox input[type="checkbox"]:checked + label::after {
+     font-family: 'FontAwesome';
+     content: "\f00c"; 
+	 }
+.docu_container .checkbox input[type="checkbox"]:disabled + label {
+     opacity: 0.65; 
+     }
+.docu_container .checkbox input[type="checkbox"]:disabled + label::before {
+     background-color: #eeeeee;
+     cursor: not-allowed; 
+	 }
+.docu_container .checkbox-success input[type="checkbox"]:checked + label::before {
+     background-color: #000;
+     border-color: #5cb85c; 
+     }
+.docu_container .checkbox-success input[type="checkbox"]:checked + label::after {
+  color: #fff; 
+  }
+  /*-----------------------------END OF CHECKBOX-------------------------------*/
+
+.docu_container .proof_col{
+	margin-top:20px;
+	padding-left:5px;
+	padding-rihght:5px;
+}
+.docu_container .proof_col div div{
+	padding-left:5px;
+	padding-right:5px;
+}
+.docu_container .proof_row{
+	margin-top:10px;
+	border-bottom: 1px solid #cac8c8
+}
+.docu_container .proof_row div{
+	padding-top: 5px;
+    padding-bottom: 5px;  
+}
+.docu_container .proof_row > div:nth-child(1){
+	display:table;
+}
+
+.docu_container .proof_text{
+	text-align: center;
+}
+.docu_container .proof_text p{
+	display: table-cell;
+    vertical-align: middle;
+        font-weight: 700;
+}
+.docu_container .img_col{
+	text-align: center;
+}
+.docu_container .img_box{
+ 	background-color: #ddd;
+    border: 1px solid #808080;
+    border-radius: 3px;
+    box-shadow: 0 0 3px 0 rgba(0,0,0,0.4);
+    padding:5px;
+  }
+  .docu_container .add_update{
+  	display:table;
+  	text-align:center;
+  }
+  .docu_container .add_update p{
+  	display: table-cell;
+    vertical-align: middle;
+    background-color: #ddd;
+    border: 1px solid #808080;
+    border-radius: 3px;
+    box-shadow: 0 0 3px 0 rgba(0,0,0,0.4);
+    color:#000;
+    font-weight:700;
+    font-size: 13px;
+  }
+  .docu_container .add_update p:hover{
+  	border: 1px solid #ff0090;
+  	 color:#ff0090;
+  	 cursor:pointer;
+  }
+  .docu_container .img_box .camera_section{
+    padding-top: 2px;
+    color: #0d6dbf;
+    font-size: 20px;
+  }
+  .docu_container .img_box .text_section{
+  	padding-top: 2px;
+    color: #000;
+    font-size: 12px;
+  }
+  .docu_container .img_box .browse_section{
+  	padding-top: 2px;
+    padding-bottom: 5px;
+  }
+  .docu_container .img_box .browse_section button{
+  	background-color: #3b3b3c;
+    border: 2px solid #0e0e0e;
+    box-shadow: 3px 2px 0px 0 rgba(0,0,0,0.3);
+    padding: 3px 6px;
+  }
+  .docu_container .img_box .browse_section button:hover{
+  	color:#8dbdfb;
+  }
+  .docu_container .delete_span{
+  	position:relative;
+  }
+/*   .docu_container .delete_span:after{ */
+/*   	content:"delete"; */
+/*   	position:absolute; */
+/*   	top:0px; */
+/*   	coor:#000; */
+/*   } */
+  .docu_container .dummy_height{
+  	height:60px;
+  	width:100%;
+  }
+  .docu_container .submit_col{
+  	padding-top:20px;
+  	padding-bottom:10px;
+  }
+   .docu_container .submit_col .submit_btn{
+  	background-color: #f72727;
+    border: 1px solid #000;
+    border-radius: 2px;
+    color: #fff;
+    box-shadow: 2px 2px 0px 0 rgba(0,0,0,0.3);
+  }
+  .docu_container .submit_col .submit_btn:hover{
+  	opacity:0.9;
+  }
+   /*-----------------------------MEDIA QUERIES-------------------------------*/
+   @media screen and (max-width:400px) and (min-width:200px){
+   .docu_container .img_box .text_section {
+    font-size: 10px;
+    line-height: 1.3;
+	}
+	.docu_container .docu_container_form .row > div{
+		width:100%;
+	}
+   }

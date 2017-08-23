@@ -1,0 +1,239 @@
+POTApp
+		.controller(
+				'AdditionalVehicleInfo',
+				function($scope, $state, InsurerService, VehicleService,
+						PersonalInfoService, StorageService,$log,$filter) {
+					var personalDetails = StorageService.get('personalInfo');
+					var vehicleDetails = StorageService.get('vehicleInfo');
+					
+					
+					var nomineeHrefLinkDetails = StorageService.get('nomineeHrefLink');
+					$scope.nomineeHrefLink=false;
+					if(angular.isDefined(nomineeHrefLinkDetails)){
+						$scope.nomineeHrefLink=true;
+					}
+					
+					$scope.vehicleHrefLink=false;
+					
+//					alert(JSON.stringify(vehicleDetails));
+					if (angular.isUndefined(personalDetails)) {
+						$scope.personalInfo = '';
+						$scope.isPersonalInfoAvailable = false;
+					} else {
+						$scope.personalInfo = personalDetails;
+					}
+					var additionalVehicleDetails = StorageService
+							.get('additionalVehicleInfo');
+					if (angular.isUndefined(additionalVehicleDetails)) {
+//						alert("isUndefined::"+additionalVehicleDetails)
+						$scope.additionalVehicleInfo = {
+							registrationNo : '',
+							engineNo : '',
+							chassisNo : '',
+							prevInsurer : '',
+							prevPolicyNo : '',
+							sameAsAboveAddressFlag : false,
+							address1 : '',
+							address2 : '',
+							address3 : '',
+							city : '',
+							area : '',
+							pincode : ''
+						};
+						if (angular.isDefined(vehicleDetails)) {
+							$scope.vehicleInfo = {
+									regNo1: angular.isUndefined(vehicleDetails.regNo1) ? '' : vehicleDetails.regNo1,
+									regNo2: angular.isUndefined(vehicleDetails.regNo2) ? '' : vehicleDetails.regNo2,
+									regNo3: angular.isUndefined(vehicleDetails.regNo3) ? '' : vehicleDetails.regNo3,
+									regNo4: angular.isUndefined(vehicleDetails.regNo4) ? '' : vehicleDetails.regNo4,
+									prevInsurer:angular.isUndefined(vehicleDetails.previousPolicyInsurer.insurerName) ? '' : vehicleDetails.previousPolicyInsurer.insurerName,
+									vehicleRegisteredTo:angular.isUndefined(vehicleDetails.vehicleRegisteredTo.name) ? '' : vehicleDetails.vehicleRegisteredTo.name,
+									policyType:angular.isUndefined(vehicleDetails.policyType.code) ? '' : vehicleDetails.policyType.code
+							};
+						}
+					} else {
+						
+						if (angular.isDefined(vehicleDetails)) {
+							$scope.vehicleInfo = {
+									regNo1: angular.isUndefined(vehicleDetails.regNo1) ? '' : vehicleDetails.regNo1,
+									regNo2: angular.isUndefined(vehicleDetails.regNo2) ? '' : vehicleDetails.regNo2,
+									regNo3: angular.isUndefined(vehicleDetails.regNo3) ? '' : vehicleDetails.regNo3,
+									regNo4: angular.isUndefined(vehicleDetails.regNo4) ? '' : vehicleDetails.regNo4,
+									prevInsurer:angular.isUndefined(vehicleDetails.previousPolicyInsurer.insurerName) ? '' : vehicleDetails.previousPolicyInsurer.insurerName,
+									vehicleRegisteredTo:angular.isUndefined(vehicleDetails.vehicleRegisteredTo.name) ? '' : vehicleDetails.vehicleRegisteredTo.name,
+									policyType:angular.isUndefined(vehicleDetails.policyType.code) ? '' : vehicleDetails.policyType.code
+							};
+						}
+						$scope.additionalVehicleInfo = additionalVehicleDetails;
+						
+						if ($scope.additionalVehicleInfo.sameAsAboveAddressFlag) {
+							sameAsAboveAddress($scope.additionalVehicleInfo.sameAsAboveAddressFlag)
+						}
+						
+					}
+					InsurerService.getInsurerList().then(function(response) {
+						$scope.insurerList = response.data.insurerList;
+					});
+					$scope.sameAsAboveAddress = function(){
+						return sameAsAboveAddress($scope.additionalVehicleInfo.sameAsAboveAddressFlag);
+					}
+					
+					function sameAsAboveAddress(sameAsAboveAddressFlag){
+						if (sameAsAboveAddressFlag) {
+							$scope.datareadonly = true;
+							$scope.additionalVehicleInfo.address1 = $scope.personalInfo.address1;
+							$scope.additionalVehicleInfo.address2 = $scope.personalInfo.address2;
+							$scope.additionalVehicleInfo.address3 = $scope.personalInfo.address3;
+							$scope.additionalVehicleInfo.city = $scope.personalInfo.city;
+							$scope.additionalVehicleInfo.area = $scope.personalInfo.area;
+							$scope.additionalVehicleInfo.pincode = $scope.personalInfo.pincode;
+							$scope.additionalVehicleInfo.isEnableAreaEdit = $scope.personalInfo.isEnableAreaEdit;
+							if(!$scope.additionalVehicleInfo.isEnableAreaEdit){
+								getlistOfCities();
+							}
+						} else {
+							$scope.datareadonly = false;
+							$scope.additionalVehicleInfo.address1 = '';
+							$scope.additionalVehicleInfo.address2 = '';
+							$scope.additionalVehicleInfo.address3 = '';
+							$scope.additionalVehicleInfo.city = '';
+							$scope.additionalVehicleInfo.area = '';
+							$scope.additionalVehicleInfo.pincode = '';
+							$scope.additionalVehicleInfo.isEnableAreaEdit = false;
+						}
+					}
+					
+					
+				/*	$scope.isNopolicy = function() {
+						
+						if (angular.equals('NO POLICY', $scope.vehicleInfo.policyType.code)) {
+							return false;
+						} else {
+							return true;
+						}
+					}*/
+					
+					
+					/*$scope.isNopolicy = */
+					
+					$scope.goNomineePage = function(e, form) {
+						e.preventDefault();
+						form.$setSubmitted();
+						if (form.$valid && $scope.additionalVehicleInfo.engineNo.toString().length >=6 && $scope.additionalVehicleInfo.chassisNo.toString().length >=6) {
+							StorageService.set('additionalVehicleInfo',
+									$scope.additionalVehicleInfo);
+							
+							$scope.vehicleHrefLink=true;
+							StorageService.set("vehicleHrefLink",$scope.vehicleHrefLink);
+							$scope.nomineeHrefLink=true;
+							StorageService.set("nomineeHrefLink",$scope.nomineeHrefLink);
+							$state.go('nomineeFinancierInfo');
+
+						}
+					}
+					$scope.goPersonalInfo = function() {
+						StorageService.set('additionalVehicleInfo',
+								$scope.additionalVehicleInfo);
+						$state.go('personalInfo');
+					}
+					
+					$scope.pincodeList = '';
+					$scope.arealist = [];
+					$scope.cityMasterdtoList=getlistOfCities();
+					
+					$scope.getcity=function(city){
+						
+						if($scope.additionalVehicleInfo.area!='' ||$scope.additionalVehicleInfo.pincode!='' ){
+							$scope.additionalVehicleInfo.area='';
+							$scope.additionalVehicleInfo.pincode='';
+						}
+						return getApplicableCityList(city);	
+					}
+				
+					
+					$scope.getPincode=function(areaName) {
+						if($scope.additionalVehicleInfo.pincode!='' ){
+							$scope.additionalVehicleInfo.pincode='';
+						}
+						return getApplicablePinCodeList(areaName);
+					}
+				function getApplicablePinCodeList(areaName){
+					var newArea= $filter("filter")($scope.arealist, {areaName:areaName});
+					if(newArea.length===0){
+						return true;
+					}else{
+						var result= false;
+						angular.forEach(newArea, function(value, key){
+				            if(value.areaName === areaName){
+				            	result = true;
+				            	
+				            } 
+						});
+						if(result) {
+							getlistOfPincode(newArea[0].areaCode);
+							return false;
+						}else{
+							return true;
+						}
+					}
+					
+				}
+				function getApplicableCityList(city){
+					var newTemp= $filter("filter")($scope.cityMasterdtoList, {cityName:city});
+					if(newTemp.length===0){
+						return true;
+					}else{
+						var result= false;
+						angular.forEach(newTemp, function(value, key){
+				            if(value.cityName === city){
+				            	result = true;
+				            } 
+						});
+						if(result) {
+							getlistOfAreas(newTemp[0].cityCode);
+							return false;
+						}else{
+							return true;
+						}
+					}
+				}
+				
+				function getlistOfCities(){
+					PersonalInfoService.getlistOfCities()
+					.then(function(d) {
+						$scope.cityMasterdtoList = d.data.cityMasterdtoList;
+						if(!$scope.personalInfo.isEnableAreaEdit){
+							var newTemp= $filter("filter")($scope.cityMasterdtoList, {cityName:$scope.additionalVehicleInfo.city});
+							if(newTemp.length > 0){
+								getlistOfAreas(newTemp[0].cityCode);
+								getApplicablePinCodeList($scope.personalInfo.area);
+							}
+						}
+					}, function(error) {
+						$log.error('failure loading movie', error);
+					});
+									
+				}
+				function getlistOfAreas(cityCode){
+					PersonalInfoService.getAreaByCity(cityCode)
+					.then(function(d) {
+						$scope.arealist= d.data.areaMasterdtoList;
+					}, function(error) {
+						$log.error('failure loading movie', error);
+					});
+				}
+				function getlistOfPincode(areaCode){
+					PersonalInfoService.getallpincode(areaCode)
+					.then(function(d) {
+//						$scope.pincodeList  = d.data.stringList;
+						if(''!=areaCode){
+							$scope.additionalVehicleInfo.pincode=d.data.stringList[0];	
+						}
+					}, function(error) {
+						$log.error('failure loading movie', error);
+					});
+				}
+					
+
+				
+				});

@@ -1,0 +1,100 @@
+<div class="container-fluid login_container">
+<form role="form" class="login_form" id="login_form">
+	<div class="row">
+		<div class="login_logo">
+			<img src="images/fa_prem.png" class="img-responsive" alt="" >
+		</div>
+		
+			<div class="col-xs-12 col-sm-12 col-md-12 userform">
+				<div class="form-group login_form">
+					<label>UserName</label>
+					<div class="input-group">
+						<input type="text" class="form-control" id="username" ng-model="userName" value="" >
+						<span class=" glyphicon glyphicon-remove clear"></span>
+						<span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+					</div>
+				</div>
+				<div class="form-group">
+					<label>Password</label>
+					<div class="input-group">
+						<input  type="password" class="form-control" id="password" ng-model="password" value="" >
+						<span class=" glyphicon glyphicon-remove clear"></span>
+						<span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+					</div>
+				</div>
+				
+				<div class="login_button text-right">
+					<button class="btn" id="" ng-click="loginSubmit(userName,password)" >LOGIN</button>
+				</div>
+				<div>
+				<p class="forgot_password"><a ng-click="password_popup=true">Forgot password ?</a></p>
+				<p class="agree_terms">By accessing FA Premium Insurance Broking Pvt. Ltd.,I hereby acknowledge 
+					and accept <a ng-click="terms_popup=true">the Terms & Conditions</a> applicable.</p>
+				</div>
+			</div>
+		
+	</div>
+	<div class="row" >
+		<div class="forgot_password_popup"  ng-show="password_popup">	
+			<div class="col-xs-12 col-sm-12 col-md-12 forgot_password_container">
+				<div class="forgot_password_header">
+					<h3>Forgot Password</h3>
+					<span class="forgot_password_close"  ng-click="password_popup=false">&#9932;</span>
+				</div>
+				<div class="forgot_password_forms">
+					<div>
+						<label>User Name :</label>
+						<input  type="text" class="form-control" id="password" value="" >
+					</div>
+					<div>
+						<label>Secret Question? :</label>
+						<p>What is your first mobile</p>
+					</div>
+					<div>
+						<label>Secret Answer :</label>
+						<input  type="text" class="form-control" id="password" value="" >
+					</div>
+					<div>
+						<label>New Password:</label>
+						<input  type="password" class="form-control" id="password" value="" >
+					</div>
+					<div>
+						<label>Confirm Password:</label>
+						<input  type="password" class="form-control" id="password" value="" >
+					</div>
+					<div class="text-center forgot_button">
+						<button type="" class="btn btn-success">SUBMIT</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="terms_popup" ng-show="terms_popup">
+			<div class="col-xs-12 col-sm-12 col-md-12 terms_container">
+				<div class="terms_header">
+					<h4>TERMS AND CONDITIONS</h4>
+					<span class="terms_close" ng-click="terms_popup=false">&#9932;</span>
+				</div>
+				<div class="terms_main">
+					<h6>Disclaimer</h6>
+					<p>The security of your personal and financial details is paramount to us. That is why this website uses 128-bit encryption that utilises SSL (Secure Sockets Layer). This offers the highest level of security available on the Internet</p>
+					<p>The SSL works by automatically scrambling the information you send over the internet thereby making it seem meaningless.Once the information reaches the destination,we have the key to de-scramble the  words</p>
+					<p>When you fill in any personal information or payment details, you will be in a secure area of the site. You can check this by looking for a padlock in the bottom corner of your web browser and by making sure the web address starts with "https://". This ensures that when you send your information over the web, it will be encrypted to prevent anyone from reading it.</p>
+					<p>In some instances, the web page may not display "https://" or a padlock - this is often the case with websites that use framesets. You can still confirm the security settings on these pages by right clicking on the page and selecting Properties. If the page is secure, the address line will begin with "https://".</p>
+					<p>All the information that we save for you is protected by firewalls and a wide range of IT security measures</p>
+					
+					<h6>Privacy Policy</h6>
+					<p>By submitting any information about you and where applicable about others within this web site, you and they consent to its use, as set out in this privacy policy.</p>
+					<p>The Internet is not a secure medium. However, we are committed to ensuring that your privacy is protected. The privacy policy explains the security measures we have put in place to protect your information and how we use the information we collect about you. We recommend you read it before you provide any information to us.</p>
+					
+					<h6>Cancellation and Refund</h6>
+					<p>To cancel this policy, just confirm us your policy details which you hold with other company so that we can able to process accordingly. And to raise this request kindly attach your<span style="font-weight: bold;"> alternate </span> policy details to the below email address.</p>
+					<p style="font-weight: bold;color:#0f76c7;">fazil@facapital.co.in </p>
+					<p>Please allow up to 10 business days to have refund for your recent premium</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+  </div>

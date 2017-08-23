@@ -1,0 +1,139 @@
+POTApp.controller('OnlinePaymentResponse', function($scope, $state,InsurerService, VehicleService, StorageService, $log,
+		PremiumCalculationService,PersonalInfoService,$q,$http,CoverageService) {
+	$scope.quoteNo='';
+	PersonalInfoService.getPaymentResponseOnQuoteNo().then(function(paymentResponse) {
+		var quoteNo = paymentResponse.data.quoteNo;
+		var msg = paymentResponse.data.message;
+
+		StorageService.set("quoteNo",quoteNo);
+    	var deferred = $q.defer();
+    	$http.post("http://localhost:8080/digital_mis/fetchQuoteByQuoteNo.json?quoteNo="+quoteNo).then(function (quoteDetails) {
+    	    var aadharNumber1  = quoteDetails.data.CustomerDetails.aadharNumber.split('-');
+    	    var registrationNo = quoteDetails.data.VehicleDetails.registrationNo.split('-');
+    		StorageService.set('productName', quoteDetails.data.QuotationData.lineOfBusiness);
+    		StorageService.set('productcode', quoteDetails.data.QuotationData.lineOfBusiness);
+    		StorageService.set('subProductCode', quoteDetails.data.QuotationData.productCode);
+    		StorageService.set('subProductName', quoteDetails.data.QuotationData.subLine);
+    		var personalInfo = {
+    			firstName  : isDefined(quoteDetails.data.CustomerDetails.firstName)?'':quoteDetails.data.CustomerDetails.firstName,
+    			lastName   : isDefined(quoteDetails.data.CustomerDetails.lastName)?'':quoteDetails.data.CustomerDetails.lastName,
+    			mobileNo   : isDefined(quoteDetails.data.CustomerDetails.mobileNo)?'':quoteDetails.data.CustomerDetails.mobileNo,
+    			email      : isDefined(quoteDetails.data.CustomerDetails.email)?'':quoteDetails.data.CustomerDetails.email,
+    			aadhaarNo1 : isDefined(aadharNumber1[0])?'':aadharNumber1[0],
+    			aadhaarNo2 : isDefined(aadharNumber1[1])?'':aadharNumber1[1],
+    			aadhaarNo3 :isDefined(aadharNumber1[2])?'':aadharNumber1[2]
+    		}
+    		StorageService.set("personalInfo",personalInfo);
+                var vehicleInfo = {
+        				regNo1              : isDefined(registrationNo[0])?'':registrationNo[0],
+                 		regNo2              : isDefined(registrationNo[1])?'':registrationNo[1],
+                 		regNo3              : isDefined(registrationNo[2])?'':registrationNo[2],
+                 		regNo4              : isDefined(registrationNo[3])?'':registrationNo[3],	
+            			vehicleRegisteredTo : {
+            				"code":quoteDetails.data.CustomerDetails.customerType,
+            			},
+            			policyType          : {
+            				"code" :quoteDetails.data.QuotationData.policyType 
+            			}, 
+            			manufacturer        :  {
+            				"code":quoteDetails.data.VehicleDetails.makeCode,
+            			},
+            			model               :{
+            				"code":quoteDetails.data.VehicleDetails.modelCode,
+            			},
+            			subModel               :{
+            				"subModelCode":quoteDetails.data.VehicleDetails.subModelCode,
+            			},
+            			modelSubModel       : quoteDetails.data.VehicleDetails.makeCode+","+quoteDetails.data.VehicleDetails.subModelCode,
+            			registrationDate    : quoteDetails.data.VehicleDetails.registrationDate,
+            			rtoCode             : {
+            				"rtoCode":quoteDetails.data.VehicleDetails.rtoCode,
+            			},
+            			fuelType            : quoteDetails.data.VehicleDetails.fuelType,
+            			ZoneArea            : quoteDetails.data.VehicleDetails.zone,
+            			engineCC            : quoteDetails.data.VehicleDetails.engineCC,
+            			yearOfMfg           : quoteDetails.data.VehicleDetails.yearOfMfg,
+            			seatingCapacity		: quoteDetails.data.VehicleDetails.seatingCapacity,
+            			previousPolicyInsurer : {
+            				"insurerCode":isDefined(quoteDetails.data.QuotationData.PreviousPolicyDetails) ?'':
+            						isDefined(quoteDetails.data.QuotationData.PreviousPolicyDetails.prevPolicyInsurerCode)?'':
+            								quoteDetails.data.QuotationData.PreviousPolicyDetails.prevPolicyInsurerCode,
+            			},
+            			prevPolicyExpDate   :isDefined(quoteDetails.data.QuotationData.PreviousPolicyDetails)?'':
+        						isDefined(quoteDetails.data.QuotationData.PreviousPolicyDetails.prevPolicyExp)?'':
+        								quoteDetails.data.QuotationData.PreviousPolicyDetails.prevPolicyExp,
+            			ncb :{
+            				"name":isDefined(quoteDetails.data.QuotationData.PreviousPolicyDetails) ?'':
+            						isDefined(quoteDetails.data.QuotationData.PreviousPolicyDetails.prevPolicyNcb)?'':
+            								quoteDetails.data.QuotationData.PreviousPolicyDetails.prevPolicyNcb
+            			},
+            			currentNCB          :{
+            				"ncbPercentage":isDefined(quoteDetails.data.VehicleDetails.currentNCB)?'':quoteDetails.data.VehicleDetails.currentNCB,
+            			},
+            			isCarOwnerChanged : isDefined(quoteDetails.data.VehicleDetails.isCarOwnerChanged)?'':quoteDetails.data.VehicleDetails.isCarOwnerChanged,
+            			isInBuilt           :isDefined(quoteDetails.data.VehicleDetails.isInBuilt)?'':quoteDetails.data.VehicleDetails.isInBuilt,
+            			isAnyClaim		: 	isDefined(quoteDetails.data.QuotationData.PreviousPolicyDetails.isPrevPolicyClaim)?'':quoteDetails.data.QuotationData.PreviousPolicyDetails.isPrevPolicyClaim,
+            		}
+                StorageService.set("vehicleInfo",vehicleInfo);
+                CoverageService.getCoverageList().then(function(coverList) {
+                	angular.forEach(coverList,function(value,index) {
+	        			 for (var i = 0; i < quoteDetails.data.CoverDetails.length; i++) {
+	        				 var covercode='',coverName='',coverType='',sumInsured='';
+	        				 covercode  = quoteDetails.data.CoverDetails[i].code;
+	        				 if (value.coverCode === covercode) {
+	        					 coverName  = value.coverName;
+	        				 }
+	        				 coverType  = quoteDetails.data.CoverDetails[i].coverType;
+	        				 sumInsured = quoteDetails.data.CoverDetails[i].sumInsured;
+	        				 CoverageService.set(covercode,coverName,coverType,sumInsured);
+	        			 }
+    				});
+    			},function(errResponse) {
+    				console.error('Error While Coverages');
+    			});
+    			 PremiumCalculationService.multipleInsurerPremiumCalc('0').then(function(mulPremiumRes) {
+    				 var insurerCode=quoteDetails.data.QuotationData.insurerCode;
+    				console.log(JSON.stringify(quoteDetails.data.QuotationData));
+    				 InsurerService.getInsuredFromProduct(StorageService.get('productcode')).then(function(insurerResponse) {
+    				 angular.forEach(insurerResponse.data.insurerMappedList,function(insurerValue, insurerKey) {
+    					 alert(JSON.stringify(insurerValue));
+	    				 if (insurerCode === insurerValue.insurerCode) {
+	    						PremiumCalculationService.singleInsurerPremiumCalc(insurerCode,'0').then(function(singleInsRes) {
+	    							if(singleInsRes.data.message=== "SUCCESS" && angular.isDefined(singleInsRes.data.premium[insurerCode]) ){
+	    								insurerValue["premiumDetails"] = singleInsRes.data.premium[insurerCode];
+	    								StorageService.set('premiumInfo',insurerValue);
+	    								console.log("Vehicle Info => "+JSON.stringify(StorageService.getAll()));
+	    								if(msg === "SUCCESS"){
+	    									$state.go('personalInfo');
+	    								}else{
+		    							$state.go('premiumSummary');
+	    								}
+	    							}else{
+	    								alert("Premium Calculation 1 Failed");
+	    							}
+	    						}, function(errorResponse) {
+	    							alert("Premium Calculation 2  Failed"+JSON.stringify(StorageService.getAll()));
+	    						});
+	    					}
+	    				}, function(errorResponse) {
+ 							alert("List Of insurer failed"+JSON.stringify(StorageService.getAll()));
+ 						});
+    				 });
+    			 }, function(errorResponse) {
+						alert("Premium Calculation  3 Failed"+JSON.stringify(StorageService.getAll()));
+					});
+            },
+            function(errResponse){
+                console.error('Error while fetching Users');
+                deferred.reject(errResponse);
+            }
+	    );
+	    return deferred.promise;
+	}, function(error) {
+		console.error('failure loading movie', error);
+	});
+	
+	function isDefined(value){
+    	return angular.isUndefined(value) || value === null; 
+    }
+});

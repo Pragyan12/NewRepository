@@ -1,0 +1,676 @@
+/**
+ * Premium Computation Logic
+ */
+POTApp.factory('PremiumCalculationService', function(CoverageService, StorageService, $http, $q, $filter, RatingConstants) {
+	var premiumDetailsForAll = {};
+	var premiumDetails = {};
+	return {
+		multipleInsurerPremiumCalc : multipleInsurerPremiumCalc,
+		calculatePremium : calculatePremium,
+		isValidInsurer : isValidInsurer,
+		getUpdateIdv : getUpdateIdv,
+		isCoverSelected : isCoverSelected,
+		vehicleAgeCaluculation : vehicleAgeCaluculation,
+		idvalledit : idvalledit,
+		singleInsurerPremiumCalc : singleInsurerPremiumCalc
+	}
+
+
+	/**
+	 * This method is used to calculate multiple insurer premium calculation
+	 */
+	function multipleInsurerPremiumCalc(idv) {
+		var details = StorageService.getAll();
+		console.log(("multipleInsurerPremiumCalcDetails => " + details));
+		var data = {
+			"CustomerDetails" : {
+				"firstName" : details.personalInfo.firstName,
+				"lastName" : details.personalInfo.lastName,
+				"mobileNo" : details.personalInfo.mobileNo,
+				"email" : details.personalInfo.email,
+				"customerType" : details.vehicleInfo.vehicleRegisteredTo.code,
+				"aadharNumber" : details.personalInfo.aadhaarNo1 + "-" + details.personalInfo.aadhaarNo2 + "-" + details.personalInfo.aadhaarNo3,
+			},
+			"QuotationData" : {
+				"quoteNo" : "",
+				"lineOfBusiness" : details.productcode,
+				"subLine" : details.subProductName,
+				"productCode" : details.subProductCode,
+				"productName" : details.productName,
+				"policyType" : details.vehicleInfo.policyType.code,
+				"businessType" : "Rollover",
+				"insceptionDate" : "",
+				"expiryDate" : "",
+				"userId" : "FAS",
+				"agentCode" : "10000001",
+				"oaCode" : "10000001",
+				"isVipPolicy" : "N",
+				"agentName" : "Kannan",
+				"channelType" : "POT",
+				"branchName" : "Chennai",
+				"branchCode" : "FACHN01",
+				"quoteStatus" : "QUOTE",
+				"PreviousPolicyDetails" : {
+					"prevPolicyNo" : "",
+					"prevPolicyExp" : details.vehicleInfo.prevPolicyExpDate,
+					"prevPolicyNcb" : details.vehicleInfo.ncb.name,
+					"prevPolicyInsurerCode" : details.vehicleInfo.previousPolicyInsurer.insurerCode,
+					"prevPolicyInsurerName" : details.vehicleInfo.previousPolicyInsurer.insurerName,
+					"isPrevPolicyClaim" : details.vehicleInfo.isAnyClaim
+				}
+			},
+			"VehicleDetails" : {
+				"registrationNo" : details.vehicleInfo.regNo1 + "-" + details.vehicleInfo.regNo2 + "-" + details.vehicleInfo.regNo3 + "-" + details.vehicleInfo.regNo4,
+				"yearOfMfg" : details.vehicleInfo.yearOfMfg,
+				"registrationDate" : details.vehicleInfo.registrationDate,
+				"makeCode" : details.vehicleInfo.manufacturer.code,
+				"modelCode" : details.vehicleInfo.model.code,
+				"makeName" : details.vehicleInfo.manufacturer.name,
+				"modelName" : details.vehicleInfo.model.name,
+				"subModelName" : details.vehicleInfo.subModel.subModelName,
+				"subModelCode" : details.vehicleInfo.subModel.subModelCode,
+				"engineCC" : details.vehicleInfo.engineCC,
+				"fuelType" : details.vehicleInfo.fuelType,
+				"rtoCode" : details.vehicleInfo.rtoCode.rtoCode,
+				"rtoName" : details.vehicleInfo.rtoCode.rtoLocation,
+				"actualIdv" : idv,
+				"vehicleAge" : vehicleAgeCaluculation(),
+				"seatingCapacity" : details.vehicleInfo.seatingCapacity,
+				"cubicCapacity" : details.vehicleInfo.engineCC,
+				"zone" : details.vehicleInfo.ZoneArea,
+				"currentNCB" : details.vehicleInfo.ncb.name,
+				"isInBuilt" : details.vehicleInfo.inbuilt,
+				"isCarOwnerChanged" : details.vehicleInfo.isCarOwnerChanged
+			}
+		};
+		console.log(("multipleInsurerPremiumCalcData => " + data));
+
+		var deferred = $q.defer();
+		$http({
+			url : "http://192.168.0.34:8080/digital_mis/multipleInsurerCalc.json",
+			method : "POST",
+			data : data
+		}).then(function(response) {
+			premiumDetailsForAll = response.data;
+			console.log("Multiple Insurer Premium Calc Response => "+response.data);
+			deferred.resolve(response);
+		}, function(error) {
+			deferred.reject(error);
+		});
+		return deferred.promise;
+	}
+
+
+	function singleInsurerPremiumCalc(insurerCode,idv) {
+		var details = StorageService.getAll();
+		console.log(("singleInsurerPremiumCalc => " + details));
+		var selectedCover = [];
+		angular.forEach(CoverageService.getSelectedCovers(), function(value, key) {
+			selectedCover.push(value);
+		});
+		var data = {
+				"CustomerDetails" : {
+					"firstName" : details.personalInfo.firstName,
+					"lastName" : details.personalInfo.lastName,
+					"mobileNo" : details.personalInfo.mobileNo,
+					"email" : details.personalInfo.email,
+					"customerType" : details.vehicleInfo.vehicleRegisteredTo.code,
+					"aadharNumber" : details.personalInfo.aadhaarNo1 + "-" + details.personalInfo.aadhaarNo2 + "-" + details.personalInfo.aadhaarNo3,
+				},
+				"QuotationData" : {
+					"quoteNo" : "",
+					"lineOfBusiness" : details.productcode,
+					"subLine" : details.subProductName,
+					"productCode" : details.subProductCode,
+					"productName" : details.productName,
+					"policyType" : details.vehicleInfo.policyType.code,
+					"businessType" : "Rollover",
+					"insceptionDate" : "",
+					"expiryDate" : "",
+					"userId" : "FAS",
+					"agentCode" : "10000001",
+					"oaCode" : "10000001",
+					"isVipPolicy" : "N",
+					"agentName" : "Kannan",
+					"channelType" : "POT",
+					"branchName" : "Chennai",
+					"branchCode" : "FACHN01",
+					"quoteStatus" : "QUOTE",
+					"insurerCode": insurerCode,
+					"PreviousPolicyDetails" : {
+						"prevPolicyNo" : "",
+						"prevPolicyExp" : details.vehicleInfo.prevPolicyExpDate,
+						"prevPolicyNcb" : details.vehicleInfo.ncb.name,
+						"prevPolicyInsurerCode" : details.vehicleInfo.previousPolicyInsurer.insurerCode,
+						"prevPolicyInsurerName" : details.vehicleInfo.previousPolicyInsurer.insurerName,
+						"isPrevPolicyClaim" : details.vehicleInfo.isAnyClaim
+					}
+				},
+				"VehicleDetails" : {
+					"registrationNo" : details.vehicleInfo.regNo1 + "-" + details.vehicleInfo.regNo2 + "-" + details.vehicleInfo.regNo3 + "-" + details.vehicleInfo.regNo4,
+					"yearOfMfg" : details.vehicleInfo.yearOfMfg,
+					"registrationDate" : details.vehicleInfo.registrationDate,
+					"makeCode" : details.vehicleInfo.manufacturer.code,
+					"modelCode" : details.vehicleInfo.model.code,
+					"makeName" : details.vehicleInfo.manufacturer.name,
+					"modelName" : details.vehicleInfo.model.name,
+					"subModelName" : details.vehicleInfo.subModel.subModelName,
+					"subModelCode" : details.vehicleInfo.subModel.subModelCode,
+					"engineCC" : details.vehicleInfo.engineCC,
+					"fuelType" : details.vehicleInfo.fuelType,
+					"rtoCode" : details.vehicleInfo.rtoCode.rtoCode,
+					"rtoName" : details.vehicleInfo.rtoCode.rtoLocation,
+					"actualIdv" : idv,
+					"vehicleAge" : vehicleAgeCaluculation(),
+					"seatingCapacity" : details.vehicleInfo.seatingCapacity,
+					"cubicCapacity" : details.vehicleInfo.engineCC,
+					"zone" : details.vehicleInfo.ZoneArea,
+					"currentNCB" : details.vehicleInfo.ncb.name,
+					"isInBuilt" : details.vehicleInfo.inbuilt,
+					"isCarOwnerChanged" : details.vehicleInfo.isCarOwnerChanged
+				},
+				"CoverDetails" : selectedCover
+			};
+		console.log(("singleInsurerPremiumCalc => " + data));
+		var deferred = $q.defer();
+		$http({
+			url : "http://192.168.0.34:8080/digital_mis/singleInsurerCalc.json?insurerCode=" + insurerCode,
+			method : "POST",
+			data : data
+		}).then(function(response) {
+			//premiumDetails = response.data;
+			console.log(("singleInsurerPremiumCalc => " + response.data));
+			deferred.resolve(response);
+		}, function(error) {
+			deferred.reject(error);
+		});
+		return deferred.promise;
+	}
+
+	function isValidInsurer(insurerCode) {
+		var premiumDetailsForTheInsurer = premiumDetailsForAll.premium[insurerCode];
+		if (angular.isUndefined(premiumDetailsForTheInsurer)) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	function idvalledit() {
+		var resultofidv = 0;
+		var allidvaddition = 0;
+		var premiumDetailsForTheInsurer = premiumDetailsForAll.premium;
+		angular.forEach(premiumDetailsForTheInsurer, function(value, key) {
+			allidvaddition = allidvaddition + value.actualIdv;
+			resultofidv = (allidvaddition / 11);
+		});
+
+		return resultofidv.toFixed(2);
+
+	}
+	function calculatePremium(insurerCode) {
+		console.log("Insurer Code => " + insurerCode);
+		var premiumDetailsForTheInsurer = premiumDetailsForAll.premium[insurerCode];
+		var premiumDetails = {};
+
+		var basicOdPremium = getBasicCoverPremium(insurerCode, RatingConstants.OD_COVER);
+		console.log("Basic Od Premium => " + basicOdPremium);
+
+		var basicTpPremium = getBasicCoverPremium(insurerCode, RatingConstants.TPL_COVER);
+		console.log("basicTpPremium => " + basicTpPremium);
+
+		var cpaPremium = getBasicCoverPremium(insurerCode, RatingConstants.CPA_COVER);
+		console.log("cpaPremium => " + cpaPremium);
+
+		var upaPremium = getSelectedCoverPremium(insurerCode, RatingConstants.UPA_COVER);
+		console.log("upaPremium => " + upaPremium);
+
+		var lldPremium = getSelectedCoverPremium(insurerCode, RatingConstants.LLD_COVER);
+		console.log("lldPremium => " + lldPremium);
+
+		var biFuelPremium = getBiFuelPremium(insurerCode, basicOdPremium);
+		console.log("biFuelPremium => " + biFuelPremium);
+
+		var bifuelTpPremium = getBiFuelTPPremium(insurerCode);
+		console.log("bifuelTpPremium => " + bifuelTpPremium);
+
+		var tariffDiscount = getTariffDiscount(insurerCode);
+		console.log("tariffDiscount => " + tariffDiscount);
+
+		var tariffDiscountAmount = getDiscountPremium(basicOdPremium, tariffDiscount);
+		console.log("tariffDiscountAmount => " + tariffDiscountAmount);
+
+		var netOdPremium = checkPremium(basicOdPremium) - tariffDiscountAmount + checkPremium(biFuelPremium);
+		console.log("netOdPremium => " + netOdPremium);
+
+		// Discount covers
+		var autoMobileAssociationMembers = getAutoMobileAssociationMembers(netOdPremium, insurerCode);
+		console.log("autoMobileAssociationMembers => "
+			+ autoMobileAssociationMembers);
+
+		var voluntaryDeductible = getVoluntaryDeductible(netOdPremium, insurerCode);
+		console.log("voluntaryDeductible => " + JSON.stringify(voluntaryDeductible));
+
+		var totalOdPremium = netOdPremium - checkPremium(autoMobileAssociationMembers) - checkPremium(voluntaryDeductible);
+		console.log("totalOdPremium => " + totalOdPremium);
+
+		var ncbDiscountAmount = getNCBPremium(totalOdPremium);
+		console.log("ncbDiscountAmount => " + ncbDiscountAmount);
+
+		totalOdPremium = totalOdPremium - checkPremium(ncbDiscountAmount);
+		console.log("totalOdPremium => " + totalOdPremium);
+		
+		var antiTheftDiscountPremium = getAntiTheftDiscountPremium(totalOdPremium, insurerCode);
+		console.log("antiTheftDiscountPremium =>" + antiTheftDiscountPremium);
+
+		totalOdPremium = totalOdPremium - checkPremium(antiTheftDiscountPremium);
+		console.log("totalOdPremium => " + totalOdPremium);
+
+		var paidtoDriver = getSelectedCoverPremium(insurerCode, RatingConstants.PAD);
+		console.log("paidtoDriver => " + paidtoDriver);
+
+		var totalTpPremium = checkPremium(basicTpPremium) + checkPremium(bifuelTpPremium) + checkPremium(lldPremium) + checkPremium(cpaPremium) + checkPremium(upaPremium);
+		console.log("totalTpPremium => " + totalTpPremium);
+
+		var totalAddonCoverPremium = getTotalAddonPremium(insurerCode);
+		console.log("totalAddonCoverPremium => " + totalAddonCoverPremium);
+
+		var totalPremiumWithoutAddons = totalOdPremium + totalTpPremium;
+		console.log("totalPremiumWithoutAddons => " + totalPremiumWithoutAddons);
+
+		var totalPremiumWithAddons = totalPremiumWithoutAddons + totalAddonCoverPremium;
+		console.log("totalPremiumWithAddons => " + totalPremiumWithAddons);
+
+		var listOfServiceTaxWithOutAddons = calculateServiceTax(insurerCode, totalPremiumWithoutAddons);
+		console.log("totalPremiumWithoutAddons =>" + JSON.stringify(listOfServiceTaxWithOutAddons));
+
+		var listOfAddonCoverServiceTax = calculateServiceTax(insurerCode, totalAddonCoverPremium);
+		console.log("listOfServiceTaxWithAddons =>" + JSON.stringify(listOfAddonCoverServiceTax));
+
+		var sumOfServiceTaxWithOutAddons = sumOfServiceTax(listOfServiceTaxWithOutAddons);
+		console.log("sumOfServiceTaxWithOutAddons => " + sumOfServiceTaxWithOutAddons);
+
+		var sumOfAddonCoverServiceTax = sumOfServiceTax(listOfAddonCoverServiceTax);
+		console.log("sumOfServiceTaxWithAddons => " + sumOfAddonCoverServiceTax);
+
+		var listOfServiceTax = calculateServiceTax(insurerCode, totalPremiumWithAddons);
+		console.log("listOfServiceTaxWithAddons => " + JSON.stringify(listOfServiceTax));
+
+		var totalServiceTax = sumOfServiceTax(listOfServiceTax);
+		console.log("totalServiceTax => " + totalServiceTax);
+
+		var grossPremium = totalPremiumWithAddons + totalServiceTax;
+		console.log("grossPremium => " + grossPremium);
+
+		var grossPremiumWithoutAddons = totalPremiumWithoutAddons + sumOfServiceTaxWithOutAddons;
+		console.log("grossPremiumWithoutAddons => " + grossPremiumWithoutAddons);
+
+		var grossPremiumWithAddons = grossPremium;
+		console.log("grossPremiumWithAddons => " + grossPremiumWithAddons);
+
+
+		var coverDetails = [];
+
+		var selectedCovers = CoverageService.getSelectedCovers();
+		if (angular.isDefined(selectedCovers) && !angular.equals({}, selectedCovers)) {
+			console.log("selectedCovers" + JSON.stringify(selectedCovers));
+			angular.forEach(selectedCovers, function(value, key) {
+				var coverPremium = -99999;
+
+				if (key === RatingConstants.AT) {
+					coverPremium = antiTheftDiscountPremium;
+				} else if (key === RatingConstants.VD) {
+					coverPremium = voluntaryDeductible;
+				} else if (key === RatingConstants.AMSM) {
+					coverPremium = autoMobileAssociationMembers;
+				} else if (key === RatingConstants.BFK) {
+					coverPremium = biFuelPremium;
+				} else if (key === RatingConstants.PAD) {
+					coverPremium = paidtoDriver;
+				} else {
+					coverPremium = getBasicCoverPremium(insurerCode, key);
+				}
+				var array = {
+					"coverCode" : key,
+					"coverName" : selectedCovers[key].name,
+					"coverPremium" : coverPremium,
+					"coverType" : selectedCovers[key].coverType
+				};
+				coverDetails.push(array);
+			});
+		}
+		premiumDetails = {
+			"insurerCode" : insurerCode,
+			"actualIdv" : premiumDetailsForTheInsurer.actualIdv,
+			"vehicleAge" : premiumDetailsForTheInsurer.vehicleAge,
+			"basicOdPremium" : basicOdPremium,
+			"basicTpPremium" : basicTpPremium,
+			"cpaPremium" : cpaPremium,
+			"tariffDiscount" : tariffDiscount,
+			"tariffDiscountAmount" : tariffDiscountAmount,
+			"ncbDiscountAmount" : ncbDiscountAmount,
+			"antiTheftDiscountAmount" : antiTheftDiscountPremium,
+			"totalOdPremium" : totalOdPremium,
+			"totalTpPremium" : totalTpPremium,
+			"selectedAddonCover" : coverDetails,
+			"totalAddonCoverPremium" : totalAddonCoverPremium,
+			"totalPremiumWithoutAddons" : totalPremiumWithoutAddons,
+			"totalPremiumWithAddons" : totalPremiumWithAddons,
+			"listOfServiceTaxWithAddons" : listOfAddonCoverServiceTax,
+			"totalServiceTax" : totalServiceTax,
+			"grossPremium" : grossPremium,
+			"grossPremiumWithoutAddons" : grossPremiumWithoutAddons,
+			"grossPremiumWithAddons" : grossPremiumWithAddons
+		}
+		console.log(JSON.stringify(premiumDetails));
+		return premiumDetails;
+	}
+
+	/*
+	 * Calculating Vehicle Age
+	 */
+	function vehicleAgeCaluculation() {
+		var vehicleDetails = StorageService.get("vehicleInfo");
+		var vehicleAge = 0;
+		var currentSystDate = new Date();
+		var registrationDate = vehicleDetails.registrationDate;
+		var prevPolicyExpDate = vehicleDetails.prevPolicyExpDate;
+		if (angular.equals(RatingConstants.NO_POLICY, vehicleDetails.policyType.code)) {
+			var regDate = new Date(registrationDate);
+			var dayDif = (currentSystDate - regDate) / 1000 / 60 / 60 / 24;
+			vehicleAge = dayDif / 365;
+		} else {
+			if (currentSystDate > prevPolicyExpDate) {
+				var regDate = new Date(registrationDate);
+				var dayDif = (currentSystDate - regDate) / 1000 / 60 / 60 / 24;
+				vehicleAge = dayDif / 365;
+			} else {
+				var regDate = new Date(registrationDate);
+				var prevDate = new Date(prevPolicyExpDate);
+				var dayDif = (prevDate - regDate) / 1000 / 60 / 60 / 24;
+				vehicleAge = dayDif / 365;
+			}
+		}
+		return vehicleAge.toFixed(2);
+	}
+	function isCoverSelected(coverCode) {
+		var selectedCovers = CoverageService.getSelectedCovers();
+		if (angular.isDefined(selectedCovers) && !angular.equals({}, selectedCovers)) {
+			var coverDetails = selectedCovers[coverCode];
+			if (angular.isDefined(coverDetails)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	function getCoverSumInsured(coverCode) {
+		var selectedCovers = CoverageService.getSelectedCovers();
+		if (angular.isDefined(selectedCovers) && !angular.equals({}, selectedCovers)) {
+			var coverDetails = selectedCovers[coverCode];
+			if (angular.isDefined(coverDetails)) {
+				return coverDetails.sumInsured;
+			} else {
+				return 0.0;
+			}
+		} else {
+			return 0.0;
+		}
+	}
+
+	function getSelectedCoverPremium(insurerCode, coverCode) {
+		if (isCoverSelected(coverCode)) {
+			var selectedCovers = CoverageService.getSelectedCovers();
+			if (angular.isDefined(selectedCovers) && !angular.equals({}, selectedCovers)) {
+				var coverDetails = selectedCovers[coverCode];
+				if (angular.isDefined(coverDetails)) {
+					return getBasicCoverPremium(insurerCode, coverCode);
+				} else {
+					return RatingConstants.RATE_NA;
+				}
+			} else {
+				return RatingConstants.RATE_NA;
+			}
+		} else {
+			return RatingConstants.RATE_NA;
+		}
+	}
+
+	function getBasicCoverPremium(insurerCode, coverCode) {
+		var premiumDetails = premiumDetailsForAll.premium[insurerCode];
+		var coverPremium = RatingConstants.RATE_NA;
+		if (angular.isDefined(premiumDetails) && !angular.equals({}, premiumDetails)) {
+			console.log("Checking" + JSON.stringify(premiumDetails));
+			var coverageDetails = premiumDetails.coverDetails[coverCode];
+			if (angular.isDefined(coverageDetails) && !angular.equals({}, coverageDetails)) {
+				if (coverCode == RatingConstants.UPA_COVER) {
+					angular.forEach(coverageDetails.coverElements, function(value, key) {
+						if (angular.isDefined(value) && !angular.equals({}, value)) {
+							var sumInsured = getCoverSumInsured(RatingConstants.UPA_COVER);
+							if (value.type == RatingConstants.SUM_INSURED && value.sumInsured == sumInsured) {
+								coverPremium = value.value;
+							}
+						}
+					});
+				} else if (coverCode == RatingConstants.PAD) {
+					angular.forEach(coverageDetails.coverElements, function(value, key) {
+						if (angular.isDefined(value) && !angular.equals({}, value)) {
+							var sumInsured = getCoverSumInsured(coverCode);
+							if (value.type == RatingConstants.SUM_INSURED && value.sumInsured == sumInsured) {
+								coverPremium = value.value;
+							}
+						}
+					});
+				} else {
+					coverPremium = coverageDetails.premium;
+				}
+			} else {
+				coverPremium = RatingConstants.RATE_NA;
+			}
+		} else {
+			coverPremium = RatingConstants.RATE_NA;
+		}
+		return coverPremium;
+	}
+
+
+	function getBiFuelPremium(insurerCode, basicOdPremium) {
+		var addoncalc = 0;
+		var vehicleDetails = StorageService.get("vehicleInfo");
+		if (vehicleDetails.inbuilt === true) {
+			var premiumDetails = premiumDetailsForAll.premium[insurerCode];
+			var coverageDetails = premiumDetails.coverDetails[RatingConstants.BFK];
+			if (angular.isDefined(coverageDetails) && !angular.equals({}, coverageDetails)) {
+				addoncalc = coverageDetails.rate * basicOdPremium / 100;
+			}
+
+		} else if (isCoverSelected(RatingConstants.BFK)) {
+			var premiumDetails = premiumDetailsForAll.premium[insurerCode];
+			var coverageDetails = premiumDetails.coverDetails[RatingConstants.BFK];
+			if (angular.isDefined(coverageDetails) && !angular.equals({}, coverageDetails)) {
+				var sumInsured = getCoverSumInsured(RatingConstants.BFK);
+				if (!angular.isUndefined(sumInsured)) {
+					var s = parseInt(sumInsured);
+					if (angular.isNumber(s)) {
+						addoncalc = coverPremuim(coverageDetails.rateType, coverageDetails.rate, coverageDetails.flat, sumInsured);
+					}
+				}
+			}
+		}
+		return addoncalc;
+	}
+	function getBiFuelTPPremium(insurerCode) {
+		var vehicleDetails = StorageService.get("vehicleInfo");
+		var biFuelTPPremium = 0;
+		if (isCoverSelected(RatingConstants.BFK) || vehicleDetails.inbuilt === true) {
+			var premiumDetails = premiumDetailsForAll.premium[insurerCode];
+			var coverageDetails = premiumDetails.coverDetails[RatingConstants.BFK];
+			if (angular.isDefined(coverageDetails) && !angular.equals({}, coverageDetails)) {
+				if (coverageDetails.coverElements.length > 0) {
+					angular.forEach(coverageDetails.coverElements, function(value, key) {
+						if (value.type = "BIFUEL_TP")
+							biFuelTPPremium = value.value;
+					});
+				}
+			}
+		}
+		return biFuelTPPremium;
+	}
+
+
+	function coverPremuim(rateType, rate, flat, premium) {
+		var coverPremium = 0;
+		if (RatingConstants.RATE === rateType) {
+			if (rate != RatingConstants.RATE_NA) {
+				coverPremium = rate * premium / 100;
+			} else {
+				coverPremium = RatingConstants.RATE_NA;
+			}
+		} else if (RatingConstants.FLAT === rateType) {
+			if (flat != RatingConstants.RATE_NA) {
+				coverPremium = flat;
+			} else {
+				coverPremium = RatingConstants.RATE_NA;
+			}
+
+		} else if (RatingConstants.BOTH === rateType) {
+			if (rate != RatingConstants.RATE_NA) {
+				coverPremium = rate * premium / 100;
+			}
+			if (flat != RatingConstants.RATE_NA) {
+				coverPremium = coverPremium + flat;
+			}
+			if (rate != RatingConstants.RATE_NA && flat != RatingConstants.RATE_NA) {
+				coverPremium = RatingConstants.RATE_NA;
+			}
+		}
+		return coverPremium;
+	}
+
+	function getTariffDiscount(insurerCode) {
+		var value = premiumDetailsForAll.premium[insurerCode];
+		var tariffDiscount = value.tariffDiscountRate;
+		return tariffDiscount;
+	}
+	function getDiscountPremium(basicOdPremium, tariffDiscount) {
+		return (basicOdPremium * tariffDiscount / 100);
+	}
+	function getNCBPremium(totalOdPremium) {
+		var ncbPremium = 0;
+		var vehicleInfo = StorageService.get("vehicleInfo");
+		if (!angular.equals(RatingConstants.NO_POLICY, vehicleInfo.policyType.code) && !angular.equals(RatingConstants.THIRDPARTY, vehicleInfo.policyType.code)) {
+			var ncbPercentage = vehicleInfo.currentNCB.ncbPercentage;
+			if (ncbPercentage == '' || ncbPercentage == null) {
+				ncbPercentage = 0;
+			}
+			var ncbNumber = parseInt(ncbPercentage);
+			if (angular.isNumber(ncbNumber)) {
+				ncbPremium = (totalOdPremium) * ncbNumber / 100;
+
+			}
+		}
+		return ncbPremium;
+	}
+	function getTotalAddonPremium(insurerCode) {
+		var totalAddonPremium = 0;
+		var selectedAddonCover = CoverageService.getSelectedCovers();
+		angular.forEach(selectedAddonCover, function(value, key) {
+			if (value.coverType === RatingConstants.ADDON) {
+				var coverPremium = getBasicCoverPremium(insurerCode, key);
+				if (coverPremium != RatingConstants.RATE_NA) {
+					totalAddonPremium = totalAddonPremium + coverPremium;
+				}
+			}
+		});
+		return totalAddonPremium;
+	}
+	function calculateServiceTax(insurerCode, premium) {
+		var premiumDetails = premiumDetailsForAll.premium[insurerCode];
+		var listOfServiceTax = [];
+		angular.forEach(premiumDetails.listOfTax, function(value, key) {
+			var array = {
+				"nameOfTax" : value.nameOfTax,
+				"rate" : value.rate,
+				"amount" : (premium * value.rate / 100)
+			};
+			listOfServiceTax.push(array);
+		});
+		return listOfServiceTax;
+	}
+	function sumOfServiceTax(listOfServiceTaxWithOutAddons) {
+		var servicTax = 0;
+		angular.forEach(listOfServiceTaxWithOutAddons, function(value, key) {
+			servicTax = servicTax + value.amount;
+		});
+		return servicTax;
+	}
+	/* Discount covers */
+	function getAutoMobileAssociationMembers(netOdPremium, insurerCode) {
+		var autoAssociationIndia = 0;
+		if (isCoverSelected(RatingConstants.AMSM)) {
+			var premiumDetails = premiumDetailsForAll.premium[insurerCode];
+			var coverageDetails = premiumDetails.coverDetails[RatingConstants.AMSM];
+			if (angular.isDefined(coverageDetails) && !angular.equals({}, coverageDetails)) {
+				if (coverageDetails.coverElements.length > 0) {
+					autoAssociationIndia = coverPremuim(coverageDetails.rateType, coverageDetails.rate, coverageDetails.flat, netOdPremium);
+					angular.forEach(coverageDetails.coverElements, function(value, key) {
+						if (value.type = "AMSM_MAX_DISCOUNT")
+							autoAssociationIndia = autoAssociationIndia > value.maxValue ? value.maxValue : autoAssociationIndia;
+					});
+				}
+			}
+		}
+		return autoAssociationIndia;
+	}
+	function getVoluntaryDeductible(netOdPremium, insurerCode) {
+		var voluntaryDeductible = 0;
+		if (isCoverSelected(RatingConstants.VD)) {
+			var premiumDetails = premiumDetailsForAll.premium[insurerCode];
+			var coverageDetails = premiumDetails.coverDetails[RatingConstants.VD];
+			var sumInsured = getCoverSumInsured(RatingConstants.VD);
+			if (angular.isDefined(coverageDetails) && !angular.equals({}, coverageDetails)) {
+				angular.forEach(coverageDetails.coverElements, function(value, key) {
+					if (value.type = RatingConstants.SUM_INSURED && value.sumInsured == sumInsured) {
+						voluntaryDeductible = (netOdPremium * value.rate) / 100;
+						voluntaryDeductible = voluntaryDeductible > value.maxValue ? value.maxValue : voluntaryDeductible;
+					}
+				});
+			}
+		}
+		return voluntaryDeductible;
+	}
+	function getAntiTheftDiscountPremium(totalOdPremium, insurerCode) {
+		var antiTheftDiscountAmount = 0;
+		if (isCoverSelected(RatingConstants.AT)) {
+			var premiumDetails = premiumDetailsForAll.premium[insurerCode];
+			var coverageDetails = premiumDetails.coverDetails[RatingConstants.AT];
+			if (angular.isDefined(coverageDetails) && !angular.equals({}, coverageDetails)) {
+				antiTheftDiscountAmount = coverPremuim(coverageDetails.rateType, coverageDetails.rate, coverageDetails.flat, totalOdPremium);
+				angular.forEach(coverageDetails.coverElements, function(value, key) {
+					if (value.type = "MAX_DISCOUNT") {
+						antiTheftDiscountAmount = antiTheftDiscountAmount > value.maxValue ? value.maxValue : antiTheftDiscountAmount;
+					}
+				});
+
+			}
+		}
+		return antiTheftDiscountAmount;
+	}
+
+	function checkPremium(premium) {
+		return premium == -99999 ? 0 : premium;
+	}
+
+	/* Idv edit for particular insurer */
+	function getUpdateIdv(insurerCode, idvForSingleInsurer) {
+		angular.forEach(premiumDetailsForAll.premium, function(value, key) {
+			if (key === insurerCode) {
+				delete premiumDetailsForAll.premium[key];
+				console.log("idvForSingleInsurer Indhuuuuuu" + JSON.stringify(idvForSingleInsurer));
+				premiumDetailsForAll.premium[key] = idvForSingleInsurer.premium[insurerCode];
+			}
+		});
+	}
+});

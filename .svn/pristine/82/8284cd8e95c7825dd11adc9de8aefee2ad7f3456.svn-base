@@ -1,0 +1,462 @@
+
+<form role="form" class="customer_details_form" name="form" id="customer_details_form" novalidate>
+  <div class=" row premium_summary_body">
+	<div class="col-xs-12 col-sm-12 col-md-12" style="padding: 0px;">
+	   <p class="back_btn">
+		  <a ui-sref="premiumComparision">
+		  <span class="glyphicon glyphicon-arrow-left"></span>
+		  </a>
+		</p>
+			<!--start of general details-->
+		<div class="col-xs-12 col-sm-6 col-md-6 gen_dae_col">
+			<div class="row gen_details">
+			  <div class="col-xs-12  col-sm-12  col-md-12 text-center pre_sum_head1" style="padding:0px;">
+				<h4>GENERAL DETAILS</h4>
+						<p class="header_margin"></p>
+						<div class="row idv_ncb">
+							<div class="col-xs-6 gen_image">
+								<div class="col-xs-6">
+									<img ng-src="{{premiumInfo.imagePath}}"
+										alt="{{premiumInfo.name}}" id="in_img1" class="img-responsive">
+								</div>
+								<div class="col-xs-6 text-center">
+									<p>Total Premium</p>
+									<p>{{premiumInfo.premium.grossPremium.toFixed(2)}}</p>
+								</div>
+							</div>
+							<div class="col-xs-6 gen_ncb_idv">
+								<div class="row idv">
+
+									<div class="col-xs-6 text-left">
+										<p>IDV</p>
+									</div>
+									<div class="col-xs-6 text-right">
+										<span class="rs fa fa-inr"></span>
+										<p>{{premiumInfo.premiumDetails.actualIdv}}</p>
+									</div>
+<!-- 									<a ui-sref="premiumComparision"><span -->
+<!-- 										class="glyphicon glyphicon-edit gen_image_span"></span></a> -->
+								</div>
+								<div class="row ncb">
+									<div class="col-xs-6 text-left">
+										<p>NCB</p>
+									</div>
+									<div class="col-xs-6 text-right">
+										<p>{{premiumInfo.premiumDetails.ncbDiscountAmount.toFixed(2)}}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="row customer_detail">
+					<div class="col-xs-12 col-sm-12 col-md-12 pre_sum_head2"
+						style="padding: 0px;">
+						<div
+							class="col-xs-12  col-sm-12  col-md-12 text-center pre_sum_head2"
+							style="padding: 0px;">
+							<div class="row">
+								<div class="col-xs-6 text-left">
+									<p>Quote No</p>
+									<span class="glyphicon glyphicon-option-horizontal"></span>
+									</p>
+								</div>
+								<div class="col-xs-6 text-right">
+									<p>123123</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6 text-left">
+									<p>Customer Name</p>
+									<span class="glyphicon glyphicon-option-horizontal"></span>
+									</p>
+								</div>
+								<div class="col-xs-6 text-right">
+									<p>{{personalInfo.firstName}} {{personalInfo.lastName}}</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6 text-left">
+									<p>Created Date</p>
+									<span class="glyphicon glyphicon-option-horizontal"></span>
+									</p>
+								</div>
+								<div class="col-xs-6 text-right">
+									<p>{{currentDate | date:'dd-MM-yyyy'}}</p>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-xs-6 text-left">
+									<p>Vehicle Name</p>
+									<span class="glyphicon glyphicon-option-horizontal"></span>
+									</p>
+								</div>
+								<div class="col-xs-6 text-right">
+									<p>{{vehicleInfo.manufacturer.name}}</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6 text-left">
+									<p>Vehicle Model & Variant</p>
+									<span class="glyphicon glyphicon-option-horizontal"></span>
+									</p>
+								</div>
+								<div class="col-xs-6 text-right">
+									<p>{{vehicleInfo.model.name}} ,
+										{{vehicleInfo.subModel.subModelName}} ,
+										{{vehicleInfo.subModel.engineCC}} ,
+										{{vehicleInfo.subModel.seatingCapacity}}</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6 text-left">
+									<p>Fuel Type</p>
+									<span class="glyphicon glyphicon-option-horizontal"></span>
+									</p>
+								</div>
+
+								<div class="col-xs-6 text-right">
+									<p>{{vehicleInfo.fuelType}}</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6 text-left">
+									<p>Manufacturing Year</p>
+									<span class="glyphicon glyphicon-option-horizontal"></span>
+									</p>
+								</div>
+								<div class="col-xs-6 text-right">
+									<p>{{vehicleInfo.yearOfMfg}}</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6 text-left">
+									<p>RTO</p>
+									<span class="glyphicon glyphicon-option-horizontal"></span>
+									</p>
+								</div>
+								<div class="col-xs-6 text-right">
+									<p>{{vehicleInfo.rtoCode.rtoLocation}}</p>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6 text-left">
+									<p>Zone</p>
+									<span class="glyphicon glyphicon-option-horizontal"></span>
+									</p>
+								</div>
+								<div class="col-xs-6 text-right">
+									<p>{{vehicleInfo.ZoneArea}}</p>
+								</div>
+							</div>
+							<!-- <div class="row">
+								<div class="col-xs-6 text-left">
+									<p>Registration Area</p>
+									<span class="glyphicon glyphicon-option-horizontal"></span>
+									</p>
+								</div>
+								<div class="col-xs-6 text-right">
+									<p></p>
+								</div>
+							</div> -->
+							<h5 class="cover_detail_head">Cover Details</h5>
+							<p class="header_margin"></p>
+							<div class="row addon_head text-center"
+								ng-init="showAdditionalCover=true;showAddonCover=true;showDiscount=true">
+								<div class="col-xs-12" ng-show="showAdditionalCover">
+									<div class="row">
+										<div class="cover_detail_head">
+											<p>Additional Cover</p>
+										</div>
+									</div>
+									<div class="row">
+										<div
+											ng-repeat="c in premiumInfo.premiumDetails.selectedAddonCover"
+											ng-if="c.coverType==='Additional'">
+											<div class="col-xs-4" ng-if="c.coverPremium != -99999">{{c.coverName}}
+												</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12" ng-show="showAddonCover">
+									<div class="row">
+										<div class="cover_detail_head">
+											<p>Addon Cover</p>
+										</div>
+									</div>
+									<div class="row">
+										<div
+											ng-repeat="c in premiumInfo.premiumDetails.selectedAddonCover"
+											ng-if="c.coverType==='Add on'">
+											<div class="col-xs-4" ng-if="c.coverPremium != -99999">{{c.coverName}}
+												</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-xs-12" ng-show="showDiscount">
+									<div class="row">
+										<div class="cover_detail_head">
+											<p>Discounts</p>
+										</div>
+									</div>
+									<div class="row">
+										<div
+											ng-repeat="c in premiumInfo.premiumDetails.selectedAddonCover"
+											ng-if="c.coverType==='DISCOUNTS'">
+											<div class="col-xs-4" ng-if="c.coverPremium != -99999">{{c.coverName}}
+												</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-xs-12 col-sm-6 col-md-6 payment_details">
+				<h4 class="payment_detail_head text-center">PAYMENT DETAILS</h4>
+				<p class="header_margin"></p>
+				<div class="row accept_box">
+					<div class="col-xs-12 text-center">
+						<div class="form-group">
+
+							<input type="checkbox" ng-model="disaplePayment"
+								ng-true-value="true" ng-false-value="false"
+								ng-click="offlinePayment=false;onlinePayment=false;resetPayment()">&nbsp;<label>I
+								accept the <a href="" ng-click="popup=true"
+								style="color: #cccbcb;">Terms and conditions of service</a>
+							</label><br/>
+<!-- 							<label ng-show="!disaplePayment">Plz Accept Terms and Conditions</label>
+ -->						</div>
+					</div>
+				</div>
+
+				<div class="termscon" ng-show="popup">
+
+					<h3 class="text-center">
+						<span style="font-size: 10px;" ng-click="popup=false">⛌</span>
+					</h3>
+					<ul>
+						<li>Condition 1</li>
+						<li>Condition 2</li>
+					</ul>
+					<span ng-click="popup=false">*</span>
+				</div>
+
+				<div ng-show="offlinePayment">
+					<div class="col-xs-12 cheque_total_col">
+						<div class="row">
+
+							<div class="row accept_box">
+								<div class="col-xs-12 text-center">
+									<div class="form-group">
+										<label>Cheque :</label> <input type="checkbox"
+											ng-model="Cheque" ng-init="Cheque=true" ng-disabled="true">
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group" data-title="Bank Name"
+									data-name="Bank Name">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-tag"></span></span> <select
+											class="form-control" ng-model="paymentInfo.bankCode"
+											name="bank"
+											ng-options="obj.bankName for obj in bankMasterdtoList track by obj.bankCode"
+											ng-change="resetBankBranch()" required>
+											<option value="">--Select--</option>
+										</select>
+									</div>
+								</div>
+								<div ng-show="form.$submitted || form.bank.$touched"
+								class="form-error val_error text-center">
+
+									<div ng-show="form.bank.$error.required">Please enter
+										Bank Name</div>
+								</div>
+
+
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group" data-title="Branch Name"
+									data-name="Branch Name">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-tags"></span></span> <input type="text"
+											class="form-control" id="Branch_Name"
+											placeholder="Branch Name" ng-model="paymentInfo.branchName"
+											capitalize name="branchname" maxlength="60" string-only
+											required>
+									</div>
+								</div>
+								<div ng-show="form.$submitted || form.branchname.$touched"
+									class="form-error val_error text-center">
+									<div ng-show="form.branchname.$error.required">Please
+										enter Branch Name</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-xs-12 cheque_total_col">
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group" data-title="Cheque Number"
+									data-name="Cheque Number">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-stop"></span></span> <input type="text"
+											class="form-control" id="cheque_num" name="cheque_no"
+											maxlength="6" placeholder="Cheque Number"
+											ng-model="paymentInfo.chequeNo" cheque-no required>
+									</div>
+								</div>
+								<div ng-show="form.$submitted || form.cheque_no.$touched"
+									class="form-error val_error text-center">
+									<div
+										ng-show="paymentInfo.chequeNo.toString().length<6 && paymentInfo.chequeNo.length>=1">cheque
+										Number Should be 6 Digit</div>
+									<div ng-show="form.cheque_no.$error.required">Please
+										enter Cheque Number</div>
+								</div>
+
+							</div>
+                            
+							<div class=" col-xs-6">
+									<div class="form-group" data-title="Cheque Date"
+										data-name="Cheque Date">
+										<div class="input-group date" moment-picker="paymentInfo.chequeDate"
+										 format="DD/MM/YYYY"
+											start-view="month"  autoclose="true"
+											set-on-select="true" min-date="minChequeDate">
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-calendar"></span></span> 
+												<input name="chequedate" type="text" class="form-control" ng-model="paymentInfo.chequeDate" required>
+										</div>
+									</div>
+								<div ng-show="form.$submitted || form.chequedate.$touched"
+									class="form-error val_error text-center">
+									<div ng-show="form.chequedate.$error.required">Please
+										select Cheque Date</div>
+								</div>
+							</div>
+							
+							
+						</div>
+					</div>
+					
+					<div class="col-xs-12 cheque_total_col">
+						<div class="row">
+							<div class="col-xs-6">
+								<div class="form-group" data-title="Cheque Amount"
+									data-name="Cheque Amount">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-briefcase"></span></span> <input
+											type="text" class="form-control" name="cheque_Amount"
+											placeholder="Cheque Amount" ng-model="paymentInfo.chequeAmt"
+											chequeamt-validation  ng-readonly="!(adjuseToPayEnabled)">
+
+									</div>
+								</div>
+								<div ng-if="" ng-show="form.cheque_Amount.$touched"
+										class="form-error val_error text-center">
+									<div ng-show="form.cheque_Amount.$error.required">Please
+										enter Cheque Amount</div>
+								</div>
+							</div>
+							<div class="col-xs-6">
+								<div class="form-group" data-title="In Favour Off"
+									data-name="In Favour Off">
+									<div class="input-group">
+										<span class="input-group-addon"><span
+											class="glyphicon glyphicon-user"></span></span> <input type="text"
+											class="form-control" id="infavour_off" name="favourOff"
+											placeholder="In favour off" ng-model="paymentInfo.favourOff"
+											capitalize maxlength="50" string-only required>
+									</div>
+								</div>
+								<div ng-show="form.$submitted || form.favourOff.$touched"
+									class="form-error val_error text-center">
+									<div ng-show="form.favourOff.$error.required">Please
+										enter In favour off</div>
+								</div>
+							</div>
+
+							<div class="col-xs-6" >
+								<div class="row accept_box">
+									<div class="col-xs-12 text-left">
+										<div class="form-group">
+											<label>Adjust to pay out :</label> <input type="checkbox" 
+											ng-model="adjuseToPayEnabled" ng-click="amount()"
+								ng-true-value="true" ng-false-value="false">
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class="col-xs-6" ng-if="adjuseToPayEnabled">
+								<div ng-show="adjuseToPay">
+									<div class="form-group" data-title="Adjust to pay Amount"
+										data-name="Adjust to pay Amount">
+										<div class="input-group">
+											<span class="input-group-addon"><span
+												class="glyphicon glyphicon-briefcase"></span></span> <input
+												type="text" class="form-control" id="adjust_to_pay_amount"
+												name="adjust_to_pay_amount"
+												placeholder="Adjust to pay Amount"
+												ng-model="paymentInfo.adjust_to_pay_amount" ng-maxlength=""
+												numbers-only >
+										</div>
+									</div>
+									<div
+										ng-show="form.adjust_to_pay_amount.$touched"
+										class="form-error val_error">
+										<div ng-show="form.adjust_to_pay_amount.$error.required">Please
+											enter Adjust to pay Amount</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-xs-12 cheque_total_btns text-center">
+						<div class="row">
+							<button type="submit" class="btn paymeny_btn"
+								ng-click="payNow($event,form)">MAKE PAYMENT</button>
+							<button type="" class="btn paymeny_btn"
+								ng-click="offlinePayment=false; resetPayment()">CANCEL</button>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!--End inspection-->
+
+
+			<div class="col-xs-12 col-sm-12 premium_summary_btn">
+
+				<div class="col-xs-12 text-right">
+					<button type="button" class="btn paymeny_btn"
+						ng-click="offlinePayment=true;onlinePayment=false;paymentInfo.paymentMode='Offline Payment';"
+						tooltip="Check the checkbox" ng-disabled="!disaplePayment;"
+						ng-show="!offlinePayment"my-tooltip-template="tooltiptmpl.html" my-tooltip-scope="prop" >OFFLINE</button>
+
+					<!-- 								<button type="submit" class="btn paymeny_btn" ng-show="offlinePayment" ng-click="payNow()">OFFLINE PAYMENT</button>
+ -->
+					<button type="submit" class="btn paymeny_btn"
+						ng-click="goNextPage();offlinePayment=false;onlinePayment=true;paymentInfo.paymentMode='Online Payment'"
+						ng-disabled="!disaplePayment" ng-show="!offlinePayment">PAY
+						NOW</button>
+
+				</div>
+
+			</div>
+		</div>
+	</div>
+</form>
+<div id="premiumsummary_dummy"></div>

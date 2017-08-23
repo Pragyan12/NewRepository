@@ -1,0 +1,705 @@
+$(document).ready(function(){
+//	alert(" COMMON MENU ");
+	// COMMON MENU 
+	$('.click_menu').on('click',function(event){
+		$('.menulist').slideToggle('slow', 'easeOutBounce'
+		);
+	});
+	
+	// LOGIN PAGE  START
+	$('.login_form input').on('keyup',function(){
+		var text_length = $(this).val().length;
+		if(text_length > 0){
+			$(this).siblings('.clear').show();
+			$('.clear').on('click',function(){
+				$(this).siblings('input').val("");
+				$(this).hide();
+			});
+		}
+		else{
+			$(this).siblings('.clear').hide();
+		}	
+	});
+	// LOGIN PAGE  END
+	
+	// FALIST PAGE START		
+	//transaction popup close	
+	$('.close_tran_popup').on('click',function(){
+		$(this).parents('.tran_popup_main').hide();
+	});
+			
+	//transaction animation	
+	$('.tran_popup_order > li').each(function(i){
+		$(this).animate({
+			top:'0px'
+		});
+	});
+	// FALIST PAGE END
+	
+	// HOME PAGE START
+	//image animation at start
+	$('#total_product .product_img div').each(function(i) {
+		delay =(i)*150;
+		setTimeout(function (div) {
+			div.animate({ 
+				opacity: '1.0',
+				top:'0px'
+			},'slow','linear');
+		}, delay, $(this));
+	});
+
+	/*circle animation*/
+	$("#total_product .product_img div img").mouseover(function(){	
+		$(this).siblings("div").addClass("img_circle");
+	});
+	$("#total_product .product_img > div").mouseleave(function(){
+		$("#total_product .product_img div").removeClass("img_circle");
+	});
+			
+	/*image click animation*/
+	$(".home_main_row_product #total_product").on('click','img',function(){
+		$(".home_main_row_product #total_product img").siblings(".selected").hide();
+			if($(this).data(":selected",true)){
+				$(this).siblings(".selected").show();
+			}
+		$(".text_box_row").show("fast");
+	});
+			
+			
+	/*bottom selected image text appears*/
+	$("#marker1_img").on('click',function(){
+		$(".product_name").html("TWO WHEELER");
+	});
+	$("#marker2_img").on('click',function(){
+		$(".product_name").html("PRIVATE CAR");
+	});
+	$("#marker3_img").on('click',function(){
+		$(".product_name").html("PASSENGER CARRYING VEHICLE");
+	});
+	$("#marker4_img").on('click',function(){
+		$(".product_name").html("GOODS CARRYING VEHICLE");
+	});
+		
+	//validation of AAdhar card number
+	$("#aad_num_value").keypress(function (e) {
+		//if the letter is not digit then display error and don't type anything
+		if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+			//display error message
+			$("#errmsg").html("Digits Only").show().fadeOut("slow");
+			return false;
+		}
+		else{
+			var foo = $(this).val().split("-").join(""); 
+			console.log(foo);
+			if (foo.length > 0) {
+				foo = foo.match(new RegExp('.{1,4}','g')).join("-");
+				} 
+			$(this).val(foo);
+		}
+	});
+					
+	$("#vec_num_value").keypress(function(e) {
+		var bar = $(this).val(); 
+		var x = event.which;
+		var y = String.fromCharCode(x);
+		console.log(bar.length);
+						
+		if(bar.length > 0 && bar.length <= 2){
+			reg = /([A-Za-z])/g;
+			if(reg.test(y)){
+			}
+			else{
+				e.preventDefault();
+			}
+		}
+						
+		if(bar.length==3){
+			$(this).val();
+		}
+						
+		if(bar.length<=4){
+			$(this).val();
+		}
+	});
+	
+	
+	// HOME PAGE END
+	
+	
+	//CUSTOMER DETAILS START 
+	$('.form-group input,.form-group select').on('focus',function(){
+		var attr_title = $(this).parents('.form-group').attr('data-title');
+		if(($(this).val().length) > 0){
+			$(this).parents('.form-group').attr('data-name',attr_title);	
+		}
+		else if(($(this).val().length) <= 0){
+		$(this).parents('.form-group').attr('data-name','');	
+		}
+		});
+		
+		//date format for reg,manu,prev
+			$('.registration_date_calendar').datetimepicker({
+				//language:  'fr',
+				weekStart: 1,
+				autoclose: 1,
+				todayHighlight: 1,
+				startView: 2,
+				minView: 2,
+				forceParse: 0,
+				format: 'dd/mm/yyyy'
+			});
+			
+			$('.manufact_date_calendar').datetimepicker({
+				//language:  'fr',
+				weekStart: 1,
+				autoclose: 1,
+				todayHighlight: 1,
+				startView: 3,
+				minView: 3,
+				forceParse: 0,
+				viewMode: "months", //this
+				minViewMode: "months",
+				format: 'mm/yyyy'
+			});
+			$('.prev_pol_date_calendar').datetimepicker({
+				//language:  'fr',
+				weekStart: 1,
+				autoclose: 1,
+				todayHighlight: 1,
+				startView: 2,
+				minView: 2,
+				forceParse: 0,
+				format: 'dd/mm/yyyy'
+			});
+			
+	$('.modelcc_form input').on('click',function(){
+		$('.modal_popup').show("fast");
+	});
+	$('.modal_popup_close').on('click',function(){
+		/*$(this).parents('.modal_popup').hide("fast");*/
+	});
+	var modal_pop;
+	var cc_pop;
+	$('.modal_popup p').on('click',function(){
+		modal_pop = $(this).html();
+		/*$(this).parent('.modal_popup').hide();*/
+		$('.sub_popup').show("fast");
+	});
+	$('.sub_popup_close').on('click',function(){
+		$(this).parents('.sub_popup').hide("fast");
+	});
+	$('.sub_popup_back').on('click',function(){
+		/*$(this).parents('.sub_popup').hide("fast");*/
+		$('.modal_popup').show("fast");
+	});
+	$('.sub_popup p').on('click',function(){
+		cc_pop = $(this).html();
+		$(this).parent('.sub_popup').hide();
+		var sym = ' ' + ","+ ' ';
+		total = modal_pop.concat(sym,cc_pop);	
+		$('.modelcc_form input').val(total);	
+	});
+			
+	$('#previous_policy_exp_date').on('change',function(){
+		var value=$.trim($("#previous_policy_exp_date").val());
+		if(value.length>0)
+		{
+			$('.claim_form').show();
+		}
+		else{
+			$('.claim_form').hide();
+		}
+					
+		});
+		//hide and showing forms on conditions
+		var claim_form,ownership_form;
+		$('.ownership_form').on('click','input',function(){
+			ownership_form = $(this).val();
+			
+			if(ownership_form =="no" && claim_form == "no"){
+				$('.ncb_form').show();
+			}
+			else{
+				$('.ncb_form').hide();
+			}	
+			
+		});
+		
+		$('.claim_form').on('click','input',function(){
+			claim_form = $(this).val();
+			if(claim_form =="no"){
+				$(ownership_form =="no" && claim_form == "no").show();
+			}
+			else{
+				$('.ncb_form').hide();
+			}		
+		});
+			
+		$('#customer_mobile').keyup(function(e) { 
+			var cal_len = $(this).val().length;
+			if(cal_len <= 10){
+				this.value = this.value.replace(/[^0-9]/g,'');
+			}
+			else{
+				alert("Only 10 numbers are allowed");
+				e.preventDefault();	
+			}
+					
+		});
+	//CUSTOMER DETAILS END 
+	
+	//ENTIRE CUSTOMER DETAILS
+	$(".choose_info_col > div").on('click',function(){
+		if($(".choose_info_col > div").hasClass('info_bg')){
+			$(".choose_info_col > div").removeClass('info_bg');		
+		}
+		if($(this).data('clicked', true)){
+			$(this).addClass('info_bg');					
+		}
+		var choose_option = $(this).attr("id");
+		switch(choose_option){
+			case 'choose_per_det':
+				$(".entire_personal_info").show("slow");
+				$(".entire_vechile_info").hide("slow");
+				$(".entire_nominee_info").hide("slow");
+				$(".entire_inspection_info").hide("slow");	
+				break;	
+			case 'choose_vec_det':
+				$(".entire_personal_info").hide("slow");
+				$(".entire_vechile_info").show("slow");
+				$(".entire_nominee_info").hide("slow");
+				$(".entire_inspection_info").hide("slow");
+				break;	
+			case 'choose_nom_det':
+				$(".entire_personal_info").hide("slow");
+				$(".entire_vechile_info").hide("slow");
+				$(".entire_nominee_info").show("slow");
+				$(".entire_inspection_info").hide("slow");
+				break;	
+			case 'choose_fin_det':
+				$(".entire_personal_info").hide("slow");
+				$(".entire_vechile_info").hide("slow");
+				$(".entire_nominee_info").hide("slow");
+				$(".entire_inspection_info").show("slow");
+				break;
+		}
+	});
+	// side button
+	$(".button_cols > div").on('click','a',function(){
+		var choose_option = $(this).attr("id");
+		switch(choose_option){
+			case 'personal_next_btn':
+				$(".entire_personal_info").hide("slow");
+				$(".entire_vechile_info").show("slow");
+				$(".entire_nominee_info").hide("slow");
+				$(".entire_inspection_info").hide("slow");
+				$(".choose_info_col > div").removeClass('info_bg');
+				$("#choose_vec_det").addClass('info_bg');
+				break;	
+			case 'vechile_prev_btn':
+				$(".entire_personal_info").show("slow");
+				$(".entire_vechile_info").hide("slow");
+				$(".entire_nominee_info").hide("slow");
+				$(".entire_inspection_info").hide("slow");
+				$(".choose_info_col > div").removeClass('info_bg');
+				$("#choose_per_det").addClass('info_bg');
+				break;	
+			case 'vechile_next_btn':
+				$(".entire_personal_info").hide("slow");
+				$(".entire_vechile_info").hide("slow");
+				$(".entire_nominee_info").show("slow");
+				$(".entire_inspection_info").hide("slow");
+				$(".choose_info_col > div").removeClass('info_bg');
+				$("#choose_nom_det").addClass('info_bg');
+				break;	
+			case 'nominee_prev_btn':
+				$(".entire_personal_info").hide("slow");
+				$(".entire_vechile_info").show("slow");
+				$(".entire_nominee_info").hide("slow");
+				$(".entire_inspection_info").hide("slow");
+				$(".choose_info_col > div").removeClass('info_bg');
+				$("#choose_vec_det").addClass('info_bg');
+				break;
+			case 'nominee_next_btn':
+				$(".entire_personal_info").hide("slow");
+				$(".entire_vechile_info").hide("slow");
+				$(".entire_nominee_info").hide("slow");
+				$(".entire_inspection_info").show("slow");
+				$(".choose_info_col > div").removeClass('info_bg');
+				$("#choose_fin_det").addClass('info_bg');
+				break;
+			case 'financier_prev_btn':
+				$(".entire_personal_info").hide("slow");
+				$(".entire_vechile_info").hide("slow");
+				$(".entire_nominee_info").show("slow");
+				$(".entire_inspection_info").hide("slow");
+				$(".choose_info_col > div").removeClass('info_bg');
+				$("#choose_nom_det").addClass('info_bg');
+				break;	
+		}
+	});
+		
+	$('#nominee_age').on('blur',function(){
+		var test = $(this).val();
+		if($(this).val() < 18){
+			$('.nominee_info_2').show();
+		}
+		else{
+			$('.nominee_info_2').hide();
+		}
+	});
+			
+		//date format for reg,manu,prev
+			$('.nominee_dob').datetimepicker({
+				//language:  'fr',
+				weekStart: 1,
+				autoclose: 1,
+				todayHighlight: 1,
+				startView: 2,
+				minView: 2,
+				forceParse: 0,
+				format: 'dd/mm/yyyy'
+			});
+			
+			$('.guardian_dob').datetimepicker({
+				//language:  'fr',
+				weekStart: 1,
+				autoclose: 1,
+				todayHighlight: 1,
+				startView: 2,
+				minView: 2,
+				forceParse: 0,
+				format: 'dd/mm/yyyy'
+			});
+			
+			$('.manufact_date_calendar').datetimepicker({
+				//language:  'fr',
+				weekStart: 1,
+				autoclose: 1,
+				todayHighlight: 1,
+				startView: 3,
+				minView: 3,
+				forceParse: 0,
+				viewMode: "months", //this
+				minViewMode: "months",
+				format: 'mm/yyyy'
+			});
+			$('.prev_pol_date_calendar').datetimepicker({
+				//language:  'fr',
+				weekStart: 1,
+				autoclose: 1,
+				todayHighlight: 1,
+				startView: 2,
+				minView: 2,
+				forceParse: 0,
+				format: 'dd/mm/yyyy'
+			});
+			$('.date_of_birth').datetimepicker({
+				//language:  'fr',
+				weekStart: 1,
+				autoclose: 1,
+				todayHighlight: 1,
+				startView: 2,
+				minView: 2,
+				forceParse: 0,
+				format: 'dd/mm/yyyy'
+			});
+			//data-title
+			$('.customer_details_form').on('change','input',function(){
+			
+				var test= $(this).val();
+									
+			});
+			
+			$('.preview_cus_btn').on('click',function(){
+				$('.preview_popup_main').show("fast");
+			});
+			
+			
+			$('.preview_popup_main .close_popup').on('click',function(){
+				$(this).parents('.preview_popup_main').hide("fast");
+			});
+			
+			$('body').on('click',function(e){
+				$(this).find('.preview_popup_main').not('.close_popup').on('click',function(e){
+					
+				});
+				
+			});
+			
+			$('.inspect_req .form-group select').on('click',function(){
+					var test = $( "#ins_required option:selected" ).val(); 
+					
+					
+					if(test == "yes"){
+						$('.inspect_col_based_req').show();
+					}
+					else{
+						$('.inspect_col_based_req').hide();
+					}
+			});
+			
+			$('.self_insurer_col .form-group select').on('click',function(){
+					var test = $( "#self_ins_insurer option:selected" ).val(); 
+					console.log(test);
+					
+					
+					if(test == "insurer"){
+						$('.inspect_col_based_self').show();
+					}
+					else{
+						$('.inspect_col_based_self').hide();
+					}
+			});
+			$('.specify_check input[type="checkbox"]').on('click',function(){	
+			
+				if($(this).prop("checked") == true){
+					$('.close_area').hide();
+					$('.specify_area').show();
+				}
+				else{
+					$('.close_area').show();
+					$('.specify_area').hide();
+				}
+			});
+			$('.reg_specify_check input[type="checkbox"]').on('click',function(){	
+			
+				if($(this).prop("checked") == true){
+					$('.reg_close_area').hide();
+					$('.reg_specify_area').show();
+				}
+				else{
+					$('.reg_close_area').show();
+					$('.reg_specify_area').hide();
+				}
+			});
+			$('.registration_label input[type="checkbox"]').on('click',function(){	
+			
+				if($(this).prop("checked") == true){
+					$('.registartion_cols_uncheck').hide();
+					$('.registartion_cols_checked').show();
+				}
+				else{
+					$('.registartion_cols_uncheck').show();
+					$('.registartion_cols_checked').hide();
+				}
+			});
+			$('#nominee_dob').on('change',function(){
+				var dob = $(this).val();
+				var d = new Date();
+				var curr_date = d.getDate();
+				var curr_month = d.getMonth();
+				var curr_year = d.getFullYear();
+				var todaydate = d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();
+				console.log(dob);
+				console.log(todaydate);
+				var from, to, druation;
+		  
+				from = moment(dob, 'DD/MM/YYYY'); // format in which you have the date
+				to = moment(todaydate, 'DD/MM/YYYY');     // format in which you have the date
+				
+				/* using diff */
+				total_days = to.diff(from, 'days')
+				var final = total_days/365;
+				
+				
+				if(final>18){
+					$('.guardian_info').show();
+				}
+				else{
+					$('.guardian_info').hide();
+				}
+			});
+			$('#guardian_dob').on('change',function(){
+				var dob = $(this).val();
+				var d = new Date();
+				var curr_date = d.getDate();
+				var curr_month = d.getMonth();
+				var curr_year = d.getFullYear();
+				var todaydate = d.getDate()+'/'+(d.getMonth()+1)+'/'+d.getFullYear();
+				console.log(dob);
+				console.log(todaydate);
+				var from, to, druation;
+		  
+				from = moment(dob, 'DD/MM/YYYY'); // format in which you have the date
+				to = moment(todaydate, 'DD/MM/YYYY');     // format in which you have the date
+				
+				/* using diff */
+				total_days = to.diff(from, 'days')
+				var final = total_days/365;
+				
+				
+				if(final>18){
+					$(this).val(final);
+				}
+				else{
+					$(this).val("");
+				}
+			}); 
+			
+	// PREMIUM SUMMARY & PAYMENT START
+	$(".accept_box input").on('click',function(){
+				if($(this).prop("checked") == true){
+					$('#offline').attr('disabled',false);
+					$('#builders_payment').attr('disabled',false);
+				}
+				else if($(this).prop("checked") == false){
+					$('#offline').attr('disabled',true);
+					$('#builders_payment').attr('disabled',true);
+					$('#offline_payment').hide();
+					$('#offline').show();
+					$('.cheque_row').hide();
+				}
+			});
+			
+			$('#offline').on('click',function(e){
+				$('.cheque_row').show();
+				$('#offline_payment').show();
+				$(this).hide();
+				e.preventDefault();
+			});
+	
+	
+	// PREMIUM SUMMARY & PAYMENT END
+	
+	//FULL SUMMARY OF CUSTOMER START
+	
+	$('.basicdetails_content').slideDown();
+			$('.insurer_content').slideUp();
+			$('.car_content').slideUp();
+			$('.coverage_content').slideUp();
+			$('.nominee_content').slideUp();
+			$('.payment_content').slideUp();
+			$('.financier_content').slideUp();
+			$('.inspection_content ').slideUp();
+			
+			$('.insurer_head').on('click',function(){
+				
+			$('.insurer_content').slideToggle();
+			$('.basicdetails_content').slideUp();
+			$('.car_content').slideUp();
+			$('.coverage_content').slideUp();
+			$('.nominee_content').slideUp();
+			$('.payment_content').slideUp();
+			$('.financier_content').slideUp();
+			$('.inspection_content').slideUp();
+		
+		});
+		$('.car_head').on('click',function(){
+			$('.car_content').slideToggle();
+			$('.insurer_content').slideUp();
+			$('.basicdetails_content').slideUp();
+			$('.coverage_content').slideUp();
+			$('.nominee_content').slideUp();
+			$('.payment_content').slideUp();
+			$('.financier_content').slideUp();
+			$('.inspection_content').slideUp();
+		});
+		$('.coverage_head').on('click',function(){
+			$('.coverage_content').slideToggle();
+			$('.insurer_content').slideUp();
+			$('.car_content').slideUp();
+			$('.nominee_content').slideUp();
+			$('.basicdetails_content').slideUp();
+			$('.payment_content').slideUp();
+			$('.financier_content').slideUp();
+			$('.inspection_content').slideUp();
+		});
+		$('.nominee_head').on('click',function(){
+			$('.nominee_content').slideToggle();
+			$('.insurer_content').slideUp();
+			$('.car_content').slideUp();
+			$('.coverage_content').slideUp();
+			$('.payment_content').slideUp();
+			$('.basicdetails_content').slideUp();
+			$('.financier_content').slideUp();
+			$('.inspection_content').slideUp();
+		});
+		$('.basicdetails_head').on('click',function(){
+			$('.nominee_content').slideUp();
+			$('.insurer_content').slideUp();
+			$('.car_content').slideUp();
+			$('.coverage_content').slideUp();
+			$('.payment_content').slideUp();
+			$('.basicdetails_content').slideToggle();
+			$('.financier_content').slideUp();
+			$('.inspection_content').slideUp();
+		});
+		$('.payment_head').on('click',function(){
+			$('.nominee_content').slideUp();
+			$('.insurer_content').slideUp();
+			$('.car_content').slideUp();
+			$('.coverage_content').slideUp();
+			$('.payment_content').slideToggle();
+			$('.basicdetails_content').slideUp();
+			$('.financier_content').slideUp();
+			$('.inspection_content').slideUp();
+		});
+		$('.financier_head').on('click',function(){
+			$('.insurer_content').slideUp();
+			$('.basicdetails_content').slideUp();
+			$('.car_content').slideUp();
+			$('.coverage_content').slideUp();
+			$('.nominee_content').slideUp();
+			$('.payment_content').slideUp();
+			$('.financier_content').slideToggle();
+			$('.inspection_content').slideUp();
+		
+		});
+		$('.inspection_head').on('click',function(){
+			$('.insurer_content').slideUp();
+			$('.basicdetails_content').slideUp();
+			$('.car_content').slideUp();
+			$('.coverage_content').slideUp();
+			$('.nominee_content').slideUp();
+			$('.payment_content').slideUp();
+			$('.financier_content').slideUp();
+			$('.inspection_content').slideToggle();
+			
+		});
+		/*icon toggle */
+		$('.fixed_icon_show').on('click',function(){
+		
+			$('.fixed_icon_hide').show("fast");
+			$(this).hide("fast");
+			$('.nominee_content').slideDown();
+			$('.financier_content').slideDown();
+			$('.insurer_content').slideDown();
+			$('.car_content').slideDown();
+			$('.coverage_content').slideDown();
+			$('.basicdetails_content').slideDown();
+			$('.payment_content').slideDown();
+			$('.inspection_content ').slideDown();
+		});
+				
+		$('.fixed_icon_hide').on('click',function(){
+			$('.fixed_icon_show').show("fast");
+			$(this).hide("fast");
+			$('.nominee_content').slideUp();
+			$('.financier_content').slideUp();
+			$('.insurer_content').slideUp();
+			$('.car_content').slideUp();
+			$('.coverage_content').slideUp();
+			$('.basicdetails_content').slideUp();
+			$('.payment_content').slideUp();
+			$('.inspection_content ').slideUp();
+		});	
+	//FULL SUMMARY OF CUSTOMER END
+	
+	//SEARCH PAGE START
+		$('.create_date_calendar').datetimepicker({
+				//language:  'fr',
+				weekStart: 1,
+				autoclose: 1,
+				todayHighlight: 1,
+				startView: 3,
+				minView: 3,
+				forceParse: 0,
+				viewMode: "months", //this
+				minViewMode: "months",
+				format: 'mm/yyyy'
+			});
+			
+	//SEARCH PAGE END
+	
+});

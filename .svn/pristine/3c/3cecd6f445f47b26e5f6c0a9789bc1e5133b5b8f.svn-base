@@ -1,0 +1,85 @@
+POTApp.factory('PremiumService',function( PremiumCalculationService,StorageService ,$q,$http,$filter) {
+		return {
+			getStatus : getStatus,
+			getErrorDescription : getErrorDescription,
+			getUpdateIdv : getUpdateIdv,
+			getIdvRange : getIdvRange
+		}
+		function getUpdateIdv(insurerCode, actualIdv, vehicleList) {
+			var vehicleDetails = StorageService.get("vehicleInfo");
+			var data = {
+				    "cubicCapacity":vehicleDetails.engineCC,
+		        	"makeCode":vehicleDetails.manufacturer.code,
+		        	"modelCode":vehicleDetails.modelCode,
+		        	"subModelCode":vehicleDetails.subModel.subModelCode,
+		        	"yearOfManufacture":vehicleDetails.year,
+		        	"idv":actualIdv,
+		        	"businessType":"Rollover",
+		        	"quoteNo":"12345",
+		        	"ncbPercentage":vehicleDetails.ncb.name,
+		        	"fuelType":vehicleDetails.fuelType,
+		        	"zoneCode":vehicleDetails.ZoneArea,
+		        	"rtoCode":vehicleDetails.rtoCode.rtoCode,
+		        	"seatingCapacity":vehicleDetails.seatingCapacity,
+		        	"engineCapacity":vehicleDetails.subModel.engineCC,
+		        	"productCode":"PCC",
+		        	"vehicleAge":PremiumCalculationService.vehicleAgeCaluculation(),
+		        	"customerType":vehicleDetails.vehicleRegisteredTo.code
+           };
+			var deferred=$q.defer();
+			$http({
+		    	url : "http://server1:8585/digital/idvCalculation.json?insurerCode="+insurerCode,
+		    	method : "POST",data}).then(function(response){
+		    			deferred.resolve(response);
+		    		},function(error){
+		    			deferred.reject(error);
+		    		});
+		
+		      return deferred.promise; 
+		}
+
+		  function getIdvRange(idv,vehicleList)
+		  {
+			  var vehicleDetails = StorageService.get("vehicleInfo");
+			  console.log("sureshchek"+JSON.stringify(vehicleDetails));
+				var data = {
+					    "cubicCapacity":vehicleDetails.engineCC,
+			        	"makeCode":vehicleDetails.manufacturer.code,
+			        	"modelCode":vehicleDetails.model.code,
+			        	"subModelCode":vehicleDetails.subModel.subModelCode,
+			        	"yearOfManufacture":vehicleDetails.year,
+			        	"idv":idv,
+			        	"businessType":"Rollover",
+			        	"quoteNo":"12345",
+			        	"ncbPercentage":vehicleDetails.ncb.name,
+			        	"fuelType":vehicleDetails.fuelType,
+			        	"zoneCode":vehicleDetails.ZoneArea,
+			        	"rtoCode":vehicleDetails.rtoCode.rtoCode,
+			        	"seatingCapacity":vehicleDetails.seatingCapacity,
+			        	"engineCapacity":vehicleDetails.subModel.engineCC,
+			        	"productCode":"PCC",
+			        	"vehicleAge":PremiumCalculationService.vehicleAgeCaluculation(),
+			        	"customerType":vehicleDetails.vehicleRegisteredTo.code
+			        	
+
+	           };
+				console.log("venkat"+JSON.stringify(data));
+				var deferred=$q.defer();
+				$http({
+			    	url : "http://server1:8585/digital/calculateCoveragePremium.json",
+			    	method : "POST",data}).then(function(response){
+			    			deferred.resolve(response);
+			    		},function(error){
+			    			deferred.reject(error);
+			    		});
+			      return deferred.promise; 
+                     }
+		
+       	function getStatus() {
+				return "SUCCESS";
+			}
+			function getErrorDescription() {
+				return "";
+			}
+
+		});

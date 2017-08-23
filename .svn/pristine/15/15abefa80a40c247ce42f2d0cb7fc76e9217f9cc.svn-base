@@ -1,0 +1,29 @@
+'use strict';
+ 
+POTApp.factory('PaymentService', ['$http', '$q', function($http, $q){
+	
+	var factory = {
+			fetchAllBankDetails: fetchAllBankDetails
+	      
+	    };
+	 
+	    return factory;
+	    
+	    function fetchAllBankDetails() {
+	        var deferred = $q.defer();
+	        $http.post("http://server1:8585/masters/getallbankmaster.json")
+	            .then(
+	            function (response) {
+	                deferred.resolve(response);
+	            },
+	            function(errResponse){
+	                console.error('Error while fetching Users');
+	                deferred.reject(errResponse);
+	            }
+	        );
+	        return deferred.promise;
+	    }
+	
+}]);
+
+

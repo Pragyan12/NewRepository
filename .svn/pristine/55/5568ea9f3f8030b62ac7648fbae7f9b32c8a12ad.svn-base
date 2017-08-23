@@ -1,0 +1,42 @@
+<div class="container-fluid customer_details_main text-center">
+	<div class="row choose_info" id="choose_info">
+		<div class="col-xs-12  col-sm-12 col-md-12  col-lg-12 text-center">
+
+			<a ui-sref="personalInfo"  ui-sref-active="{{personalInfoActive?'info_bg':''}}"
+				id="choose_per_det"
+				class="col-xs-4 col-sm-3 col-md-offset-1 col-md-2 col-lg-offset-1 col-lg-2 choose_info_col"  >
+				<div>Proposer Details</div>
+			</a>
+			 <a ui-sref="{{vehicleHrefLink?'vehicleInfo':''}}"  ui-sref-active="{{vehicleInfoActive?'info_bg':''}}"
+				id="choose_vec_det"
+				class="col-xs-4 col-sm-3 col-md-2 col-lg-2 choose_info_col">
+				<div>Vehicle Details</div>
+			</a>
+			 <a ui-sref="{{nomineeHrefLink?'nomineeFinancierInfo':''}}" ui-sref-active="{{nomineeActive?'info_bg':''}}"
+				id="choose_nom_det"
+				class="col-xs-4 col-sm-3 col-md-2 col-lg-2 choose_info_col">
+				<div>Nominee & Financier Details</div>
+			</a> 
+			<a ui-sref="{{inspectionHrefLink?'inspectionInfo':''}}"  ui-sref-active="{{inspectionInfoActive?'info_bg':''}}"
+				id="choose_fin_det"
+				class="col-xs-4 col-sm-3 col-md-2 col-lg-2 choose_info_col">
+				<div>Inspection Details</div>
+			</a>
+			<a ui-sref="{{documentHrefLink?'documentupload':''}}"  ui-sref-active="{{documentuploadActive?'info_bg':''}}"
+				id="choose_fin_det"
+				class="col-xs-4 col-sm-3 col-md-2 col-lg-2 choose_info_col">
+				<div>Document Upload</div>
+			</a>
+			<!-- </a> <a ui-sref="qcPendingInfo" ui-sref-active="info_bg"
+				id="choose_qcpend_det"
+				class="col-xs-4 col-sm-2 col-md-2 choose_info_col">
+				<div>QC pending Details</div>
+			</a> <a ui-sref="inwardPendingInfo" ui-sref-active="info_bg"
+				id="choose_inward_det"
+				class="col-xs-4 col-sm-2 col-md-2 choose_info_col">
+				<div>Inward Pending Details</div>
+			</a> -->
+
+		</div>
+	</div>
+</div>

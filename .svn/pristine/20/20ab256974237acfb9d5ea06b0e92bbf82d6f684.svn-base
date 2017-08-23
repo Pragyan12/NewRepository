@@ -1,0 +1,457 @@
+<div class="entire home viewpolicy_details">
+	<div class="wrapper">
+		<div class="totalpage">
+			<!--start header-->
+			<!-- <div ui-view="customer_header"></div> -->
+			<!--End header-->
+			<div class="fixed_icon_show">
+				<span class="glyphicon glyphicon-menu-hamburger"></span>
+			</div>
+			<div class="fixed_icon_hide">
+				<span class="glyphicon glyphicon-menu-hamburger"></span>
+			</div>
+
+			<!-- logo -->
+			<div class="col-xs-12 gen_image">
+				<!-- <p>{{premiumInfo.imagePath}}</p> -->
+				<div class="col-xs-5"></div>
+				<div class="col-xs-7">
+					<img ng-src="{{formData.premiumInfo.imagePath}}"
+						alt="{{formData.premiumInfo.name}}" id="in_img1"
+						class="img-responsive">
+				</div>
+			</div>
+			<!-- logo -->
+
+			<!--Start home_main-->
+			<form role="form" class="viewpolicy_claim_form"
+				id="viewpolicy_claim_form" method="post">
+				<div class="row total_claim">
+					<div class="col-xs-12 col-sm-12 col-md-12 col_12_pad">
+						<div class="col-xs-6 col-sm-6 col-md-offset-2 col-md-4 col_div">
+							<div class="col-xs-12 col-sm-12 col-md-12 basicdetails_col ">
+
+								<div class="row basicdetails_head text-center heading_row">
+									<h4>BASIC DETAILS</h4>
+								</div>
+								<div class="row basicdetails_content content_row">
+									<div>
+										<p>Quote Number</p>
+										<p>: {{formData.PolicyDetails.quoteNo}}</p>
+									</div>
+									<div>
+										<p>Policy Number</p>
+										<p>: -</p>
+									</div>
+									<div>
+										<p>Policy Start Date</p>
+										<p>: {{formData.PolicyDetails.inseptionDate}}</p>
+									</div>
+									<div>
+										<p>Policy End Date</p>
+										<p>: {{formData.PolicyDetails.expiryDate}}</p>
+									</div>
+									<div>
+										<p>Creation Date</p>
+										<p>: {{formData.PolicyDetails.createdDate}}</p>
+									</div>
+									<div>
+										<p>Product Name</p>
+										<p>: {{formData.PolicyDetails.subLine}}</p>
+									</div>
+									<div>
+										<p>Status</p>
+										<p>: {{formData.PolicyDetails.status}}</p>
+									</div>
+									<div>
+										<p>Sub Status</p>
+										<p>: {{formData.PolicyDetails.subStatus}}</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-12 col-md-12 insurer_col">
+								<div class="row insurer_head text-center heading_row">
+									<h4>PROPOSER DETAILS</h4>
+								</div>
+								<div class="row insurer_content content_row">
+									<div>
+										<p>Name</p>
+										<p>
+											<span>:{{formData.CustomerDetails.title}}</span>{{formData.CustomerDetails.firstName}}
+											{{formData.CustomerDetails.lastName}}
+										</p>
+									</div>
+									<div
+										ng-if="formData.CustomerDetails.dateOfBirth != null && formData.CustomerDetails.dateOfBirth!=''">
+										<p>DOB</p>
+										<p>: {{formData.CustomerDetails.dateOfBirth |
+											date:'dd-MM-yyyy'}}</p>
+									</div>
+									<div>
+										<p>Mobile Number</p>
+										<p>: {{formData.CustomerDetails.mobileNo}}</p>
+									</div>
+
+									<div
+										ng-if="formData.CustomerDetails.alternateMobile != null && formData.CustomerDetails.alternateMobile!=''">
+										<p>Alternative Mobile</p>
+										<p>
+											<span>:{{formData.CustomerDetails.alternateMobile}}</span>
+										</p>
+									</div>
+									<div>
+										<p>Email ID</p>
+										<p>
+											<span>:{{formData.CustomerDetails.email}}</span>
+										</p>
+									</div>
+									<div
+										ng-if="formData.CustomerDetails.alternateEmail != null && formData.CustomerDetails.alternateEmail!=''">
+										<p>Alternate Email ID</p>
+										<p>
+											<span>:{{formData.CustomerDetails.alternateEmail}}</span>
+										</p>
+									</div>
+									<div>
+										<p>Communication Address</p>
+										<p>
+											:{{formData.CustomerDetails.address1}}, <span
+												ng-if="formData.CustomerDetails.address2!=''">
+												{{formData.CustomerDetails.address2}}, </span> <span
+												ng-if="formData.CustomerDetails.address3!=''">
+												{{formData.CustomerDetails.address3}}, </span>
+											{{formData.CustomerDetails.cityName}},
+											{{formData.CustomerDetails.areaName}},
+											{{formData.CustomerDetails.pinCode}}
+										</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-12 col-md-12 car_col">
+								<div class="row car_head text-center heading_row">
+									<h4>VEHICLE DETAILS</h4>
+								</div>
+								<div class="row car_content content_row">
+									<div>
+										<p>Make</p>
+										<p>: {{formData.VehicleDetails.makeName}}</p>
+									</div>
+									<div>
+										<p>Model & Variant</p>
+										<p>: {{formData.VehicleDetails.modelName}}</p>
+
+									</div>
+									<div>
+										<p>Seating Capacity</p>
+										<p>: {{formData.VehicleDetails.seatingCapacity}}</p>
+									</div>
+									<div>
+										<p>Engine CC</p>
+										<p>: {{formData.VehicleDetails.engineCC}}</p>
+									</div>
+									<div>
+										<p>Fuel Type</p>
+										<p>: {{formData.VehicleDetails.fuelType}}</p>
+									</div>
+									<div>
+										<p>Manufacturing Year</p>
+										<p>: {{formData.VehicleDetails.yearOfMfg}}</p>
+									</div>
+									<div>
+										<p>Registration Address</p>
+										<p>
+											<span>:{{formData.VehicleDetails.regiAddress1}}, <span
+												ng-if="formData.VehicleDetails.regiAddress2!=''">
+													{{formData.VehicleDetails.regiAddress2}}, </span> <span
+												ng-if="formData.VehicleDetails.regiAddress3!=''">
+													{{formData.VehicleDetails.regiAddress3}}, </span>
+												{{formData.VehicleDetails.regiCityName}},
+												{{formData.VehicleDetails.regiAreaName}},
+												{{formData.VehicleDetails.regiPinCode}}
+											</span>
+										</p>
+									</div>
+									<div>
+										<p>Registration Number</p>
+										<p>: {{formData.VehicleDetails.registrationNo}}</p>
+									</div>
+									<div>
+										<p>Engine Number</p>
+										<p>
+											<span>:{{formData.VehicleDetails.engineNo}}</span>
+										</p>
+									</div>
+									<div>
+										<p>Chassis Number</p>
+										<p>
+											<span>:{{formData.VehicleDetails.chassisNo}}</span>
+										</p>
+									</div>
+									<div
+										ng-if="formData.PreviousPolicyDetails.prevPolicyInsurerName != null && formData.PreviousPolicyDetails.prevPolicyInsurerName!=''">
+										<p>Previous Insurer</p>
+										<p>:
+											{{formData.PreviousPolicyDetails.prevPolicyInsurerName}}</p>
+									</div>
+									<div
+										ng-if="formData.PreviousPolicyDetails.prevPolicyNo != null && formData.PreviousPolicyDetails.prevPolicyNo!=''">
+										<p>Previous Policy Number</p>
+										<p>
+											<span>:{{formData.PreviousPolicyDetails.prevPolicyNo}}</span>
+										</p>
+									</div>
+
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-12 col-md-12 finan_col">
+								<div class="row financier_head text-center heading_row"
+									ng-show="formData.VehicleDetails.financierType != null && formData.VehicleDetails.financierType!=''">
+									<h4>FINANCIER DETAILS</h4>
+								</div>
+								<div class="row financier_content content_row">
+
+									<div
+										ng-if="formData.VehicleDetails.financierType != null && formData.VehicleDetails.financierType!=''">
+										<p>Financier Type</p>
+										<p>: {{formData.VehicleDetails.financierType}}</p>
+									</div>
+									<div
+										ng-if="formData.VehicleDetails.financierName != null && formData.VehicleDetails.financierName!=''">
+										<p>Financier Name</p>
+										<p>
+											<span>:{{formData.VehicleDetails.financierName}}</span>
+										</p>
+									</div>
+									<div
+										ng-if="formData.VehicleDetails.financierCity != null && formData.VehicleDetails.financierCity!=''">
+										<p>Financier City</p>
+										<p>
+											<span>:{{formData.VehicleDetails.financierCity}}</span>
+										</p>
+									</div>
+
+								</div>
+							</div>
+						</div>
+
+						<div class="col-xs-6 col-sm-6 col-md-4 col_div">
+							<div class=" col-xs-12 col-sm-12 col-md-12 coverage_col">
+								<div class="row coverage_head text-center heading_row">
+									<h4>PREMIUM DETAILS</h4>
+								</div>
+								<div class="row coverage_content content_row">
+									<div>
+										<p>IDV</p>
+										<p>: {{formData.VehicleDetails.idv}}</p>
+									</div>
+									<div>
+										<p>NCB</p>
+										<p>: {{formData.VehicleDetails.currentNCB}}{{formData.VehicleDetails.currentNCB>0?'%':''}}</p>
+									</div>
+									<div>
+										<p>Premium amount</p>
+										<p>: {{formData.PolicyDetails.grossPremium}}</p>
+									</div>
+									<div>
+										<p>ADDITIONAL COVER</p>
+										:
+										<span class="col-xs-offset-0" ng-repeat="c in additionalCoverList">
+											<span  ng-if="c.premium != -99999">{{c.name}}{{$last ? '': ','}}</span>
+										</span>
+										
+									</div>
+									<div>
+										<p>ADD-ON COVERS</p>
+										:
+										<span ng-repeat="c in addonCoverList">
+											<span class="col-xs-offset-0" ng-if="c.premium != -99999">{{c.name}}{{$last ? '': ','}}</span>
+										</span>
+									</div>
+								</div>
+								</div>
+										
+									<div class="col-xs-12 col-sm-12 col-md-12 payment_col">
+										<div class="row payment_head text-center heading_row">
+											<h4>PAYMENT DETAILS</h4>
+										</div>
+										<div class="row payment_content content_row">
+											<div>
+												<p>Cheque Number</p>
+												 <p>: {{formData.PaymentDetails[0].instrumentNo}}</p> 
+											</div>
+											
+											<div>
+												<p>Cheque Date</p>
+												 <p>: {{formData.PaymentDetails[0].instrumentDate}}</p> 
+											</div>
+											<div>
+												<p>Cheque Amount</p>
+												 <p>: {{formData.PaymentDetails[0].amount}}</p> 
+											</div>
+											<div>
+												<p>Bank Name </p>
+												 <p>: {{formData.PaymentDetails[0].bankName}}</p> 
+											</div>
+											<div>
+												<p>Favor Of </p>
+												 <p>: {{formData.PaymentDetails[0].favourOff}}</p> 
+											</div>
+											<div ng-if="formData.PaymentDetails.adjustedAmount != null && formData.PaymentDetails.adjustedAmount!=''">
+												<p>Adjust to Pay/out </p>
+												 <p>:{{formData.PaymentDetails[0].adjustedAmount}}</p> 
+											</div>
+											<div>
+												<p>Transaction Number</p>
+												 <p>:            -</p> 
+											</div>
+											<div>
+												<p>Status</p>
+												 <p>:Active</p> 
+											</div>
+											<div>
+												<p>Amount</p>
+												 <p>: {{formData.PaymentDetails[0].amount}}</p> 
+											</div>
+											
+										</div>
+									</div>
+
+							<div class="col-xs-12 col-sm-12 col-md-12 nominee_col"
+								ng-show="formData.CustomerDetails.nominee.nomineeName != null && formData.CustomerDetails.nominee.nomineeName!=''">
+								<div class="row nominee_head text-center heading_row">
+									<h4>NOMINEE DETAILS</h4>
+								</div>
+								<div class="row nominee_content content_row">
+									<div
+										ng-if="formData.CustomerDetails.nominee.nomineeName != null && formData.CustomerDetails.nominee.nomineeName!=''">
+										<p>Nominee Name</p>
+										<p>: {{formData.CustomerDetails.nominee.nomineeName}}</p>
+									</div>
+									<div
+										ng-if="formData.CustomerDetails.nominee.nomineeDob != null && formData.CustomerDetails.nominee.nomineeDob!=''">
+										<p>Nominee DOB</p>
+										<p>: {{formData.CustomerDetails.nominee.nomineeDob |
+											date:'dd-MM-yyyy'}}</p>
+									</div>
+									<div
+										ng-if="formData.CustomerDetails.nominee.nomineeRelationship != null && formData.CustomerDetails.nominee.nomineeRelationship!=''">
+										<p>Nominee Relationship</p>
+										<p>:
+											{{formData.CustomerDetails.nominee.nomineeRelationship}}</p>
+									</div>
+									<div
+										ng-if="formData.CustomerDetails.nominee.guardianName != null && formData.CustomerDetails.nominee.guardianName!=''">
+										<p>Guardian Name</p>
+										<p>: {{formData.CustomerDetails.nominee.guardianName}}</p>
+									</div>
+									<div
+										ng-if="formData.CustomerDetails.nominee.guardianDob != null && formData.CustomerDetails.nominee.guardianDob!=''">
+										<p>Guardian DOB</p>
+										<p>: {{formData.CustomerDetails.nominee.guardianDob |
+											date:'dd-MM-yyyy'}}</p>
+									</div>
+									<div
+										ng-if="formData.CustomerDetails.nominee.guardianRelationship != null && formData.CustomerDetails.nominee.guardianRelationship!=''">
+										<p>Guardian Relationship</p>
+										<p>:
+											{{formData.CustomerDetails.nominee.guardianRelationship}}</p>
+									</div>
+
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-12 col-md-12 inspection_col"
+								ng-show="formData.VehicleDetails.isInspectInfo=='Y'">
+								<div class="row inspection_head text-center heading_row">
+									<h4>INSPECTION DETAILS</h4>
+								</div>
+								<div class="row inspection_content content_row">
+									<div
+										ng-if="formData.VehicleDetails.inspectBy != null && formData.VehicleDetails.inspectBy!=''">
+										<p>Insurer/FA</p>
+										<p>: {{formData.VehicleDetails.inspectBy}}</p>
+									</div>
+									<div
+										ng-if="formData.VehicleDetails.inspectReason != null && formData.VehicleDetails.inspectReason!=''">
+										<p>Inspection Reason</p>
+										<p>: {{formData.VehicleDetails.inspectReason}}</p>
+									</div>
+
+									<div
+										ng-if="formData.VehicleDetails.inspecDate != null && formData.VehicleDetails.inspecDate!=''">
+										<p>Inspection Date</p>
+										<p>: {{formData.VehicleDetails.inspecDate |
+											date:'dd-MM-yyyy'}}</p>
+									</div>
+									<div
+										ng-if="formData.VehicleDetails.inspecTime != null && formData.VehicleDetails.inspecTime!=''">
+										<p>Inspection Time</p>
+										<p>: {{formData.VehicleDetails.inspecTime}}</p>
+									</div>
+									<div
+										ng-if="formData.VehicleDetails.insPectionComments != null && formData.VehicleDetails.insPectionComments!=''">
+										<p>Address</p>
+										<p>
+											<span>:{{formData.VehicleDetails.insPectionComments}}</span>
+										</p>
+									</div>
+										</div>
+										
+									</div>
+									
+									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 document_col">
+									<div class="row document_head text-center heading_row" >
+											<h4>DOCUMENT DETAILS</h4>
+										</div>
+										<div class="document_content">
+										<div class="row  docment_row"  ng-repeat="(key, value) in documentPreviewDisp track by $index" >
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 img_col" >
+												     <div class="col-xs-12 document_name_height text-center">{{key}}</div>
+													  <span  ng-repeat='(base64, fileType) in value' >
+							<!-- 						   ng-init="{{key-{{$index + 1}}.{{fileType}}" -->
+													  	<div  class="col-xs-4" >
+													  		<a href="{{downloadURL}}{{base64}}">
+															 <span style="color: black;cursor: pointer;text-decoration: underline;">
+															 {{key}}-{{$index + 1}}{{$last ? '' : ', '}}</span>
+															 </a>
+														</div>
+													  </span>
+													
+												
+											</div>
+										</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+				<!-- <div class="row viewpolicy_claim_buttons">
+						<div class="col-xs-6 text-left">
+							<a href="#" class="btn " id=""><span
+								class="glyphicon glyphicon glyphicon-print close_link"></span>&nbsp;PRINT</a>
+						</div>
+						<div class="col-xs-6 text-right">
+							<a ui-sref="product" class="btn btn-default " id=""><span
+								class="glyphicon glyphicon-remove-sign close_link"></span>&nbsp;CLOSE</a>
+						</div>
+					</div>  -->
+
+			</form>
+		</div>
+		<!--End home_main-->
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="extra_height"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- SPACE -->
+
+	<!-- SPACE -->
+</div>

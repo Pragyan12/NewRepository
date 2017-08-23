@@ -1,0 +1,284 @@
+<div class="entire customer_details">
+	<div class="wrapper">
+		<div class="totalpage">
+			<div ui-view="customer_header"></div>
+			<div class="container-fluid customer_details_main text-center">
+				<div class="row customer_details_row inwardPending_info">
+
+					<div
+						class=" col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6 customer_cols inwardPending_info_col"">
+						<h4 class="text-left">InwardPending Information</h4>
+
+						<div class=" col-xs-6 col-sm-6 col-md-6">
+							<div class="form-group" data-title="D.O.B">
+								<div class="input-group date date_of_birth">
+									<input type="text" class="form-control col-md-2 readonly"
+										uib-datepicker-popup="{{dateformat}}"
+										ng-model="inwardPendingInfo.sentdate" is-open="showdp"
+										placeholder="INWARD SENT DATE"> <span
+										class="input-group-addon" ng-click="showcalendar($event)"><span
+										class="glyphicon glyphicon-calendar"></span></span>
+								</div>
+							</div>
+						</div>
+
+
+						<div class=" col-xs-6 col-sm-6 col-md-6">
+							<div class="form-group" data-title="D.O.B">
+								<div class="input-group date date_of_birth">
+									<input type="text" class="form-control col-md-2 readonly"
+										uib-datepicker-popup="{{dateformat}}"
+										ng-model="inwardPendingInfo.riskstartdate" is-open="showdp1"
+										placeholder="RISK START DATE"> <span
+										class="input-group-addon" ng-click="showcalendar1($event)"><span
+										class="glyphicon glyphicon-calendar"></span></span>
+								</div>
+							</div>
+						</div>
+
+
+
+						<div class=" col-xs-6 col-sm-6 col-md-6">
+							<div class="form-group" data-title="POLICY NUMBER">
+								<div class="input-group">
+									<input type="text" class="form-control"
+										ng-model="inwardPendingInfo.policyNo" name="policyNo"
+										id="policyNo" placeholder="POLICY NUMBER" required> <span
+										class="input-group-addon"><span
+										class="glyphicon glyphicon-pencil"></span></span>
+								</div>
+							</div>
+						</div>
+
+						<div class=" col-xs-6 col-sm-6 col-md-6">
+							<div class="form-group" data-title="REFERENCE NUMBER">
+								<div class="input-group">
+									<input type="text" class="form-control"
+										ng-model="inwardPendingInfo.referenceNo" name="referenceNo"
+										id="referenceNo" placeholder="REFERENCE NUMBER" required>
+									<span class="input-group-addon"><span
+										class="glyphicon glyphicon-pencil"></span></span>
+								</div>
+							</div>
+						</div>
+
+						<div class=" col-xs-6 col-sm-6 col-md-6">
+							<div class="form-group" data-title="INVERED STATUS">
+								<div class="input-group">
+									<select name="inveredStatus" id="inveredStatus"
+										class="form-control"
+										ng-model="inwardPendingInfo.inveredStatus"
+										ng-options="obj.name for obj in inveredStatus track by obj.code"
+										placeholder="INVERED STATUS" required>
+										<option value="">INVERED STATUS</option>
+									</select><span class="input-group-addon"><span
+										class="glyphicon glyphicon-hand-left"></span></span>
+								</div>
+							</div>
+						</div>
+
+						<div ng-if="inwardPendingInfo.inveredStatus.name=='Incomplete'">
+							<div class=" col-xs-6 col-sm-6 col-md-6">
+								<div class="form-group" data-title="REASON">
+									<div class="input-group">
+										<input type="text" class="form-control"
+											ng-model="inwardPendingInfo.reason" name="reason" id="reason"
+											placeholder="REASON" required><span
+											class="input-group-addon"><span
+											class="glyphicon glyphicon-hand-left"></span></span>
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class=" col-xs-6 col-sm-6 col-md-6">
+							<div class="form-group" data-title="status">
+								<div class="input-group">
+									<select name="status" id="status" class="form-control"
+										ng-model="inwardPendingInfo.inspectionStatus"
+										ng-options="obj.name for obj in inspectionStatus track by obj.code"
+										placeholder="INSURER INSPECTION STATUS" required>
+										<option value="">INSURER INSPECTION STATUS</option>
+									</select><span class="input-group-addon"><span
+										class="glyphicon glyphicon-hand-left"></span></span>
+								</div>
+							</div>
+						</div>
+						<div class=" col-xs-6 col-sm-6 col-md-6">
+							<div class="form-group" data-title="status">
+								<div class="input-group">
+									<select name="status" id="status" class="form-control"
+										ng-model="inwardPendingInfo.policyStatus"
+										ng-options="obj.name for obj in policyStatus track by obj.code"
+										placeholder="POLICY STATUS" required>
+										<option value="">POLICY STATUS</option>
+									</select><span class="input-group-addon"><span
+										class="glyphicon glyphicon-hand-left"></span></span>
+								</div>
+							</div>
+						</div>
+
+						<div class=" col-xs-6 col-sm-6 col-md-6">
+							<div class="form-group" data-title="COMMENTS">
+								<div class="input-group">
+									<input type="text" class="form-control"
+										ng-model="inwardPendingInfo.comments" name="comments"
+										id="comments" placeholder="COMMENTS" required><span
+										class="input-group-addon"><span
+										class="glyphicon glyphicon-comment"></span></span>
+								</div>
+							</div>
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="col-md-4"></div>
+			<div class="col-md-4"></div>
+			<div class="col-md-4">
+
+				<a href="#nomineeFinancierInfo"
+					class="btn btn-default btn-success col-md-8">PREV</a> <input
+					type="submit" class="btn btn-default btn-success col-md-8"
+					id="submit" ng-click="showModal1 = true" value='PREVIEW'>
+
+
+				<modal visible="showModal1" on-sown="modalOneShown()"
+					on-hide="modalOneHide()"> <modal-header
+					title="INSURER PREVIEW"></modal-header> <modal-body>
+				<div class="row">
+					<div class="col-md-6">
+
+						<h5>CUSTOMER DETAILS</h5>
+						<div class="row">
+							<span class="col-md-6">firstName:</span><span class="col-md-6">{{personalInfo.firstName}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6">lastName:</span><span class="col-md-6">{{personalInfo.lastName}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6">D.O.B:</span><span class="col-md-6">{{personalInfo.dob}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6">Mobile No:</span><span class="col-md-6">{{personalInfo.mobileNo}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6">Alter Mobile No:</span><span
+								class="col-md-6">{{personalInfo.alterMobileNo}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6">Email ID:</span><span class="col-md-6">{{personalInfo.email}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6">Alter Email ID:</span><span
+								class="col-md-6">{{personalInfo.alterEmail}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6">Communication Address:</span><span
+								class="col-md-6">{{personalInfo.address1}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6"></span><span class="col-md-6">:{{personalInfo.address2}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6"></span><span class="col-md-6">:{{personalInfo.address3}}</span>
+						</div>
+
+
+					</div>
+					<div class="col-md-6">
+
+						<h5>VECHILE DETAILS</h5>
+						<div class="row">
+							<span class="col-md-6">Registration No:</span><span
+								class="col-md-6">{{vehicleInfo.RegistrationNo}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6">Chassis No:</span><span class="col-md-6">{{vehicleInfo.chassisNo}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6">Engine No:</span><span class="col-md-6">{{vehicleInfo.engineNo}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6">Previous Insurer:</span><span
+								class="col-md-6">{{vehicleInfo.prevInsurer}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6">Prev Policy No:</span><span
+								class="col-md-6">{{vehicleInfo.prevPolicyNo}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6">Registration Address:</span><span
+								class="col-md-6">{{vehicleInfo.address1}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6"></span><span class="col-md-6">:{{vehicleInfo.address2}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6"></span><span class="col-md-6">:{{vehicleInfo.address3}}</span>
+						</div>
+
+
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-6">
+
+						<h5>NOMINEE DETAILS</h5>
+						<div class="row">
+							<span class="col-md-6">Nominee Name:</span><span class="col-md-6">{{nomineeFinancierInfo.nomineeName}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6">Nominee D.O.B:</span><span
+								class="col-md-6">{{nomineeFinancierInfo.dob}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6">Nominee Relationship:</span><span
+								class="col-md-6">{{nomineeFinancierInfo.nomineeRelationShip}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6">Guardian Name:</span><span
+								class="col-md-6">{{nomineeFinancierInfo.guardianName}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6">Guardian Relationship:</span><span
+								class="col-md-6">{{nomineeFinancierInfo.guardianRelationship}}</span>
+						</div>
+
+					</div>
+					<div class="col-md-6">
+
+						<h5>FINANCIER DETAILS</h5>
+						<div class="row">
+							<span class="col-md-6">Financier Name:</span><span
+								class="col-md-6">{{nomineeFinancierInfo.financierNameList}}</span>
+						</div>
+						<div class="row">
+							<span class="col-md-6">Financier City:</span><span
+								class="col-md-6">{{nomineeFinancierInfo.financierCity}}</span>
+						</div>
+					</div>
+
+				</div>
+				<div class="row">
+					<div class="col-md-8"></div>
+					<input type="submit" class="btn btn-default btn-success col-md-4"
+						id="submit" value='SUBMIT' ng-click="submit()">
+				</div>
+				</modal-body> </modal>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<pre>{{personalInfo}}{{vehicleInfo}}{{nomineeFinancierInfo}}{{inspectionInfo}}{{qcPendingInfo}}{{inwardPendingInfo}}</pre>
