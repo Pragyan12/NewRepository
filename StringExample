@@ -15,8 +15,8 @@ public class StringExample
 		
 		//showing effect of precedence
 		
-		x = 3;
-		int y = 5;
+		x = 6;
+		int y = 7;
 		String s6 = x + y + "total";
 		String s7 = "total " + x + y;
 		String s8 = " " + x + y + "total";
